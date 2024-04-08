@@ -3,6 +3,7 @@ import { db } from "@/lib/db/index";
 
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { sessions, users } from "../db/schema/auth";
+import { getBaseUrl } from "../utils";
 
 declare module "lucia" {
 	interface Register {
@@ -23,6 +24,8 @@ export const lucia = new Lucia(adapter, {
 		expires: false,
 		attributes: {
 			secure: process.env.NODE_ENV === "production",
+			sameSite: "none",
+			domain: "localhost",
 		},
 	},
 	getUserAttributes: (attributes) => {

@@ -12,7 +12,7 @@ export const config = {
 		 * 3. /_static (inside /public)
 		 * 4. all root files inside /public (e.g. /favicon.ico)
 		 */
-		"/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
+		"/((?!api/|_next/|_static/|_vercel|favicon.ico|[\\w-]+\\.\\w+).*)",
 	],
 };
 
@@ -52,14 +52,14 @@ export default async function middleware(req: NextRequest) {
 		.replace(".localhost:3000", `.${env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
 	// special case for Vercel preview deployment URLs
-	if (
-		hostname.includes("---") &&
-		hostname.endsWith(`.${process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_SUFFIX}`)
-	) {
-		hostname = `${hostname.split("---")[0]}.${
-			process.env.NEXT_PUBLIC_ROOT_DOMAIN
-		}`;
-	}
+	// if (
+	// 	hostname.includes("---") &&
+	// 	hostname.endsWith(`.${process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_SUFFIX}`)
+	// ) {
+	// 	hostname = `${hostname.split("---")[0]}.${
+	// 		process.env.NEXT_PUBLIC_ROOT_DOMAIN
+	// 	}`;
+	// }
 
 	const searchParams = req.nextUrl.searchParams.toString();
 	// Get the pathname of the request (e.g. /, /about, /blog/first-post)
@@ -67,39 +67,50 @@ export default async function middleware(req: NextRequest) {
 		searchParams.length > 0 ? `?${searchParams}` : ""
 	}`;
 
-	if (
-		hostname === `${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` &&
-		path === `/sign-in`
-	) {
-		return NextResponse.redirect(
-			new URL(`app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/sign-in`)
-		);
-	}
+	// if (
+	// 	hostname === `${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` &&
+	// 	path === `/sign-in`
+	// ) {
+	// 	return NextResponse.redirect(
+	// 		new URL(`app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/sign-in`)
+	// 	);
+	// }
 
 	// rewrites for app pages
-	if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-		const { session } = await uncachedValidateAuthRequest();
-		if (!session && path !== "/sign-in") {
-			return NextResponse.redirect(new URL("/sign-in", req.url));
-		} else if (session && path == "/sign-in") {
-			return NextResponse.redirect(new URL("/", req.url));
-		}
+	// if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+	// 	const { session } = await uncachedValidateAuthRequest();
+	// 	if (!session && path !== "/sign-in") {
+	// 		return NextResponse.redirect(new URL("/sign-in", req.url));
+	// 	} else if (session && path == "/sign-in") {
+	// 		return NextResponse.redirect(new URL("/", req.url));
+	// 	}
 
-		return NextResponse.rewrite(
-			new URL(`/app${path === "/" ? "" : path}`, req.url)
-		);
-	}
+	// 	return NextResponse.rewrite(
+	// 		new URL(`/app${path === "/" ? "" : path}`, req.url)
+	// 	);
+	// }
 
 	// rewrite root application to `/home` folder
+	// if (
+	// 	hostname === "localhost:3000" ||
+	// 	hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
+	// ) {
+	// 	return NextResponse.rewrite(
+	// 		new URL(`/home${path === "/" ? "" : path}`, req.url)
+	// 	);
+	// }
+
+	// if path is inside /app folder, return NextResponse.next()
 	if (
-		hostname === "localhost:3000" ||
-		hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
+		path.startsWith("/app") ||
+		path.startsWith("/sign-in") ||
+		path.startsWith("/sign-up")
 	) {
-		return NextResponse.rewrite(
-			new URL(`/home${path === "/" ? "" : path}`, req.url)
-		);
+		return NextResponse.next();
 	}
 
 	// rewrite everything else to `/[domain]/[slug] dynamic route
 	return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
+
+	// return NextResponse.next();
 }
