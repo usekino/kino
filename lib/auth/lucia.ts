@@ -25,7 +25,8 @@ export const lucia = new Lucia(adapter, {
 		attributes: {
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "lax",
-			domain: "usekino.com",
+			domain: ".usekino.com",
+			path: "/",
 		},
 	},
 	getUserAttributes: (attributes) => {
