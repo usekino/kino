@@ -24,8 +24,6 @@ export const validateAuthRequest = cache(
 			if (result.session && result.session.fresh) {
 				const sessionCookie = lucia.createSessionCookie(result.session.id);
 
-				console.log("Cookie validated: ", sessionCookie);
-
 				cookies().set(
 					sessionCookie.name,
 					sessionCookie.value,
@@ -34,8 +32,6 @@ export const validateAuthRequest = cache(
 			}
 			if (!result.session) {
 				const sessionCookie = lucia.createBlankSessionCookie();
-
-				console.log("Cookie blank: ", sessionCookie);
 
 				cookies().set(
 					sessionCookie.name,

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { getUserAuth } from "@/lib/auth/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +15,6 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { session } = await getUserAuth();
-
-	console.log("Session: ", session);
-
 	return (
 		<html lang="en">
 			<body className={inter.className}>

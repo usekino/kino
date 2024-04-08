@@ -53,8 +53,6 @@ export async function signInAction(
 		const session = await lucia.createSession(existingUser.id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
-		console.log("Set cookie: ", sessionCookie);
-
 		setAuthCookie(sessionCookie);
 
 		return redirect("/dashboard");
