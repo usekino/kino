@@ -41,8 +41,17 @@ export const setAuthCookie = (cookie: Cookie) => {
 	// cookies().set(cookie.name, cookie.value, cookie.attributes); // <- suggested approach from the docs, but does not work with `next build` locally
 
 	console.log("setAuthCookie", cookie);
-
+	cookies().set({
+		name: "test-name",
+		value: "test-value",
+		domain:
+			process.env.NODE_ENV === "development" ? "localhost" : "usekino.com",
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "lax",
+	});
 	cookies().set(cookie);
+
+	console.log("cookies", cookies().getAll());
 };
 
 const getErrorMessage = (errors: any): string => {

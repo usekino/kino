@@ -55,7 +55,7 @@ export async function signInAction(
 
 		setAuthCookie(sessionCookie);
 
-		return redirect("/dashboard");
+		return redirect("/app/dashboard");
 	} catch (e) {
 		return genericError;
 	}
@@ -85,7 +85,7 @@ export async function signUpAction(
 	const session = await lucia.createSession(userId, {});
 	const sessionCookie = lucia.createSessionCookie(session.id);
 	setAuthCookie(sessionCookie);
-	return redirect("/dashboard");
+	return redirect("/app/dashboard");
 }
 
 export async function signOutAction() {

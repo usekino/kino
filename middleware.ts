@@ -100,7 +100,8 @@ export default async function middleware(req: NextRequest) {
 	// 	);
 	// }
 
-	console.log("cookies: ", context.cookies().getAll());
+	console.log("path", path);
+	console.log("hostname", hostname);
 
 	// if path is inside /app folder, return NextResponse.next()
 	if (
