@@ -40,18 +40,17 @@ export const genericError = { error: "Error, please try again." };
 export const setAuthCookie = (cookie: Cookie) => {
 	// cookies().set(cookie.name, cookie.value, cookie.attributes); // <- suggested approach from the docs, but does not work with `next build` locally
 
-	console.log("setAuthCookie", cookie);
+	// Manually set this for testing purposes
 	cookies().set({
-		name: "test-name",
-		value: "test-value",
+		name: cookie.name,
+		value: cookie.value,
 		domain:
-			process.env.NODE_ENV === "development" ? "localhost" : "usekino.com",
+			process.env.NODE_ENV === "development"
+				? "localhost"
+				: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
 	});
-	cookies().set(cookie);
-
-	console.log("cookies", cookies().getAll());
 };
 
 const getErrorMessage = (errors: any): string => {
