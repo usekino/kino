@@ -9,7 +9,7 @@ export default defineConfig({
 		connectionString: env.DATABASE_URL,
 	},
 	schema: './lib/db/schema',
-	out: './drizzle',
+	out: './migrations',
 	driver: 'pg',
 	verbose: true,
 });

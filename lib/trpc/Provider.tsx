@@ -18,7 +18,6 @@ export default function TrpcProvider({
 	const [queryClient] = useState(() => new QueryClient({}));
 	const [trpcClient] = useState(() =>
 		trpc.createClient({
-			transformer: SuperJSON,
 			links: [
 				loggerLink({
 					enabled: (op) =>
@@ -26,6 +25,7 @@ export default function TrpcProvider({
 						(op.direction === 'down' && op.result instanceof Error),
 				}),
 				unstable_httpBatchStreamLink({
+					transformer: SuperJSON,
 					url: getUrl(),
 					headers() {
 						return {
