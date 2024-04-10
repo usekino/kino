@@ -1,9 +1,9 @@
 import { checkAuth } from "@/lib/auth/utils";
 import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 import TrpcProvider from "@/lib/trpc/Provider";
 import { cookies } from "next/headers";
+import { MainNav } from "@/components/section/main-nav";
+import { DashboardNav } from "./_components/dashboard-nav";
 export default async function AppLayout({
 	children,
 }: {
@@ -12,17 +12,15 @@ export default async function AppLayout({
 	await checkAuth();
 	return (
 		<main>
-			<TrpcProvider cookies={cookies().toString()}>
-				<div className="flex h-screen">
-					<Sidebar />
-					<main className="flex-1 md:p-8 pt-2 p-8 overflow-y-auto">
-						<Navbar />
+			<div className="flex h-screen">
+				<div className="flex flex-col h-screen w-full">
+					<MainNav />
+					<DashboardNav />
+					<div className="py-6 px-6 md:px-10 bg-muted flex-auto">
 						{children}
-					</main>
+					</div>
 				</div>
-			</TrpcProvider>
-
-			<Toaster richColors />
+			</div>
 		</main>
 	);
 }

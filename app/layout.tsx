@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import TrpcProvider from "@/lib/trpc/Provider";
+import { Toaster } from "@/components/ui/sonner";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +27,8 @@ export default async function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					{children}
+					<TrpcProvider cookies={cookies().toString()}>{children}</TrpcProvider>
+					<Toaster richColors />
 				</ThemeProvider>
 			</body>
 		</html>
