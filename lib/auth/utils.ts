@@ -1,10 +1,9 @@
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { type Cookie } from 'lucia';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { type Cookie } from "lucia";
-
-import { validateAuthRequest } from ".";
-import { UsernameAndPassword, authenticationSchema } from "../db/schema/auth";
+import { validateAuthRequest } from '.';
+import { authenticationSchema, UsernameAndPassword } from '../db/schema/auth';
 
 export type AuthSession = {
 	session: {
@@ -32,10 +31,10 @@ export const getUserAuth = async (): Promise<AuthSession> => {
 
 export const checkAuth = async () => {
 	const { session } = await validateAuthRequest();
-	if (!session) redirect("/sign-in");
+	if (!session) redirect('/sign-in');
 };
 
-export const genericError = { error: "Error, please try again." };
+export const genericError = { error: 'Error, please try again.' };
 
 export const setAuthCookie = (cookie: Cookie) => {
 	// cookies().set(cookie.name, cookie.value, cookie.attributes); // <- suggested approach from the docs, but does not work with `next build` locally
@@ -45,27 +44,23 @@ export const setAuthCookie = (cookie: Cookie) => {
 		name: cookie.name,
 		value: cookie.value,
 		domain:
-			process.env.NODE_ENV === "development"
-				? "kino.local"
-				: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
-		secure: process.env.NODE_ENV === "production",
-		sameSite: "lax",
+			process.env.NODE_ENV === 'development' ? 'kino.local' : process.env.NEXT_PUBLIC_ROOT_DOMAIN,
+		secure: process.env.NODE_ENV === 'production',
+		sameSite: 'lax',
 	});
 };
 
 const getErrorMessage = (errors: any): string => {
-	if (errors.email) return "Invalid Email";
-	if (errors.password) return "Invalid Password - " + errors.password[0];
-	return ""; // return a default error message or an empty string
+	if (errors.email) return 'Invalid Email';
+	if (errors.password) return 'Invalid Password - ' + errors.password[0];
+	return ''; // return a default error message or an empty string
 };
 
 export const validateAuthFormData = (
 	formData: FormData
-):
-	| { data: UsernameAndPassword; error: null }
-	| { data: null; error: string } => {
-	const email = formData.get("email");
-	const password = formData.get("password");
+): { data: UsernameAndPassword; error: null } | { data: null; error: string } => {
+	const email = formData.get('email');
+	const password = formData.get('password');
 	const result = authenticationSchema.safeParse({ email, password });
 
 	if (!result.success) {

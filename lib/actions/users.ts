@@ -1,31 +1,23 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { eq } from 'drizzle-orm';
+import { generateId } from 'lucia';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { Argon2id } from 'oslo/password';
 
-import { Argon2id } from "oslo/password";
-import { lucia } from "../auth/lucia";
-import { validateAuthRequest } from "../auth";
-import { generateId } from "lucia";
-import { eq } from "drizzle-orm";
-import { db } from "@/lib/db/index";
+import { db } from '@/lib/db/index';
 
-import {
-	genericError,
-	setAuthCookie,
-	validateAuthFormData,
-	getUserAuth,
-} from "../auth/utils";
-import { users, updateUserSchema } from "../db/schema/auth";
+import { validateAuthRequest } from '../auth';
+import { lucia } from '../auth/lucia';
+import { genericError, getUserAuth, setAuthCookie, validateAuthFormData } from '../auth/utils';
+import { updateUserSchema, users } from '../db/schema/auth';
 
 interface ActionResult {
 	error: string;
 }
 
-export async function signInAction(
-	_: ActionResult,
-	formData: FormData
-): Promise<ActionResult> {
+export async function signInAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
 	const { data, error } = validateAuthFormData(formData);
 	if (error !== null) return { error };
 
@@ -36,17 +28,14 @@ export async function signInAction(
 			.where(eq(users.email, data.email.toLowerCase()));
 		if (!existingUser) {
 			return {
-				error: "Incorrect username or password",
+				error: 'Incorrect username or password',
 			};
 		}
 
-		const validPassword = await new Argon2id().verify(
-			existingUser.hashedPassword,
-			data.password
-		);
+		const validPassword = await new Argon2id().verify(existingUser.hashedPassword, data.password);
 		if (!validPassword) {
 			return {
-				error: "Incorrect username or password",
+				error: 'Incorrect username or password',
 			};
 		}
 
@@ -55,16 +44,13 @@ export async function signInAction(
 
 		setAuthCookie(sessionCookie);
 
-		return redirect("/app/dashboard");
+		return redirect('/app/dashboard');
 	} catch (e) {
 		return genericError;
 	}
 }
 
-export async function signUpAction(
-	_: ActionResult,
-	formData: FormData
-): Promise<ActionResult> {
+export async function signUpAction(_: ActionResult, formData: FormData): Promise<ActionResult> {
 	const { data, error } = validateAuthFormData(formData);
 
 	if (error !== null) return { error };
@@ -85,14 +71,14 @@ export async function signUpAction(
 	const session = await lucia.createSession(userId, {});
 	const sessionCookie = lucia.createSessionCookie(session.id);
 	setAuthCookie(sessionCookie);
-	return redirect("/app/dashboard");
+	return redirect('/app/dashboard');
 }
 
 export async function signOutAction() {
 	const { session } = await validateAuthRequest();
 	if (!session) {
 		return {
-			error: "Unauthorized",
+			error: 'Unauthorized',
 		};
 	}
 
@@ -107,17 +93,17 @@ export async function updateUser(
 	formData: FormData
 ): Promise<ActionResult & { success?: boolean }> {
 	const { session } = await getUserAuth();
-	if (!session) return { error: "Unauthorised" };
+	if (!session) return { error: 'Unauthorised' };
 
-	const name = formData.get("name") ?? undefined;
-	const email = formData.get("email") ?? undefined;
+	const name = formData.get('name') ?? undefined;
+	const email = formData.get('email') ?? undefined;
 
 	const result = updateUserSchema.safeParse({ name, email });
 
 	if (!result.success) {
 		const error = result.error.flatten().fieldErrors;
-		if (error.name) return { error: "Invalid name - " + error.name[0] };
-		if (error.email) return { error: "Invalid email - " + error.email[0] };
+		if (error.name) return { error: 'Invalid name - ' + error.name[0] };
+		if (error.email) return { error: 'Invalid email - ' + error.email[0] };
 		return genericError;
 	}
 
@@ -126,8 +112,8 @@ export async function updateUser(
 			.update(users)
 			.set({ ...result.data })
 			.where(eq(users.id, session.user.id));
-		revalidatePath("/account");
-		return { success: true, error: "" };
+		revalidatePath('/account');
+		return { success: true, error: '' };
 	} catch (e) {
 		return genericError;
 	}

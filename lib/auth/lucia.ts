@@ -1,11 +1,12 @@
-import { Lucia } from "lucia";
-import { db } from "@/lib/db/index";
+import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
+import { Lucia } from 'lucia';
 
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import { sessions, users } from "../db/schema/auth";
-import { getBaseUrl } from "../utils";
+import { db } from '@/lib/db/index';
 
-declare module "lucia" {
+import { sessions, users } from '../db/schema/auth';
+import { getBaseUrl } from '../utils';
+
+declare module 'lucia' {
 	interface Register {
 		Lucia: typeof lucia;
 		DatabaseUserAttributes: DatabaseUserAttributes;
@@ -23,7 +24,7 @@ export const lucia = new Lucia(adapter, {
 	sessionCookie: {
 		expires: false,
 		attributes: {
-			secure: process.env.NODE_ENV === "production",
+			secure: process.env.NODE_ENV === 'production',
 		},
 	},
 	getUserAttributes: (attributes) => {

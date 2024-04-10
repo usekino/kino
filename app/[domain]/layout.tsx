@@ -1,12 +1,12 @@
-import { MainNav } from "@/components/section/main-nav";
-import { env } from "@/lib/env/server";
-import { redirect } from "next/navigation";
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
+
+import { redirect } from 'next/navigation';
+
+import { MainNav } from '@/components/section/main-nav';
+import { env } from '@/lib/env/server';
 
 const temp_getSiteData = async (domain: string) => {
-	const subdomain = domain.includes(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-		? domain.split(".")[0]
-		: "";
+	const subdomain = domain.includes(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) ? domain.split('.')[0] : '';
 
 	return {
 		team: subdomain,
@@ -26,17 +26,14 @@ export default async function DomainLayout({
 	const domain = decodeURIComponent(params.domain);
 	const data = await temp_getSiteData(domain);
 
-	if (
-		domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) &&
-		data.customDomain
-	) {
+	if (domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) && data.customDomain) {
 		return redirect(`https://${data.customDomain}`);
 	}
 
 	return (
 		<main>
-			<div className="flex h-screen">
-				<div className="w-full">
+			<div className='flex h-screen'>
+				<div className='w-full'>
 					<MainNav />
 					{children}
 				</div>

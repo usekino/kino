@@ -5,7 +5,7 @@ export default async function FeedbackPage({
 		domain: string;
 	};
 }) {
-	console.log("params", params);
+	console.log('params', params);
 	return (
 		<div>
 			<h1>Feedback for {params.domain}</h1>

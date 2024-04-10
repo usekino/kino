@@ -1,29 +1,24 @@
-import "server-only";
+import 'server-only';
 
+import { cache } from 'react';
+import { createTRPCProxyClient, loggerLink, TRPCClientError } from '@trpc/client';
+import { callProcedure } from '@trpc/server';
+import { observable } from '@trpc/server/observable';
+import { type TRPCErrorResponse } from '@trpc/server/rpc';
+import { cookies } from 'next/headers';
+import SuperJSON from 'superjson';
+
+import { env } from '@/lib/env/server';
 //  import { getUserAuth } from "@/lib/auth/utils";
-import { appRouter } from "@/lib/server/routers/_app";
-import { env } from "@/lib/env/server";
-import { createTRPCContext } from "./context";
+import { appRouter } from '@/lib/server/routers/_app';
 
-import {
-	createTRPCProxyClient,
-	loggerLink,
-	TRPCClientError,
-} from "@trpc/client";
-import { callProcedure } from "@trpc/server";
-import { type TRPCErrorResponse } from "@trpc/server/rpc";
-import { observable } from "@trpc/server/observable";
-
-import { cache } from "react";
-import { cookies } from "next/headers";
-
-import SuperJSON from "superjson";
+import { createTRPCContext } from './context';
 
 const createContext = cache(() => {
 	return createTRPCContext({
 		headers: new Headers({
 			cookie: cookies().toString(),
-			"x-trpc-source": "rsc",
+			'x-trpc-source': 'rsc',
 		}),
 	});
 });
@@ -33,8 +28,7 @@ export const api = createTRPCProxyClient<typeof appRouter>({
 	links: [
 		loggerLink({
 			enabled: (op) =>
-				env.NODE_ENV === "development" ||
-				(op.direction === "down" && op.result instanceof Error),
+				env.NODE_ENV === 'development' || (op.direction === 'down' && op.result instanceof Error),
 		}),
 		/**
 		 * Custom RSC link that lets us invoke procedures without using http requests. Since Server

@@ -1,4 +1,4 @@
-import { getUserAuth } from "@/lib/auth/utils";
+import { getUserAuth } from '@/lib/auth/utils';
 
 export default async function DomainPage() {
 	const { session } = await getUserAuth();
@@ -11,7 +11,7 @@ export default async function DomainPage() {
 					<pre>{JSON.stringify(session, null, 2)}</pre>
 				</div>
 			) : (
-				"Sign In"
+				'Sign In'
 			)}
 		</div>
 	);
