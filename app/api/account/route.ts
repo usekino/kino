@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 
 import { getUserAuth } from '@/lib/auth/utils';
 import { db } from '@/lib/db/index';
-import { users } from '@/lib/db/schema/auth';
+import { users } from '@/lib/db/schema/users';
 
 export async function PUT(request: Request) {
 	const { session } = await getUserAuth();

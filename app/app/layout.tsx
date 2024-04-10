@@ -1,9 +1,10 @@
-import { cookies } from 'next/headers';
+// import { cookies } from 'next/headers';
 
 import { MainNav } from '@/components/section/main-nav';
-import { Toaster } from '@/components/ui/sonner';
+// import { Toaster } from '@/components/ui/sonner';
 import { checkAuth } from '@/lib/auth/utils';
-import TrpcProvider from '@/lib/trpc/Provider';
+
+// import TrpcProvider from '@/lib/trpc/Provider';
 
 import { DashboardNav } from './_components/dashboard-nav';
 

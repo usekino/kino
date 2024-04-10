@@ -18,7 +18,7 @@ export function getBaseUrl({ withProtocol = true }: { withProtocol?: boolean }) 
 	if (!!env.NEXT_PUBLIC_ROOT_DOMAIN) {
 		const getProtocol = () => {
 			if (!withProtocol) return '';
-			if (env.NODE_ENV === 'development') {
+			if (process.env.NODE_ENV === 'development') {
 				return 'http://';
 			} else {
 				return 'https://';
@@ -31,5 +31,5 @@ export function getBaseUrl({ withProtocol = true }: { withProtocol?: boolean }) 
 		return `${withProtocol ?? 'https://'}${env.VERCEL_URL}`;
 	}
 
-	return `${withProtocol ?? 'http://'}localhost:${env.PORT ?? 3000}`;
+	return `${withProtocol ?? 'http://'}localhost:${process.env?.PORT ?? 3000}`;
 }

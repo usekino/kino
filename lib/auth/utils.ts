@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { validateAuthRequest } from '.';
-import { authenticationSchema, UsernameAndPassword } from '../db/schema/auth';
+import { authenticationSchema, UsernameAndPassword } from '../db/schema/authentications';
 
 export type AuthSession = {
 	session: {
@@ -23,7 +23,7 @@ export const getUserAuth = async (): Promise<AuthSession> => {
 			user: {
 				id: user.id,
 				email: user.email,
-				name: user.name,
+				name: user.name ?? undefined,
 			},
 		},
 	};

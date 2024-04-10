@@ -9,6 +9,7 @@
 		"lint": "next lint",
 		"db:studio": "drizzle-kit studio",
 		"db:check": "drizzle-kit check:pg",
+		"db:push": "drizzle-kit push:pg",
 		"db:generate": "drizzle-kit generate:pg",
 		"db:migrate": "tsx --env-file .env lib/db/migrate.ts",
 		"db:drop": "drizzle-kit drop",

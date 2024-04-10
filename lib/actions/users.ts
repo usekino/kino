@@ -11,7 +11,8 @@ import { db } from '@/lib/db/index';
 import { validateAuthRequest } from '../auth';
 import { lucia } from '../auth/lucia';
 import { genericError, getUserAuth, setAuthCookie, validateAuthFormData } from '../auth/utils';
-import { updateUserSchema, users } from '../db/schema/auth';
+import { updateUserSchema } from '../db/schema/authentications';
+import { users } from '../db/schema/users';
 
 interface ActionResult {
 	error: string;
@@ -59,6 +60,7 @@ export async function signUpAction(_: ActionResult, formData: FormData): Promise
 	const userId = generateId(15);
 
 	try {
+		// @ts-expect-error
 		await db.insert(users).values({
 			id: userId,
 			email: data.email,

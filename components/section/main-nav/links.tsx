@@ -1,5 +1,4 @@
 import { ExternalLink } from 'lucide-react';
-import Link from 'next/link';
 
 import { env } from '@/lib/env/server';
 import { cn } from '@/lib/utils';

@@ -1,4 +1,4 @@
-import { Cog, Globe, HomeIcon } from 'lucide-react';
+import { Cog, HomeIcon } from 'lucide-react';
 
 import { SidebarLink } from '@/components/SidebarItems';
 
