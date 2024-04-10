@@ -1,16 +1,12 @@
-import { neon, neonConfig, NeonQueryFunction } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
+
+import 'dotenv/config';
 
 import { env } from '@/lib/env/server';
 
 const runMigrate = async () => {
-	if (!env.DATABASE_URL) {
-		throw new Error('DATABASE_URL is not defined');
-	}
-
-	neonConfig.fetchConnectionCache = true;
-
 	const sql: NeonQueryFunction<boolean, boolean> = neon(env.DATABASE_URL);
 	const db = drizzle(sql);
 
@@ -18,7 +14,7 @@ const runMigrate = async () => {
 
 	const start = Date.now();
 
-	await migrate(db, { migrationsFolder: 'lib/db/migrations' });
+	await migrate(db, { migrationsFolder: './drizzle' });
 
 	const end = Date.now();
 
