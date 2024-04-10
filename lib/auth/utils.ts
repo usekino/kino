@@ -46,7 +46,7 @@ export const setAuthCookie = (cookie: Cookie) => {
 		value: cookie.value,
 		domain:
 			process.env.NODE_ENV === "development"
-				? "localhost"
+				? "kino.local"
 				: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
