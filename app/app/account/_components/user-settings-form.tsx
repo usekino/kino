@@ -1,45 +1,83 @@
-import { useForm } from '@tanstack/react-form';
-import { zodValidator } from '@tanstack/zod-form-adapter';
+'use client';
 
-import { MutateUserSchema, mutateUserSchema } from '@/lib/db/schema/users';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { User } from 'lucia';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-export const UserSettingsForm = () => {
-	const form = useForm<MutateUserSchema, typeof zodValidator>({
-		defaultValues: {
-			username: '',
-			email: '',
-			name: '',
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { api } from '@/lib/trpc/clients/client';
+import { UpdateUserSchema, updateUserSchema } from '@/lib/validation/user-validation';
+
+export const UserSettingsForm = ({ user }: { user: User }) => {
+	const { mutate: updateUser } = api.user.update.useMutation({
+		onSuccess: () => {
+			toast.success('User updated');
 		},
-		onSubmit: async (values) => {
-			console.log(values);
-		},
-		validatorAdapter: zodValidator,
-		validators: {
-			onChange: mutateUserSchema,
+		onError: (err) => {
+			toast.error('Error', { description: err.message });
 		},
 	});
 
+	const { control, handleSubmit, formState } = useForm<UpdateUserSchema>({
+		defaultValues: updateUserSchema.parse(user),
+		resolver: zodResolver(updateUserSchema),
+	});
+
+	const onSubmit = (data: UpdateUserSchema) => {
+		updateUser(data);
+	};
+
 	return (
 		<div>
-			<form>
-				<form.Field name='username'>
-					{(field) => (
-						<>
-							<label htmlFor={field.name}>Age:</label>
-							<input
-								id={field.name}
-								name={field.name}
-								value={field.state.value}
-								type='string'
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-							/>
-							{field.state.meta.errors ? (
-								<em role='alert'>{field.state.meta.errors.join(', ')}</em>
-							) : null}
-						</>
-					)}
-				</form.Field>
+			<form className='grid gap-4' onSubmit={handleSubmit(onSubmit)}>
+				<div className='grid gap-2'>
+					<Label htmlFor='username'>Username</Label>
+					<Controller
+						control={control}
+						name='username'
+						render={(ctx) => (
+							<>
+								<Input {...ctx.field} id='email' placeholder='m@example.com' required />
+								{ctx.fieldState.error ? <em>{ctx.fieldState.error.message}</em> : null}
+							</>
+						)}
+					/>
+				</div>
+				<div className='grid gap-2'>
+					<Label htmlFor='email'>Email</Label>
+					<Controller
+						control={control}
+						name='email'
+						render={(ctx) => (
+							<>
+								<Input {...ctx.field} id='email' placeholder='m@example.com' required />
+								{ctx.fieldState.error ? <em>{ctx.fieldState.error.message}</em> : null}
+							</>
+						)}
+					/>
+				</div>
+				<div className='grid gap-2'>
+					<Label htmlFor='name'>Name</Label>
+					<Controller
+						control={control}
+						name='name'
+						render={({ field, fieldState }) => {
+							const { value, ...props } = field;
+							return (
+								<>
+									<Input {...props} value={value ?? ''} id='name' placeholder='John Doe' required />
+									{fieldState.error ? <em>{fieldState.error.message}</em> : null}
+								</>
+							);
+						}}
+					/>
+				</div>
+				<Button type='submit' className='w-full'>
+					{formState.isSubmitting ? '...' : 'Sign In'}
+				</Button>
 			</form>
 		</div>
 	);

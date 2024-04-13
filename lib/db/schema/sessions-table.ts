@@ -4,7 +4,7 @@ import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 // import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
 // import { z } from 'zod';
 
-import { users } from './users';
+import { users } from './users-table';
 
 export const sessions = pgTable('sessions', {
 	id: text('id').unique().primaryKey(),

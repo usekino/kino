@@ -4,7 +4,7 @@ import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from './_shared';
-import { users } from './users';
+import { users } from './users-table';
 
 export const authentications = pgTable('authentications', {
 	// Defaults

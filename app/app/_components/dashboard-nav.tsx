@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 export const DashboardNav = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
 	return (
-		<div className='border-b'>
+		<div className='border-b bg-transparent bg-[repeating-linear-gradient(45deg,hsl(var(--border))_0,hsl(var(--border))_1px,transparent_0,transparent_50%)] bg-[length:10px_10px]'>
 			<div className='px-6 py-6 md:px-10'>
 				<h1 className='mb-3 mt-10 text-3xl font-bold'>Dashboard</h1>
 				<nav className={cn('flex items-center space-x-4 lg:space-x-6', className)} {...props}>
@@ -21,10 +21,10 @@ export const DashboardNav = ({ className, ...props }: React.HTMLAttributes<HTMLE
 						Settings
 					</Link>
 					<Link
-						href='/app/user'
+						href='/app/account'
 						className='font-medium transition-colors hover:text-stone-950 hover:underline dark:hover:text-primary'
 					>
-						User
+						Account
 					</Link>
 					<Link
 						href='/app/resend'

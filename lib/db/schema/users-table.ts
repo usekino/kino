@@ -4,8 +4,8 @@ import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from './_shared';
-import { authentications } from './authentications';
-import { sessions } from './sessions';
+import { authentications } from './authentications-table';
+import { sessions } from './sessions-table';
 
 export const users = pgTable(
 	'users',
@@ -52,7 +52,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
 const refineSchema = {
 	username: ({ username }) => username.min(3).max(100),
 	email: ({ email }) => email.email(),
-	name: ({ name }) => name.min(3).max(255),
+	name: ({ name }) => name.max(255),
 	role: () => z.array(z.enum(['member', 'admin'])),
 	bio: ({ bio }) => bio.max(450),
 	updates: ({ updates }) => updates.min(0),
@@ -60,7 +60,10 @@ const refineSchema = {
 } satisfies Refine<typeof users, 'select'>;
 
 export const selectUserSchema = createSelectSchema(users, refineSchema);
-export const mutateUserSchema = createInsertSchema(users, refineSchema);
+export const mutateUserSchema = createInsertSchema(users, refineSchema).omit({
+	id: true,
+	createdAt: true,
+});
 
 export type SelectUserSchema = z.infer<typeof selectUserSchema>;
 export type MutateUserSchema = z.infer<typeof mutateUserSchema>;

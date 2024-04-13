@@ -69,7 +69,6 @@ export default async function middleware(req: NextRequest) {
 		path.startsWith('/sign-up') ||
 		(path.startsWith('/') && !subdomain)
 	) {
-		console.log('>>>>>next');
 		return NextResponse.next();
 	}
 

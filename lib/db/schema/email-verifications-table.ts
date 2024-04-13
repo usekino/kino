@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { users } from './users';
+import { users } from './users-table';
 
 export const emailVerifications = pgTable('email_verifications', {
 	id: serial('id').notNull().primaryKey(),
