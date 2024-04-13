@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { validateAuthRequest } from '@/lib/auth';
 import { lucia } from '@/lib/auth/lucia';
+import { validateAuthRequest } from '@/lib/auth/utils';
 
 export async function GET(request: NextRequest) {
 	const { session } = await validateAuthRequest();

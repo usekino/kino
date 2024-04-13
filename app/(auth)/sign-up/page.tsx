@@ -1,9 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useFormStatus } from 'react-dom';
-
-import { Button } from '@/components/ui/button';
 
 import { SignUpForm } from './_components/sign-up-form';
 
@@ -21,12 +18,3 @@ export default function SignUpPage() {
 		</main>
 	);
 }
-
-const SubmitButton = () => {
-	const { pending } = useFormStatus();
-	return (
-		<Button className='w-full' type='submit' disabled={pending}>
-			Sign{pending ? 'ing' : ''} up
-		</Button>
-	);
-};

@@ -1,7 +1,3 @@
-import Link from 'next/link';
-
-import { api } from '@/lib/trpc/clients/server-invoker';
-
 import { ClientTest } from './client-test';
 
 export default async function LandingPage() {

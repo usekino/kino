@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { Argon2id } from 'oslo/password';
 
-import { generateEmailVerificationCode } from '@/lib/auth/codes/email-verification';
+// import { generateEmailVerificationCode } from '@/lib/auth/codes/email-verification';
 import { lucia } from '@/lib/auth/lucia';
 import { authentications, mutateAuthSchema } from '@/lib/db/schema/authentications';
 import { mutateUserSchema, users } from '@/lib/db/schema/users';

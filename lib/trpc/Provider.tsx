@@ -12,7 +12,7 @@ import {
 import superjson from 'superjson';
 
 import { api } from '@/lib/trpc/clients/client';
-import { customLoggerLink, getTRPCUrl, skipStream } from '@/lib/trpc/utils';
+import { customLoggerLink, skipStream } from '@/lib/trpc/utils';
 
 import { getBaseUrl } from '../util/get-base-url';
 

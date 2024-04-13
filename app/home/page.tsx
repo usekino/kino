@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import { getSession } from '@/lib/auth/utils';
-import { api } from '@/lib/trpc/clients/client';
 
 export default async function HomePage() {
 	const session = await getSession();
