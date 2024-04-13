@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { schemaDefaults } from './_shared';
 import { authentications } from './authentications-table';
 import { sessions } from './sessions-table';
+import { teams } from './teams-table';
 
 export const users = pgTable(
 	'users',
@@ -42,11 +43,12 @@ export const users = pgTable(
 );
 
 export const userRelations = relations(users, ({ many, one }) => ({
-	auth: one(authentications, {
+	authentications: one(authentications, {
 		fields: [users.id],
 		references: [authentications.userId],
 	}),
 	sessions: many(sessions),
+	teams: many(users),
 }));
 
 const refineSchema = {

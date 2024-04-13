@@ -70,7 +70,7 @@ export const authRouter = router({
 		const existingUser = await ctx.db.query.users.findFirst({
 			where: (user, { eq }) => eq(user.email, input.email),
 			with: {
-				auth: {
+				authentications: {
 					columns: {
 						hashedPassword: true,
 					},
@@ -78,7 +78,7 @@ export const authRouter = router({
 			},
 		});
 
-		if (!existingUser || !existingUser.auth?.hashedPassword) {
+		if (!existingUser || !existingUser.authentications?.hashedPassword) {
 			throw new TRPCError({
 				code: 'UNAUTHORIZED',
 				message: 'Incorrect username or password',
@@ -86,7 +86,7 @@ export const authRouter = router({
 		}
 
 		const validPassword = await new Argon2id().verify(
-			existingUser.auth.hashedPassword,
+			existingUser.authentications.hashedPassword,
 			input.password
 		);
 
