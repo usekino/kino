@@ -61,14 +61,23 @@ export default async function middleware(req: NextRequest) {
 	// console.log('subdomain', subdomain);
 	// console.log('nextUrl', req.nextUrl.host);
 
-	// if path is inside /app folder, return NextResponse.next()
+	// if (path.startsWith('/sign-out')) {
+	// 	return NextResponse.redirect(new URL('/api/sign-out', req.url));
+	// }
+
 	if (
 		path.startsWith('/api') ||
 		path.startsWith('/app') ||
 		path.startsWith('/sign-in') ||
 		path.startsWith('/sign-up') ||
+		path.startsWith('/sign-out') ||
 		(path.startsWith('/') && !subdomain)
 	) {
+		if (!!subdomain) {
+			return NextResponse.redirect(
+				new URL(`https://${env.NEXT_PUBLIC_ROOT_DOMAIN}${path}`, req.url)
+			);
+		}
 		return NextResponse.next();
 	}
 

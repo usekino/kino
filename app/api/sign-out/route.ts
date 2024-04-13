@@ -1,24 +1,30 @@
 import type { NextRequest } from 'next/server';
 
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { lucia } from '@/lib/auth/lucia';
-import { validateAuthRequest } from '@/lib/auth/utils';
+import { getSession } from '@/lib/auth/utils';
+import { env } from '@/lib/env/server';
+import { api } from '@/lib/trpc/clients/server-invoker';
+
+const signOut = async (request: NextRequest) => {
+	const session = await getSession();
+
+	if (session) {
+		await api.auth.signOut();
+	}
+
+	const url =
+		process.env.NODE_ENV === 'development'
+			? request.url.replace('localhost:3000', env.NEXT_PUBLIC_ROOT_DOMAIN)
+			: request.url;
+
+	return NextResponse.redirect(new URL('/sign-in', url));
+};
 
 export async function GET(request: NextRequest) {
-	const { session } = await validateAuthRequest();
+	return await signOut(request);
+}
 
-	// if (!session) {
-	// 	return NextResponse.redirect(
-	// 		new URL("app.localhost:3000/sign-in", request.url)
-	// 	);
-	// }
-
-	await lucia.invalidateSession(session?.id ?? '');
-
-	const sessionCookie = lucia.createBlankSessionCookie();
-	cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-
-	return NextResponse.redirect(new URL('/sign-in', request.url));
+export async function POST(request: NextRequest) {
+	return await signOut(request);
 }

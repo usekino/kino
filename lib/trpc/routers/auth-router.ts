@@ -12,6 +12,8 @@ import { env } from '@/lib/env/server';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { signInEmailSchema, signUpEmailSchema } from '@/lib/validation/auth-validation';
 
+import { isAuthed } from '../middleware/is-authed';
+
 export const authRouter = router({
 	signUpByEmail: procedure.input(signUpEmailSchema).mutation(async ({ ctx, input }) => {
 		return ctx.db.transaction(async (trx) => {
@@ -112,5 +114,13 @@ export const authRouter = router({
 		return {
 			user: existingUser,
 		};
+	}),
+	signOut: procedure.use(isAuthed).mutation(async ({ ctx }) => {
+		await lucia.invalidateSession(ctx.auth.session.id);
+
+		const sessionCookie = lucia.createBlankSessionCookie();
+		cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+
+		return {};
 	}),
 });

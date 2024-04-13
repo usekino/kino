@@ -21,6 +21,15 @@ const nextConfig = {
 		}
 		return config;
 	},
+	redirects: async () => {
+		return [
+			{
+				source: '/sign-out',
+				destination: '/api/sign-out',
+				permanent: true,
+			},
+		];
+	},
 };
 
 export default nextConfig;

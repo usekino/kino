@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from 'lucia';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -12,9 +13,12 @@ import { api } from '@/lib/trpc/clients/client';
 import { UpdateUserSchema, updateUserSchema } from '@/lib/validation/user-validation';
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
+	const router = useRouter();
+
 	const { mutate: updateUser } = api.user.update.useMutation({
 		onSuccess: () => {
 			toast.success('User updated');
+			router.refresh();
 		},
 		onError: (err) => {
 			toast.error('Error', { description: err.message });

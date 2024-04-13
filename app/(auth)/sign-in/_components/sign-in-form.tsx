@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -11,9 +12,11 @@ import { api } from '@/lib/trpc/clients/client';
 import { SignInEmailSchema, signInEmailSchema } from '@/lib/validation/auth-validation';
 
 export const SignInForm = () => {
+	const router = useRouter();
 	const { mutate: signInByEmail } = api.auth.signInByEmail.useMutation({
 		onSuccess: () => {
 			toast.success('Signed in');
+			router.push('/app');
 		},
 		onError: (error) => {
 			toast.error('Error', { description: error.message });
