@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation';
 
-import { getUserAuth } from '@/lib/auth/utils';
+import { getSession } from '@/lib/auth/utils';
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-	const session = await getUserAuth();
-	if (session?.session) redirect('/app/dashboard');
+	const session = await getSession();
+	if (session) redirect('/app/dashboard');
 
-	return <div className='h-screen bg-muted pt-8'>{children}</div>;
+	return <div className='h-screen bg-muted'>{children}</div>;
 }

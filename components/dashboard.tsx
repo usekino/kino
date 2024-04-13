@@ -192,7 +192,7 @@ export function Dashboard() {
 						<CardContent className='grid gap-8'>
 							<div className='flex items-center gap-4'>
 								<Avatar className='hidden h-9 w-9 sm:flex'>
-									<AvatarImage alt='Avatar' src='/avatars/01.png' />
+									{/* <AvatarImage alt='Avatar' src='/avatars/01.png' /> */}
 									<AvatarFallback>OM</AvatarFallback>
 								</Avatar>
 								<div className='grid gap-1'>
@@ -203,7 +203,7 @@ export function Dashboard() {
 							</div>
 							<div className='flex items-center gap-4'>
 								<Avatar className='hidden h-9 w-9 sm:flex'>
-									<AvatarImage alt='Avatar' src='/avatars/02.png' />
+									{/* <AvatarImage alt='Avatar' src='/avatars/02.png' /> */}
 									<AvatarFallback>JL</AvatarFallback>
 								</Avatar>
 								<div className='grid gap-1'>
@@ -214,7 +214,7 @@ export function Dashboard() {
 							</div>
 							<div className='flex items-center gap-4'>
 								<Avatar className='hidden h-9 w-9 sm:flex'>
-									<AvatarImage alt='Avatar' src='/avatars/03.png' />
+									{/* <AvatarImage alt='Avatar' src='/avatars/03.png' /> */}
 									<AvatarFallback>IN</AvatarFallback>
 								</Avatar>
 								<div className='grid gap-1'>
@@ -225,7 +225,7 @@ export function Dashboard() {
 							</div>
 							<div className='flex items-center gap-4'>
 								<Avatar className='hidden h-9 w-9 sm:flex'>
-									<AvatarImage alt='Avatar' src='/avatars/04.png' />
+									{/* <AvatarImage alt='Avatar' src='/avatars/04.png' /> */}
 									<AvatarFallback>WK</AvatarFallback>
 								</Avatar>
 								<div className='grid gap-1'>
@@ -236,7 +236,7 @@ export function Dashboard() {
 							</div>
 							<div className='flex items-center gap-4'>
 								<Avatar className='hidden h-9 w-9 sm:flex'>
-									<AvatarImage alt='Avatar' src='/avatars/05.png' />
+									{/* <AvatarImage alt='Avatar' src='/avatars/05.png' /> */}
 									<AvatarFallback>SD</AvatarFallback>
 								</Avatar>
 								<div className='grid gap-1'>

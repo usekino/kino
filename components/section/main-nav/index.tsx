@@ -1,7 +1,7 @@
 // import { Links } from "./links";
 import Link from 'next/link';
 
-import { getUserAuth } from '@/lib/auth/utils';
+import { getSession } from '@/lib/auth/utils';
 
 import { Links } from './links';
 import { Search } from './search';
@@ -9,7 +9,7 @@ import TeamSwitcher from './team-switcher';
 import { UserNav } from './user-nav';
 
 export const MainNav = async () => {
-	const { session } = await getUserAuth();
+	const session = await getSession();
 
 	return (
 		<div className='border-b'>

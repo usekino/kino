@@ -46,7 +46,7 @@ export default async function middleware(req: NextRequest) {
 	// Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
 	const hostname = req.headers
 		.get('host')!
-		.replace('.localhost:3000', `.${env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+		.replace('localhost:3000', `.${env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
 	const subdomain = hostname.includes(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`)
 		? hostname.split('.')[0]
@@ -56,17 +56,20 @@ export default async function middleware(req: NextRequest) {
 	// Get the pathname of the request (e.g. /, /about, /blog/first-post)
 	const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ''}`;
 
-	// console.log("path", path);
-	// console.log("hostname", hostname);
-	// console.log("subdomain", subdomain);
+	// console.log('path', path);
+	// console.log('hostname', hostname);
+	// console.log('subdomain', subdomain);
+	// console.log('nextUrl', req.nextUrl.host);
 
 	// if path is inside /app folder, return NextResponse.next()
 	if (
+		path.startsWith('/api') ||
 		path.startsWith('/app') ||
 		path.startsWith('/sign-in') ||
 		path.startsWith('/sign-up') ||
 		(path.startsWith('/') && !subdomain)
 	) {
+		console.log('>>>>>next');
 		return NextResponse.next();
 	}
 

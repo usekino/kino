@@ -1,7 +1,7 @@
-import { publicProcedure, router } from '@/lib/server/trpc';
+import { procedure, router } from '@/lib/trpc/trpc';
 
 export const computersRouter = router({
-	getComputers: publicProcedure.query(async () => {
+	getComputers: procedure.query(async () => {
 		return [
 			{ id: 1, name: 'Apple I' },
 			{ id: 2, name: 'Apple II' },

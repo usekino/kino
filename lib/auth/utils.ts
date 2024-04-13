@@ -1,74 +1,54 @@
-import { type Cookie } from 'lucia';
+import { cache } from 'react';
+import { Session, User } from 'lucia';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { validateAuthRequest } from '.';
-import { authenticationSchema, UsernameAndPassword } from '../db/schema/authentications';
+import { lucia } from '@/lib/auth/lucia';
 
-export type AuthSession = {
-	session: {
-		user: {
-			id: string;
-			name?: string;
-			email?: string;
-			username?: string;
-		};
-	} | null;
+export const validateAuthRequest = cache(
+	async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
+		'use server';
+
+		const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+		if (!sessionId) {
+			return {
+				user: null,
+				session: null,
+			};
+		}
+
+		const result = await lucia.validateSession(sessionId);
+
+		try {
+			if (result.session && result.session.fresh) {
+				const sessionCookie = lucia.createSessionCookie(result.session.id);
+
+				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+			}
+			if (!result.session) {
+				const sessionCookie = lucia.createBlankSessionCookie();
+
+				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+			}
+		} catch {
+			// We know this will throw when Next attempts to set the cookie while
+			// rendering the page.
+		}
+		return result;
+	}
+);
+
+export const getUser = async () => {
+	const { user } = await validateAuthRequest();
+	return user;
 };
-export const getUserAuth = async (): Promise<AuthSession> => {
-	const { session, user } = await validateAuthRequest();
-	if (!session) return { session: null };
-	return {
-		session: {
-			user: {
-				id: user.id,
-				email: user.email,
-				name: user.name ?? undefined,
-			},
-		},
-	};
+
+export const getSession = async () => {
+	const { session } = await validateAuthRequest();
+	return session;
 };
 
 export const checkAuth = async () => {
-	const { session } = await validateAuthRequest();
-	if (!session) redirect('/sign-in');
-};
-
-export const genericError = { error: 'Error, please try again.' };
-
-export const setAuthCookie = (cookie: Cookie) => {
-	// cookies().set(cookie.name, cookie.value, cookie.attributes); // <- suggested approach from the docs, but does not work with `next build` locally
-
-	// Manually set this for testing purposes
-	cookies().set({
-		name: cookie.name,
-		value: cookie.value,
-		domain:
-			process.env.NODE_ENV === 'development' ? 'kino.local' : process.env.NEXT_PUBLIC_ROOT_DOMAIN,
-		secure: process.env.NODE_ENV === 'production',
-		sameSite: 'lax',
-	});
-};
-
-const getErrorMessage = (errors: any): string => {
-	if (errors.email) return 'Invalid Email';
-	if (errors.password) return 'Invalid Password - ' + errors.password[0];
-	return ''; // return a default error message or an empty string
-};
-
-export const validateAuthFormData = (
-	formData: FormData
-): { data: UsernameAndPassword; error: null } | { data: null; error: string } => {
-	const email = formData.get('email');
-	const password = formData.get('password');
-	const result = authenticationSchema.safeParse({ email, password });
-
-	if (!result.success) {
-		return {
-			data: null,
-			error: getErrorMessage(result.error.flatten().fieldErrors),
-		};
-	}
-
-	return { data: result.data, error: null };
+	const session = await getSession();
+	if (session === null) redirect('/api/auth/login');
 };

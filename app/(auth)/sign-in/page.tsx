@@ -1,51 +1,44 @@
-'use client';
-
+import Image from 'next/image';
 import Link from 'next/link';
-import { useFormState, useFormStatus } from 'react-dom';
 
-import AuthFormError from '@/components/auth/AuthFormError';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { signInAction } from '@/lib/actions/users';
+import { SignInForm } from './_components/sign-in-form';
 
-export default function SignInPage() {
-	const [state, formAction] = useFormState(signInAction, {
-		error: '',
-	});
-
+export default function Dashboard() {
 	return (
-		<main className='mx-auto my-4 max-w-lg bg-popover p-10'>
-			<h1 className='text-center text-2xl font-bold'>Sign in to your account</h1>
-			<AuthFormError state={state} />
-			<form action={formAction}>
-				<Label htmlFor='email' className='text-muted-foreground'>
-					Email
-				</Label>
-				<Input name='email' id='email' type='email' required />
-				<br />
-				<Label htmlFor='password' className='text-muted-foreground'>
-					Password
-				</Label>
-				<Input type='password' name='password' id='password' required />
-				<br />
-				<SubmitButton />
-			</form>
-			<div className='mt-4 text-center text-sm text-muted-foreground'>
-				Don&apos;t have an account yet?{' '}
-				<Link href='/sign-up' className='text-accent-foreground underline hover:text-primary'>
-					Create an account
-				</Link>
+		<div className='h-full w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]'>
+			<div className='flex items-center justify-center py-12'>
+				<div className='mx-auto grid w-[350px] gap-6'>
+					<div className='grid gap-2 text-center'>
+						<h1 className='text-3xl font-bold'>Login</h1>
+						<p className='text-balance text-muted-foreground'>
+							Enter your email below to login to your account
+						</p>
+					</div>
+					<SignInForm />
+					<div className='mt-4 space-y-1 text-center text-sm'>
+						<span className='inline-block'>
+							Don&apos;t have an account?{' '}
+							<Link href='/sign-up' className='underline'>
+								Sign up
+							</Link>
+						</span>
+						<span className='inline-block'>
+							<Link href='/forgot-password' className='ml-auto inline-block text-sm underline'>
+								Forgot your password?
+							</Link>
+						</span>
+					</div>
+				</div>
 			</div>
-		</main>
+			<div className='relative hidden bg-muted lg:inline-flex'>
+				<Image
+					src='/bg-sign-in.webp'
+					alt='Image'
+					width='1920'
+					height='1080'
+					className='absolute inset-0 h-full w-full object-cover'
+				/>
+			</div>
+		</div>
 	);
 }
-
-const SubmitButton = () => {
-	const { pending } = useFormStatus();
-	return (
-		<Button className='w-full' type='submit' disabled={pending}>
-			Sign{pending ? 'ing' : ''} in
-		</Button>
-	);
-};

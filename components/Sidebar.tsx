@@ -1,13 +1,14 @@
+import { Session } from 'lucia';
 import Link from 'next/link';
 
-import { AuthSession, getUserAuth } from '@/lib/auth/utils';
+import { getSession, getUser } from '@/lib/auth/utils';
 
 import SidebarItems from './SidebarItems';
 import { Avatar, AvatarFallback } from './ui/avatar';
 
 const Sidebar = async () => {
-	const session = await getUserAuth();
-	if (session.session === null) return null;
+	const session = await getSession();
+	if (session === null) return null;
 
 	return (
 		<aside className='hidden h-screen min-w-52 border-r border-border bg-muted p-4 pt-8 shadow-inner md:block'>
@@ -24,9 +25,9 @@ const Sidebar = async () => {
 
 export default Sidebar;
 
-const UserDetails = ({ session }: { session: AuthSession }) => {
-	if (session.session === null) return null;
-	const { user } = session.session;
+const UserDetails = async ({ session }: { session: Session }) => {
+	if (session === null) return null;
+	const user = await getUser();
 
 	if (!user?.name || user.name.length == 0) return null;
 

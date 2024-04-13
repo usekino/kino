@@ -11,6 +11,14 @@ jiti('./lib/env/client');
 const nextConfig = {
 	webpack: (config) => {
 		config.externals.push('@node-rs/argon2', '@node-rs/bcrypt');
+		if (process.env.NODE_ENV === 'development') {
+			config.devServer = {
+				allowedHosts: 'all',
+				client: {
+					webSocketURL: 'auto://0.0.0.0:0/ws',
+				},
+			};
+		}
 		return config;
 	},
 };

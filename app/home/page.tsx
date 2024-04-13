@@ -1,9 +1,11 @@
 import Link from 'next/link';
 
-import { getUserAuth } from '@/lib/auth/utils';
+import { getSession } from '@/lib/auth/utils';
+import { api } from '@/lib/trpc/clients/client';
 
 export default async function HomePage() {
-	const { session } = await getUserAuth();
+	const session = await getSession();
+
 	return (
 		<div>
 			<h1 className='text-6xl'>HOME PAGE</h1>

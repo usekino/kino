@@ -1,7 +1,7 @@
-import { getUserAuth } from '@/lib/auth/utils';
+import { getSession } from '@/lib/auth/utils';
 
 export default async function DomainPage() {
-	const { session } = await getUserAuth();
+	const session = await getSession();
 
 	return (
 		<div>

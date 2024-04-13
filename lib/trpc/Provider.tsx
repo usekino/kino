@@ -1,45 +1,82 @@
 'use client';
 
-import React, { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client';
-import SuperJSON from 'superjson';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
+import {
+	httpBatchLink,
+	unstable_httpBatchStreamLink as httpBatchStreamLink,
+	splitLink,
+} from '@trpc/client';
+import superjson from 'superjson';
 
-import { trpc } from './client';
-import { getUrl } from './utils';
+import { api } from '@/lib/trpc/clients/client';
+import { customLoggerLink, getTRPCUrl, skipStream } from '@/lib/trpc/utils';
 
-export default function TrpcProvider({
-	children,
-	cookies,
-}: {
-	children: React.ReactNode;
-	cookies: string;
-}) {
-	const [queryClient] = useState(() => new QueryClient({}));
-	const [trpcClient] = useState(() =>
-		trpc.createClient({
+import { getBaseUrl } from '../util/get-base-url';
+
+type ClientProviderProps = PropsWithChildren<{
+	headers: Headers;
+}>;
+
+const makeQueryClient = () => {
+	return new QueryClient({
+		defaultOptions: {
+			queries: {
+				staleTime: 5 * 1000,
+			},
+		},
+	});
+};
+
+let clientQueryClient: QueryClient | undefined = undefined;
+
+const getQueryClient = () => {
+	if (typeof window === 'undefined') {
+		// Server: always make a new query client
+		return makeQueryClient();
+	} else {
+		// Browser: make a new query client if we don't already have one
+		if (!clientQueryClient) clientQueryClient = makeQueryClient();
+		return clientQueryClient;
+	}
+};
+
+export function TrpcProvider(props: ClientProviderProps) {
+	const queryClient = getQueryClient();
+
+	const options = {
+		transformer: superjson,
+		url: `${getBaseUrl()}/api/trpc`,
+		headers() {
+			const headers = new Map(props.headers);
+			headers.set('x-trpc-source', 'nextjs-react');
+			return Object.fromEntries(headers);
+		},
+	};
+
+	const [trpcClient] = useState(() => {
+		return api.createClient({
 			links: [
-				loggerLink({
-					enabled: (op) =>
-						process.env.NODE_ENV === 'development' ||
-						(op.direction === 'down' && op.result instanceof Error),
-				}),
-				unstable_httpBatchStreamLink({
-					transformer: SuperJSON,
-					url: getUrl(),
-					headers() {
-						return {
-							cookie: cookies,
-							'x-trpc-source': 'react',
-						};
-					},
+				customLoggerLink(),
+				splitLink({
+					condition: skipStream,
+					true: httpBatchLink(options),
+					false: httpBatchStreamLink(options),
 				}),
 			],
-		})
-	);
+		});
+	});
+
 	return (
-		<trpc.Provider client={trpcClient} queryClient={queryClient}>
-			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-		</trpc.Provider>
+		<api.Provider client={trpcClient} queryClient={queryClient}>
+			<QueryClientProvider client={queryClient}>
+				<ReactQueryStreamedHydration>
+					{props.children}
+					<ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-left' />
+				</ReactQueryStreamedHydration>
+			</QueryClientProvider>
+		</api.Provider>
 	);
 }
