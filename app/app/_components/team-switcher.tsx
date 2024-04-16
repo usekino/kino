@@ -29,6 +29,7 @@ interface TeamSwitcherProps extends PopoverTriggerProps {
 export default function TeamSwitcher({ className, teams }: TeamSwitcherProps) {
 	const router = useRouter();
 
+	const [mounted, setMounted] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
 	const [selectedTeam, setSelectedTeam] = React.useState<ReadTeamSchema>(teams[0]);
 
@@ -43,7 +44,15 @@ export default function TeamSwitcher({ className, teams }: TeamSwitcherProps) {
 		return () => document.removeEventListener('keydown', down);
 	}, []);
 
-	React.useEffect(() => {}, [selectedTeam]);
+	React.useEffect(() => {
+		if (mounted) {
+			localStorage.setItem('selectedTeam', JSON.stringify(selectedTeam.slug));
+		}
+	}, [selectedTeam]);
+
+	React.useEffect(() => {
+		setMounted(true);
+	}, [mounted]);
 
 	return (
 		<div className='flex items-center gap-6'>
