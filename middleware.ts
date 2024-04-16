@@ -1,9 +1,10 @@
-// import * as context from 'next/headers';
+import * as context from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { env } from '@/lib/env/client';
 
-// import { lucia } from './lib/auth/lucia';
+import { lucia } from './lib/auth/lucia';
+import { getSession } from './lib/auth/utils';
 
 export const config = {
 	matcher: [
@@ -18,27 +19,27 @@ export const config = {
 	],
 };
 
-// const uncachedValidateAuthRequest = async () => {
-// 	const sessionId = context.cookies().get(lucia.sessionCookieName)?.value ?? null;
-// 	if (!sessionId) {
-// 		return {
-// 			user: null,
-// 			session: null,
-// 		};
-// 	}
-// 	const result = await lucia.validateSession(sessionId);
-// 	try {
-// 		if (result.session && result.session.fresh) {
-// 			const sessionCookie = lucia.createSessionCookie(result.session.id);
-// 			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-// 		}
-// 		if (!result.session) {
-// 			const sessionCookie = lucia.createBlankSessionCookie();
-// 			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-// 		}
-// 	} catch {}
-// 	return result;
-// };
+const uncachedValidateAuthRequest = async () => {
+	const sessionId = context.cookies().get(lucia.sessionCookieName)?.value ?? null;
+	if (!sessionId) {
+		return {
+			user: null,
+			session: null,
+		};
+	}
+	const result = await lucia.validateSession(sessionId);
+	try {
+		if (result.session && result.session.fresh) {
+			const sessionCookie = lucia.createSessionCookie(result.session.id);
+			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+		}
+		if (!result.session) {
+			const sessionCookie = lucia.createBlankSessionCookie();
+			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+		}
+	} catch {}
+	return result;
+};
 
 export default async function middleware(req: NextRequest) {
 	const url = req.nextUrl;
@@ -65,9 +66,18 @@ export default async function middleware(req: NextRequest) {
 	// 	return NextResponse.redirect(new URL('/api/sign-out', req.url));
 	// }
 
+	if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+		const { session } = await uncachedValidateAuthRequest();
+		if (!session && path !== '/sign-in') {
+			return NextResponse.redirect(new URL('/sign-in', req.url));
+		} else if (session && path == '/sign-in') {
+			return NextResponse.redirect(new URL('/', req.url));
+		}
+		return NextResponse.rewrite(new URL(`/app${path === '/' ? '' : path}`, req.url));
+	}
+
 	if (
 		path.startsWith('/api') ||
-		path.startsWith('/app') ||
 		path.startsWith('/sign-in') ||
 		path.startsWith('/sign-up') ||
 		path.startsWith('/sign-out') ||

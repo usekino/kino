@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-// import { selectAuthSchema } from '@/lib/db/schema/authentications';
 import { mutateUserSchema } from '@/lib/db/schema/users-table';
 
 export const updateUserSchema = z.object({

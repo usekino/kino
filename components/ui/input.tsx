@@ -2,10 +2,15 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
+// export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'> {
+// 	value?: string | null;
+// }
+
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	({ className, type, ...props }, ref) => {
+		// const normalizedValue = value ? String(value) : '';
 		return (
 			<input
 				type={type}

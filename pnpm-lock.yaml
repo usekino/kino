@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@heyooo-inc/reserved-subdomains':
+    specifier: ^1.2.4
+    version: 1.2.4
   '@hookform/resolvers':
     specifier: ^3.3.4
     version: 3.3.4(react-hook-form@7.51.3)
@@ -943,6 +946,10 @@ packages:
 
   /@floating-ui/utils@0.2.1:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
+    dev: false
+
+  /@heyooo-inc/reserved-subdomains@1.2.4:
+    resolution: {integrity: sha512-9LeY5hxmHlmSpfLh6oapF4/RrNxrcBnPLbTT0IHQvpKYKM5xjErz1Jv+87HJwepDuutJJwcwYv+sHtZwHVmVoQ==}
     dev: false
 
   /@hookform/resolvers@3.3.4(react-hook-form@7.51.3):

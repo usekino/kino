@@ -7,6 +7,7 @@ import { schemaDefaults } from './_shared';
 import { authentications } from './authentications-table';
 import { sessions } from './sessions-table';
 import { teams } from './teams-table';
+import { xUsersTeams } from './x-users-teams-table';
 
 export const users = pgTable(
 	'users',
@@ -46,9 +47,12 @@ export const userRelations = relations(users, ({ many, one }) => ({
 	authentications: one(authentications, {
 		fields: [users.id],
 		references: [authentications.userId],
+		relationName: 'authentications',
 	}),
-	sessions: many(sessions),
-	teams: many(users),
+	sessions: many(sessions, {
+		relationName: 'sessions',
+	}),
+	teams: many(xUsersTeams),
 }));
 
 const refineSchema = {

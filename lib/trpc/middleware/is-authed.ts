@@ -3,8 +3,6 @@ import { TRPCError } from '@trpc/server';
 import { t } from '@/lib/trpc/trpc';
 
 export const isAuthed = t.middleware(async ({ ctx, next }) => {
-	console.log('>>>>isAuthed', ctx.auth);
-
 	if (!ctx.auth.session || !ctx.auth.user) {
 		throw new TRPCError({
 			code: 'UNAUTHORIZED',

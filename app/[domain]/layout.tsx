@@ -1,33 +1,22 @@
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { redirect } from 'next/navigation';
 
 import { MainNav } from '@/components/section/main-nav';
-import { env } from '@/lib/env/server';
 
-const temp_getSiteData = async (domain: string) => {
-	const subdomain = domain.includes(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) ? domain.split('.')[0] : '';
-
-	return {
-		team: subdomain,
-		customDomain: false, // TODO: check if domain is a custom domain
-	};
-};
+import { DomainPageParams, getTeam } from './_lib/utils';
 
 export default async function DomainLayout({
 	params,
 	children,
-}: {
-	params: {
-		domain: string;
-	};
-	children: ReactNode;
-}) {
-	const domain = decodeURIComponent(params.domain);
-	const data = await temp_getSiteData(domain);
+}: PropsWithChildren<DomainPageParams>) {
+	const team = await getTeam({
+		domain: params.domain,
+	});
 
-	if (domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) && data.customDomain) {
-		return redirect(`https://${data.customDomain}`);
+	// TODO: Redirect to custom domain
+	if (team.decodedDomain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) && team.customDomain) {
+		return redirect(`https://${team.customDomain}`);
 	}
 
 	return (

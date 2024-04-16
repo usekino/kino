@@ -1,10 +1,12 @@
-import { relations, sql } from 'drizzle-orm';
+import ReservedSubdomains from '@heyooo-inc/reserved-subdomains';
+import { relations } from 'drizzle-orm';
 import { integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from './_shared';
 import { users } from './users-table';
+import { xUsersTeams } from './x-users-teams-table';
 
 export const teams = pgTable('teams', {
 	// Defaults
@@ -15,6 +17,7 @@ export const teams = pgTable('teams', {
 	updates: integer('updates').default(0).notNull(),
 	//
 	name: varchar('name', { length: 255 }).notNull(),
+	slug: varchar('slug', { length: 255 }).notNull().unique(),
 	description: varchar('description', { length: 3072 }),
 	ownerId: varchar('owner_id', {
 		length: 255,
@@ -27,12 +30,25 @@ export const teamRelations = relations(teams, ({ one, many }) => ({
 	owner: one(users, {
 		fields: [teams.ownerId],
 		references: [users.id],
+		relationName: 'ownerId',
 	}),
-	members: many(users),
+	members: many(xUsersTeams),
 }));
 
 const refineSchema = {
 	name: ({ name }) => name.min(3).max(50),
+	slug: ({ slug }) =>
+		slug
+			.min(3)
+			.max(25)
+			.regex(
+				/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
+				'Invalid subdomain' //
+			)
+			.refine(
+				(slug) => ReservedSubdomains.isValid(slug),
+				'Team slug is not allowed' //
+			),
 	description: ({ description }) => description.max(300),
 	members: () => z.array(z.string()).min(1).max(3),
 	githubUrl: ({ githubUrl }) => githubUrl.url(),

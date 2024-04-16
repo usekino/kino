@@ -19,6 +19,7 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 	user: one(users, {
 		fields: [sessions.userId],
 		references: [users.id],
+		relationName: 'sessions',
 	}),
 }));
 

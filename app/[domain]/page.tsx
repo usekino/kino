@@ -1,18 +1,21 @@
-import { getSession } from '@/lib/auth/utils';
+import { getUser } from '@/lib/auth/utils';
 
-export default async function DomainPage() {
-	const session = await getSession();
+import { DomainPageParams, getTeam } from './_lib/utils';
+
+export default async function DomainPage({ params }: DomainPageParams) {
+	const user = await getUser();
+
+	const team = await getTeam({
+		domain: params.domain,
+		user,
+	});
 
 	return (
 		<div>
-			{session ? (
-				<div>
-					<h2>Profile</h2>
-					<pre>{JSON.stringify(session, null, 2)}</pre>
-				</div>
-			) : (
-				'Sign In'
-			)}
+			<h1>{team.name}</h1>
+			<p>{team.description}</p>
+			{team.githubUrl && <a href={team.githubUrl}>{team.githubUrl}</a>}
+			{team.userIsOwner && <a href={`/app?team=${team.subdomain}`}>Dashboard</a>}
 		</div>
 	);
 }
