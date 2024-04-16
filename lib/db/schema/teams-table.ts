@@ -1,4 +1,6 @@
-import ReservedSubdomains from '@heyooo-inc/reserved-subdomains';
+import badwords from '@heyooo-inc/reserved-subdomains/badwords.json';
+import names from '@heyooo-inc/reserved-subdomains/names.json';
+import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { relations } from 'drizzle-orm';
 import { integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
@@ -46,7 +48,28 @@ const refineSchema = {
 				'Invalid subdomain' //
 			)
 			.refine(
-				(slug) => ReservedSubdomains.isValid(slug),
+				(slug) => {
+					return ![
+						'development',
+						'dev',
+						'dns',
+						'ftp',
+						'host',
+						'mail',
+						'server',
+						'server',
+						'smtp',
+						'static',
+						'assets',
+						'test',
+						'v',
+						'web',
+						'www',
+						...web,
+						...badwords,
+						...names,
+					].includes(slug);
+				},
 				'Team slug is not allowed' //
 			),
 	description: ({ description }) => description.max(300),
