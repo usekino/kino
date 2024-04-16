@@ -1,6 +1,5 @@
 'use client';
 
-import { watch } from 'fs';
 import type { CreateTeamSchema } from '@/lib/validation/team-validation';
 
 import { zodResolver } from '@hookform/resolvers/zod';

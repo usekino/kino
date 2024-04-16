@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import { CheckIcon, ChevronsUpDown, PlusCircle } from 'lucide-react';
+import { CheckIcon, ChevronsUpDown, ExternalLink, PlusCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
 	Command,
@@ -15,33 +16,21 @@ import {
 	CommandSeparator,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { env } from '@/lib/env/client';
 import { cn } from '@/lib/utils';
-
-const groups = [
-	{
-		label: 'Teams',
-		teams: [
-			{
-				label: 'Acme Inc.',
-				value: 'acme-inc',
-			},
-			{
-				label: 'Monsters Inc.',
-				value: 'monsters',
-			},
-		],
-	},
-];
-
-type Team = (typeof groups)[number]['teams'][number];
+import { ReadTeamSchema } from '@/lib/validation/team-validation';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
 
-interface TeamSwitcherProps extends PopoverTriggerProps {}
+interface TeamSwitcherProps extends PopoverTriggerProps {
+	teams: ReadTeamSchema[];
+}
 
-export default function TeamSwitcher({ className }: TeamSwitcherProps) {
+export default function TeamSwitcher({ className, teams }: TeamSwitcherProps) {
+	const router = useRouter();
+
 	const [open, setOpen] = React.useState(false);
-	const [selectedTeam, setSelectedTeam] = React.useState<Team>(groups[0].teams[0]);
+	const [selectedTeam, setSelectedTeam] = React.useState<ReadTeamSchema>(teams[0]);
 
 	React.useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -57,77 +46,87 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
 	React.useEffect(() => {}, [selectedTeam]);
 
 	return (
-		<Popover open={open} onOpenChange={setOpen}>
-			<PopoverTrigger asChild>
-				<Button
-					variant='outline'
-					role='combobox'
-					aria-expanded={open}
-					aria-label='Select a team'
-					className={cn('w-[200px] justify-between', className)}
-				>
-					<Avatar className='mr-2 h-5 w-5'>
-						<AvatarImage
-							src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-							alt={selectedTeam.label}
+		<div className='flex items-center gap-6'>
+			<Popover open={open} onOpenChange={setOpen}>
+				<PopoverTrigger asChild>
+					<Button
+						variant='outline'
+						role='combobox'
+						aria-expanded={open}
+						aria-label='Select a team'
+						className={cn('w-[200px] justify-between', className)}
+					>
+						<Avatar className='mr-2 h-5 w-5'>
+							{/* <AvatarImage
+							src={`https://avatar.vercel.sh/${selectedTeam.slug}.png`}
+							alt={selectedTeam.name}
 							className='grayscale'
-						/>
-						<AvatarFallback>SC</AvatarFallback>
-					</Avatar>
-					{selectedTeam.label}
-					<ChevronsUpDown className='ml-auto h-4 w-4 shrink-0 opacity-50' />
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent className='w-[200px] p-0' asChild>
-				<Command>
-					<CommandInput placeholder='Search team...' />
-					<CommandList>
-						<CommandEmpty>No team found.</CommandEmpty>
-						{groups.map((group) => (
-							<CommandGroup key={group.label} heading={group.label}>
-								{group.teams.map((team) => (
+						/> */}
+							<AvatarFallback>❖</AvatarFallback>
+						</Avatar>
+						{selectedTeam.name}
+						<ChevronsUpDown className='ml-auto h-4 w-4 shrink-0 opacity-50' />
+					</Button>
+				</PopoverTrigger>
+				<PopoverContent className='w-[200px] p-0' asChild>
+					<Command>
+						<CommandInput placeholder='Search team...' />
+						<CommandList>
+							<CommandEmpty>No team found.</CommandEmpty>
+							<CommandGroup key='owned-teams' heading='Teams'>
+								{teams.map((team) => (
 									<CommandItem
-										key={team.value}
-										value={team.value}
+										key={team.slug}
+										value={team.slug}
 										onSelect={() => {
 											setSelectedTeam(team);
 											setOpen(false);
+											router.push(`/team/${team.slug}`);
 										}}
 										className='text-sm'
 									>
 										<Avatar className='mr-2 h-5 w-5'>
-											<AvatarImage
-												src={`https://avatar.vercel.sh/${team.value}.png`}
-												alt={team.label}
+											{/* <AvatarImage
+												src={`https://avatar.vercel.sh/${team.slug}.png`}
+												alt={team.name}
 												className='grayscale'
-											/>
-											<AvatarFallback>SC</AvatarFallback>
+											/> */}
+											<AvatarFallback>❖</AvatarFallback>
 										</Avatar>
-										{team.label}
+										{team.name}
 										<CheckIcon
 											className={cn(
 												'ml-auto h-4 w-4',
-												selectedTeam.value === team.value ? 'opacity-100' : 'opacity-0'
+												selectedTeam.slug === team.slug ? 'opacity-100' : 'opacity-0'
 											)}
 										/>
 									</CommandItem>
 								))}
 							</CommandGroup>
-						))}
-						<CommandSeparator />
-						<CommandGroup>
-							<CommandItem
-								onSelect={() => {
-									console.log('Go to create team page');
-								}}
-							>
-								<PlusCircle className='mr-2 h-5 w-5' />
-								Create Team
-							</CommandItem>
-						</CommandGroup>
-					</CommandList>
-				</Command>
-			</PopoverContent>
-		</Popover>
+
+							<CommandSeparator />
+							<CommandGroup>
+								<CommandItem
+									onSelect={() => {
+										setOpen(false);
+										router.push(`/create/team`);
+									}}
+								>
+									<PlusCircle className='mr-2 h-5 w-5' />
+									Create Team
+								</CommandItem>
+							</CommandGroup>
+						</CommandList>
+					</Command>
+				</PopoverContent>
+			</Popover>
+			<a
+				href={`https://${selectedTeam.slug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}`}
+				className='inline-flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary hover:underline'
+			>
+				Public view
+				<ExternalLink size={16} />
+			</a>
+		</div>
 	);
 }
