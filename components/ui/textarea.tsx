@@ -2,14 +2,10 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-export interface TextareaProps
-	extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> {
-	value?: string | null;
-}
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-	({ className, value, ...props }, ref) => {
-		const normalizedValue = value ? String(value) : '';
+	({ className, ...props }, ref) => {
 		return (
 			<textarea
 				className={cn(
@@ -17,7 +13,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 					className
 				)}
 				ref={ref}
-				value={normalizedValue}
 				{...props}
 			/>
 		);
