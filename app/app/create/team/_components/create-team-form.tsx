@@ -1,5 +1,6 @@
 'use client';
 
+import { watch } from 'fs';
 import type { CreateTeamSchema } from '@/lib/validation/team-validation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,17 +41,12 @@ export function CreateTeamForm() {
 		defaultValues: {
 			name: '',
 			slug: '',
-			description: '',
 			githubUrl: null,
 		},
 		resolver: zodResolver(createTeamSchema),
 	});
 
-	const onSubmit = async (data: CreateTeamSchema) => {
-		if (form.formState.isValid) {
-			createTeam(data);
-		}
-	};
+	const onSubmit = async (data: CreateTeamSchema) => createTeam(data);
 
 	return (
 		<div className='flex items-start justify-center'>
@@ -105,6 +101,7 @@ export function CreateTeamForm() {
 										className='min-h-[100px]'
 										placeholder='Enter a short description of your team'
 										{...field}
+										value={field.value ?? ''}
 									/>
 								</FormControl>
 								<FormDescription>Tell us a little bit about your team.</FormDescription>
