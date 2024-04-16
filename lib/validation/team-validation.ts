@@ -20,4 +20,4 @@ export const readTeamSchema = selectTeamSchema.pick({
 	githubUrl: true,
 	members: true,
 });
-export type SelectTeamSchema = z.infer<typeof readTeamSchema>;
+export type ReadTeamSchema = z.infer<typeof readTeamSchema>;
