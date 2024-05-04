@@ -64,13 +64,13 @@ export default function Home() {
 						<li>Add and verify your domain</li>
 						<li>
 							Create an API Key and add to{' '}
-							<span className='ml-1 bg-neutral-100 p-0.5 font-mono font-thin text-neutral-600'>
+							<span className='ml-1 bg-stone-100 p-0.5 font-mono font-thin text-stone-600'>
 								.env
 							</span>
 						</li>
 						<li>
 							Update &quot;from:&quot; in{' '}
-							<span className='ml-1 bg-neutral-100 p-0.5 font-mono font-thin text-neutral-600'>
+							<span className='ml-1 bg-stone-100 p-0.5 font-mono font-thin text-stone-600'>
 								app/api/email/route.ts
 							</span>
 						</li>
@@ -79,17 +79,17 @@ export default function Home() {
 				</div>
 			</div>
 			<form onSubmit={(e) => e.preventDefault()} className='mt-4 space-y-3 border-t pt-4'>
-				{errors && <p className='bg-neutral-50 p-3'>{JSON.stringify(errors, null, 2)}</p>}
+				{errors && <p className='bg-stone-50 p-3'>{JSON.stringify(errors, null, 2)}</p>}
 				<div>
-					<label className='text-sm text-neutral-700'>Name</label>
+					<label className='text-sm text-stone-700'>Name</label>
 					<input
 						type='text'
 						placeholder='Tim'
 						name='name'
 						ref={nameInputRef}
 						className={`
-              w-full rounded-md border px-3 py-2 text-sm focus:outline-neutral-700 ${
-								!!errors?.name ? 'border-red-700' : 'border-neutral-200'
+              w-full rounded-md border px-3 py-2 text-sm focus:outline-stone-700 ${
+								!!errors?.name ? 'border-red-700' : 'border-stone-200'
 							}`}
 					/>
 				</div>
@@ -101,8 +101,8 @@ export default function Home() {
 						name='email'
 						ref={emailInputRef}
 						className={`
-              w-full rounded-md border px-3 py-2 text-sm focus:outline-neutral-700 ${
-								!!errors?.email ? 'border-red-700' : 'border-neutral-200'
+              w-full rounded-md border px-3 py-2 text-sm focus:outline-stone-700 ${
+								!!errors?.email ? 'border-red-700' : 'border-stone-200'
 							}`}
 					/>
 				</div>

@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { schemaDefaults } from './_shared';
 import { authentications } from './authentications-table';
 import { sessions } from './sessions-table';
-import { teams } from './teams-table';
+import { xUsersProjects } from './x-users-projects-table';
 import { xUsersTeams } from './x-users-teams-table';
 
 export const users = pgTable(
@@ -52,7 +52,12 @@ export const userRelations = relations(users, ({ many, one }) => ({
 	sessions: many(sessions, {
 		relationName: 'sessions',
 	}),
-	teams: many(xUsersTeams),
+	teams: many(xUsersTeams, {
+		relationName: 'teams',
+	}),
+	projects: many(xUsersProjects, {
+		relationName: 'projects',
+	}),
 }));
 
 const refineSchema = {
@@ -67,7 +72,6 @@ const refineSchema = {
 
 export const selectUserSchema = createSelectSchema(users, refineSchema);
 export const mutateUserSchema = createInsertSchema(users, refineSchema).omit({
-	id: true,
 	createdAt: true,
 });
 

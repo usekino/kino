@@ -7,7 +7,6 @@ export const createTeamSchema = z.object({
 	slug: mutateTeamSchema.shape.slug,
 	description: mutateTeamSchema.shape.description,
 	// members: mutateTeamSchema.shape.members,
-	githubUrl: mutateTeamSchema.shape.githubUrl,
 });
 export type CreateTeamSchema = z.infer<typeof createTeamSchema>;
 
@@ -17,7 +16,5 @@ export const readTeamSchema = selectTeamSchema.pick({
 	slug: true,
 	description: true,
 	ownerId: true,
-	githubUrl: true,
-	members: true,
 });
 export type ReadTeamSchema = z.infer<typeof readTeamSchema>;

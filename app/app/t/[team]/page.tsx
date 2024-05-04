@@ -25,7 +25,6 @@ export default async function DashTeamPage({
 		<div>
 			<h1>{team?.name}</h1>
 			<p>{team?.description}</p>
-			{team?.githubUrl && <a href={team.githubUrl}>{team.githubUrl}</a>}
 		</div>
 	);
 }

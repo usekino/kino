@@ -3,7 +3,7 @@ import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
 export const env = createEnv({
-	extends: [vercel],
+	extends: [vercel()],
 	client: {
 		// Project
 		NEXT_PUBLIC_ROOT_DOMAIN: z.string().min(1),

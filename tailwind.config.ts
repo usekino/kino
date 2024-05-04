@@ -1,3 +1,4 @@
+const plugin = require('tailwindcss/plugin');
 const { fontFamily } = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
@@ -22,10 +23,12 @@ module.exports = {
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))',
+					fade: 'hsla(var(--primary-fade))',
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))',
+					fade: 'hsl(var(--secondary) / 0.15)',
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
@@ -38,6 +41,7 @@ module.exports = {
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
 					foreground: 'hsl(var(--accent-foreground))',
+					fade: 'hsl(var(--accent) / 0.15)',
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
@@ -46,6 +50,10 @@ module.exports = {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))',
+				},
+				native: {
+					DEFAULT: 'hsl(var(--native))',
+					foreground: 'hsl(var(--native-foreground))',
 				},
 			},
 			borderRadius: {
@@ -70,7 +78,25 @@ module.exports = {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 			},
+			backgroundImage: {
+				// bg-[repeating-linear-gradient(45deg,hsl(var(--border))_0,hsl(var(--border))_1px,transparent_0,transparent_50%)]
+				diagonal:
+					'repeating-linear-gradient(45deg,hsl(var(--border)) 0,hsl(var(--border)) 1px,transparent 0,transparent 50%)',
+			},
+			background: {
+				gradient: 'var(--gradient)',
+			},
 		},
 	},
-	plugins: [require('tailwindcss-animate')],
+	plugins: [
+		plugin(function ({ addVariant }: { addVariant: (name: string, variants: string[]) => void }) {
+			addVariant('hocus', ['&:hover', '&:focus']);
+			addVariant('group-hocus', [':merge(.group):hover &', ':merge(.group):focus &']);
+			addVariant('factive', ['&:active', '&:focus']);
+			addVariant('all', ['&:active', '&:focus', '&:hover']);
+			addVariant('list', ['.list-primary &']);
+			addVariant('light', ['html.light &']);
+		}),
+		require('tailwindcss-animate'),
+	],
 };

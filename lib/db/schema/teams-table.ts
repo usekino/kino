@@ -7,6 +7,7 @@ import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from './_shared';
+import { projects } from './projects-table';
 import { users } from './users-table';
 import { xUsersTeams } from './x-users-teams-table';
 
@@ -24,17 +25,21 @@ export const teams = pgTable('teams', {
 	ownerId: varchar('owner_id', {
 		length: 255,
 	}).notNull(),
-	members: json('members').$type<string[]>().notNull(),
-	githubUrl: varchar('github_url', { length: 255 }),
+	// members: json('members').$type<string[]>().notNull(),
 });
 
 export const teamRelations = relations(teams, ({ one, many }) => ({
 	owner: one(users, {
 		fields: [teams.ownerId],
 		references: [users.id],
-		relationName: 'ownerId',
+		relationName: 'owner',
 	}),
-	members: many(xUsersTeams),
+	members: many(xUsersTeams, {
+		relationName: 'members',
+	}),
+	projects: many(projects, {
+		relationName: 'team_projects',
+	}),
 }));
 
 const refineSchema = {
@@ -73,8 +78,7 @@ const refineSchema = {
 				'Team slug is not allowed' //
 			),
 	description: ({ description }) => description.max(300),
-	members: () => z.array(z.string()).min(1).max(3),
-	githubUrl: ({ githubUrl }) => githubUrl.url(),
+	// members: () => z.array(z.string()).min(1).max(3),
 } satisfies Refine<typeof teams, 'select'>;
 
 export const selectTeamSchema = createSelectSchema(teams, refineSchema);

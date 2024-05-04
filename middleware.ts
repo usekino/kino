@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { env } from '@/lib/env/client';
 
 import { lucia } from './lib/auth/lucia';
-import { getSession } from './lib/auth/utils';
 
 export const config = {
 	matcher: [
@@ -77,7 +76,6 @@ export default async function middleware(req: NextRequest) {
 	}
 
 	if (
-		path.startsWith('/api') ||
 		path.startsWith('/sign-in') ||
 		path.startsWith('/sign-up') ||
 		path.startsWith('/sign-out') ||

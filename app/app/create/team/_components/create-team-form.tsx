@@ -27,9 +27,9 @@ import { createTeamSchema } from '@/lib/validation/team-validation';
 export function CreateTeamForm() {
 	const router = useRouter();
 	const { mutate: createTeam } = api.team.create.useMutation({
-		onSuccess: ({ data }) => {
+		onSuccess: ({ slug }) => {
 			toast.success('Team created');
-			router.push(`https://${data.slug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+			router.push(`https://${slug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 		},
 		onError: (error) => {
 			toast.error('Error', { description: error.message });
@@ -40,7 +40,6 @@ export function CreateTeamForm() {
 		defaultValues: {
 			name: '',
 			slug: '',
-			githubUrl: null,
 		},
 		resolver: zodResolver(createTeamSchema),
 	});
@@ -104,24 +103,6 @@ export function CreateTeamForm() {
 									/>
 								</FormControl>
 								<FormDescription>Tell us a little bit about your team.</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='githubUrl'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Github (optional)</FormLabel>
-								<FormControl>
-									<Input
-										type='url'
-										placeholder='https://github.com/acme-inc/repo'
-										{...field}
-										value={field.value ?? ''}
-									/>
-								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
