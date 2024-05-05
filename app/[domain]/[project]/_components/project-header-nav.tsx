@@ -1,14 +1,12 @@
 'use client';
 
-import { Home, MessageSquare, Rss, Settings } from 'lucide-react';
+import { Home, Map, MessageSquare, Rss, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 
-// import { splitPathAfterProject } from '../_lib/splitPathAfterProject';
-
-export const DashboardLinks = () => {
+export const ProjectLinks = () => {
 	const pathname = usePathname();
 	const params = useParams();
 
@@ -28,21 +26,21 @@ export const DashboardLinks = () => {
 			className: '',
 		},
 		{
+			text: 'Roadmap',
+			href: `${base}/roadmap`,
+			icon: Map,
+			className: '',
+		},
+		{
 			text: 'Updates',
 			href: `${base}/updates`,
 			icon: Rss,
 			className: '',
 		},
-		{
-			text: 'Settings',
-			href: `${base}/settings`,
-			icon: Settings,
-			className: '',
-		},
 	];
 
 	return (
-		<nav className={cn('flex items-center gap-2')}>
+		<nav className={cn('inline-flex items-center gap-2')}>
 			{links.map((link) => (
 				<Link
 					key={link.href}

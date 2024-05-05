@@ -23,7 +23,9 @@ export default async function DomainLayout({
 		<main>
 			<div className='flex h-screen'>
 				<div className='w-full'>
-					<MainNav />
+					<div className='border'>
+						<MainNav dashboard={false} />
+					</div>
 					{children}
 				</div>
 			</div>

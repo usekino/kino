@@ -14,7 +14,6 @@ export default async function DomainPage({ params }: DomainPageParams) {
 		<div>
 			<h1>{team.name}</h1>
 			<p>{team.description}</p>
-			{team.githubUrl && <a href={team.githubUrl}>{team.githubUrl}</a>}
 			{team.userIsOwner && <a href={`/app?team=${team.subdomain}`}>Dashboard</a>}
 		</div>
 	);

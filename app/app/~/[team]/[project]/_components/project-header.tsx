@@ -13,8 +13,7 @@ type ProjectHeaderProps = {
 	links?: LinkData[];
 };
 
-export const ProjectHeader = ({ icon, title, links }: ProjectHeaderProps) => {
-	const Icon = icon;
+export const ProjectHeader = ({ icon: Icon, title, links }: ProjectHeaderProps) => {
 	return (
 		<header className='border-y bg-diagonal bg-[length:10px_10px]'>
 			<div className='p-4 md:px-8 md:pb-6'>
