@@ -18,7 +18,9 @@ export const emailVerifications = pgTable('email_verifications', {
 		.unique(),
 	email: varchar('email', {
 		length: 255,
-	}).notNull(),
+	})
+		.unique()
+		.notNull(),
 	expiresAt: timestamp('expires_at').notNull(),
 });
 
