@@ -221,7 +221,7 @@ export function FeedbackTable() {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-			<div className='rounded-md border'>
+			<div className='rounded-md border bg-native'>
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (

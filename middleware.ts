@@ -1,5 +1,7 @@
+import type { NextRequest } from 'next/server';
+
 import * as context from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { env } from '@/lib/env/client';
 

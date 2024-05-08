@@ -1,6 +1,9 @@
 import { Blocks, Bug, GalleryVerticalEnd, Gift } from 'lucide-react';
 import Link from 'next/link';
 
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 export const ListSidebar = () => {
 	const links = [
 		{
@@ -32,7 +35,12 @@ export const ListSidebar = () => {
 					<Link
 						key={link.title}
 						href={link.href}
-						className='inline-flex items-center gap-2 rounded-md px-3 py-2 hover:bg-accent hover:underline'
+						className={cn(
+							buttonVariants({
+								variant: 'ghost',
+							}),
+							'justify-start gap-3 hocus:underline'
+						)}
 					>
 						<link.icon size={16} />
 						<span>{link.title}</span>

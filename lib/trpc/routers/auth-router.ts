@@ -22,7 +22,7 @@ export const authRouter = router({
 			const email = input.email.toLowerCase().trim();
 
 			const newUser = mutateUserSchema.parse({
-				id: userId,
+				publicId: userId,
 				email,
 				username: input.username,
 				roles: ['beta', 'member'],
@@ -49,18 +49,16 @@ export const authRouter = router({
 			const session = await lucia.createSession(userId, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
 
-			const { domain, secure, sameSite, ...rest } = sessionCookie.attributes;
+			const { sameSite, ...luciaAttr } = sessionCookie.attributes;
 
 			cookies().set({
+				...luciaAttr,
 				name: sessionCookie.name,
 				value: sessionCookie.value,
 				domain: env.NEXT_PUBLIC_ROOT_DOMAIN,
 				secure: process.env.NODE_ENV === 'production',
 				sameSite: process.env.NODE_ENV === 'development' ? 'lax' : sameSite,
-				...rest,
 			});
-
-			console.log('>>> success:', session, userId);
 
 			return {
 				user: newUser,
@@ -101,18 +99,18 @@ export const authRouter = router({
 			});
 		}
 
-		const session = await lucia.createSession(existingUser.id, {});
+		const session = await lucia.createSession(existingUser.publicId, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
-		const { domain, secure, sameSite, ...rest } = sessionCookie.attributes;
+		const { sameSite, ...luciaAttr } = sessionCookie.attributes;
 
 		cookies().set({
+			...luciaAttr,
 			name: sessionCookie.name,
 			value: sessionCookie.value,
 			domain: env.NEXT_PUBLIC_ROOT_DOMAIN,
 			secure: process.env.NODE_ENV === 'production',
 			sameSite: process.env.NODE_ENV === 'development' ? 'lax' : sameSite,
-			...rest,
 		});
 
 		return {

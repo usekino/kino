@@ -1,14 +1,11 @@
-import { LucideIcon } from 'lucide-react';
+import type { API } from '@/lib/trpc/routers/_app';
+import type { LucideIcon } from 'lucide-react';
+
+import Link from 'next/link';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { API } from '@/lib/trpc/routers/_app';
 
 import { ProjectLinks } from './project-header-nav';
-
-type LinkData = {
-	href: string;
-	title: string;
-};
 
 export const ProjectHeader = ({
 	project,
@@ -19,24 +16,37 @@ export const ProjectHeader = ({
 	title: string;
 	icon: LucideIcon;
 }) => {
+	const teamInitial = project.team.name.slice(0, 1)[0].toUpperCase();
 	return (
-		<header className='border-b bg-accent/10 pt-8'>
+		<header className='border-b bg-white pt-8 dark:bg-accent/10'>
 			<div className='container'>
-				<div className='flex items-center gap-3'>
-					<Avatar className='h-8 w-8'>
-						<AvatarImage alt='KI' />
-						<AvatarFallback className='text-sm'>KI</AvatarFallback>
+				<div className='mx-2 flex items-center gap-3'>
+					<Avatar className='h-6 w-6'>
+						<AvatarImage alt={teamInitial} />
+						<AvatarFallback className='text-[10px]'>{teamInitial}</AvatarFallback>
 					</Avatar>
-					<span className='text-lg'>{project.name}</span>
+					<Link
+						className='decoration-2 underline-offset-2 hocus:underline'
+						href={`https://${project.team.slug}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/`}
+					>
+						{project.team.name}
+					</Link>
+					<span className='opacity-50'> / </span>
+					<Link
+						className='decoration-2 underline-offset-2 hocus:underline'
+						href={`https://${project.team.slug}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/project/${project.slug}/`}
+					>
+						{project.slug}
+					</Link>
 				</div>
 			</div>
-			<div className='p-4 md:px-8 md:pb-6'>
-				<div className='container mt-12 flex items-center gap-4'>
+			<div className='container'>
+				<div className='mx-2 mt-12 flex items-center gap-4'>
 					<Icon size={30} />
 					<h1 className='text-3xl font-medium md:text-4xl'>{title}</h1>
 				</div>
 			</div>
-			<div className='container pb-2'>
+			<div className='container pb-2 pt-6'>
 				<ProjectLinks />
 			</div>
 		</header>

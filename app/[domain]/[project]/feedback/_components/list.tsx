@@ -1,7 +1,13 @@
-import { Plus } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from '@/components/ui/pagination';
 import {
 	Select,
 	SelectContent,
@@ -10,7 +16,8 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 
-import { ListItem } from './item';
+import { AddDialog } from './add-dialog';
+import { ListItem } from './list-item';
 
 export const List = () => {
 	return (
@@ -30,10 +37,7 @@ export const List = () => {
 					</Select>
 				</nav>
 				<div>
-					<Button className='gap-2'>
-						<Plus size={14} />
-						Add feedback
-					</Button>
+					<AddDialog />
 				</div>
 			</div>
 			<ul className='grid gap-4'>
@@ -41,6 +45,22 @@ export const List = () => {
 				<ListItem />
 				<ListItem />
 			</ul>
+			<Pagination>
+				<PaginationContent>
+					<PaginationItem>
+						<PaginationPrevious href='#' />
+					</PaginationItem>
+					<PaginationItem>
+						<PaginationLink href='#'>1</PaginationLink>
+					</PaginationItem>
+					<PaginationItem>
+						<PaginationEllipsis />
+					</PaginationItem>
+					<PaginationItem>
+						<PaginationNext href='#' />
+					</PaginationItem>
+				</PaginationContent>
+			</Pagination>
 		</div>
 	);
 };

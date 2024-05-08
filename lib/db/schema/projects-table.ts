@@ -1,10 +1,12 @@
+import type { Refine } from 'drizzle-zod';
+import type { z } from 'zod';
+
 import badwords from '@heyooo-inc/reserved-subdomains/badwords.json';
 import names from '@heyooo-inc/reserved-subdomains/names.json';
 import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { relations } from 'drizzle-orm';
 import { integer, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
-import { z } from 'zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { schemaDefaults } from './_shared';
 import { teams } from './teams-table';

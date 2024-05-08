@@ -1,9 +1,10 @@
 'use client';
 
-import { Home, Map, MessageSquare, Rss, Settings } from 'lucide-react';
+import { Home, Map, MessageSquare, Rss } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export const ProjectLinks = () => {
@@ -46,8 +47,10 @@ export const ProjectLinks = () => {
 					key={link.href}
 					href={link.href}
 					className={cn(
-						'flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors',
-						'hocus:bg-accent',
+						buttonVariants({
+							variant: 'ghost',
+							size: 'sm',
+						}),
 						link.href === pathname ? 'bg-primary text-primary-foreground hocus:bg-primary' : '',
 						link.className
 					)}

@@ -1,10 +1,11 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
+import { defaultColumns } from './_shared';
 import { users } from './users-table';
 
 export const emailVerifications = pgTable('email_verifications', {
-	id: serial('id').notNull().primaryKey(),
+	...defaultColumns(),
 	code: varchar('code', {
 		length: 255,
 	}).notNull(),

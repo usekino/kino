@@ -1,10 +1,11 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
-// import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
-// import { z } from 'zod';
-
 import { users } from './users-table';
+
+// Note: this sessions table differs than the rest of the tables because it is
+// managed by Lucia for sessions. AFAIK, this has specific requirements, that I
+// won't really want to experiment with right now.
 
 export const sessions = pgTable('sessions', {
 	id: text('id').unique().primaryKey(),
@@ -22,11 +23,3 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 		relationName: 'sessions',
 	}),
 }));
-
-// const refineSchema = {} satisfies Refine<typeof sessions, 'select'>;
-
-// export const selectSessionSchema = createSelectSchema(users, refineSchema);
-// export const mutateSessionSchema = createInsertSchema(users, refineSchema);
-
-// export type SelectSessionSchema = z.infer<typeof selectSessionSchema>;
-// export type CreateSessionSchema = z.infer<typeof mutateSessionSchema>;

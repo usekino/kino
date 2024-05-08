@@ -1,6 +1,8 @@
+import type { Refine } from 'drizzle-zod';
+
 import { relations, sql } from 'drizzle-orm';
-import { index, integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
+import { index, integer, json, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from './_shared';
@@ -12,8 +14,11 @@ import { xUsersTeams } from './x-users-teams-table';
 export const users = pgTable(
 	'users',
 	{
-		// Defaults
-		id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull().primaryKey(),
+		// Note: this sessions table differs than the rest of the tables because it
+		// is managed by Lucia for users. AFAIK, this has specific requirements,
+		// that I won't really want to experiment with right now.
+		id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull(),
+		privateId: serial('private_id').notNull().primaryKey(),
 		createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
 		updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
 		deletedAt: timestamp('deleted_at'),

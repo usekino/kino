@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { arrayContains } from 'drizzle-orm';
 
 import { getProjectData } from '@/lib/db/prepared';
 import { projects, selectProjectSchema } from '@/lib/db/schema';

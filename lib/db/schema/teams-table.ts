@@ -1,23 +1,21 @@
+import type { Refine } from 'drizzle-zod';
+import type { z } from 'zod';
+
 import badwords from '@heyooo-inc/reserved-subdomains/badwords.json';
 import names from '@heyooo-inc/reserved-subdomains/names.json';
 import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { relations } from 'drizzle-orm';
-import { integer, json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
-import { z } from 'zod';
+import { pgTable, varchar } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { schemaDefaults } from './_shared';
+import { defaultColumns } from './_shared';
 import { projects } from './projects-table';
 import { users } from './users-table';
 import { xUsersTeams } from './x-users-teams-table';
 
 export const teams = pgTable('teams', {
 	// Defaults
-	id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	...defaultColumns(),
 	//
 	name: varchar('name', { length: 255 }).notNull(),
 	slug: varchar('slug', { length: 255 }).notNull().unique(),

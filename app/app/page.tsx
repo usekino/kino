@@ -7,6 +7,6 @@ export default async function AppHome() {
 	if (!selected) {
 		redirect('/sign-in');
 	}
-	const project = selected.project ? `/project/${selected.project.slug}/` : '';
-	redirect(`/team/${selected.team.slug}${project}`);
+	const project = selected.project ? `/${selected.project.slug}/` : '';
+	redirect(`/~/${selected.team.slug}${project}`);
 }

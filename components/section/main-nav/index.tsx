@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { GlobalSearchToggle } from '@/components/global-search/toggle';
+import { ModeToggle } from '@/components/ui/ThemeToggle';
 import { getUser } from '@/lib/auth/utils';
 
 import { UserNav } from './user-nav';
@@ -22,8 +23,11 @@ export const MainNav = async ({ dashboard }: { dashboard: boolean }) => {
 					<GlobalSearchToggle />
 				</div>
 				<div className='flex items-center space-x-4'>
-					{!dashboard && <Link href='/app'>Dashboard</Link>}
+					{!dashboard && (
+						<a href={`https://app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}>Dashboard</a>
+					)}
 					<UserNav user={user} />
+					<ModeToggle />
 				</div>
 			</div>
 		</div>

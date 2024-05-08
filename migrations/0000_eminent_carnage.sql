@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" varchar(255) PRIMARY KEY DEFAULT LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0') NOT NULL,
+	"id" varchar(255) DEFAULT LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0') NOT NULL,
+	"private_id" serial PRIMARY KEY NOT NULL,
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"deleted_at" timestamp,
@@ -40,11 +41,16 @@ CREATE TABLE IF NOT EXISTS "sessions" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "email_verifications" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" varchar(255) PRIMARY KEY DEFAULT LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0') NOT NULL,
+	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"deleted_at" timestamp,
+	"updates" integer DEFAULT 0 NOT NULL,
 	"code" varchar(255) NOT NULL,
 	"user_id" varchar(15) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"expires_at" timestamp NOT NULL,
+	CONSTRAINT "email_verifications_id_unique" UNIQUE("id"),
 	CONSTRAINT "email_verifications_user_id_unique" UNIQUE("user_id")
 );
 --> statement-breakpoint
@@ -77,6 +83,44 @@ CREATE TABLE IF NOT EXISTS "projects" (
 	CONSTRAINT "projects_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "feedback" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"deleted_at" timestamp,
+	"updates" integer DEFAULT 0 NOT NULL,
+	"user_id" serial NOT NULL,
+	"team_id" serial NOT NULL,
+	"project_id" serial NOT NULL,
+	"board_id" serial NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"description" varchar(3072) NOT NULL,
+	"status" json DEFAULT '["pending"]' NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "feedback_votes" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"deleted_at" timestamp,
+	"updates" integer DEFAULT 0 NOT NULL,
+	"feedback_id" serial NOT NULL,
+	"user_id" serial NOT NULL,
+	"vote" integer NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "feedback_boards" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"deleted_at" timestamp,
+	"updates" integer DEFAULT 0 NOT NULL,
+	"project_id" serial NOT NULL,
+	"slug" varchar(255) NOT NULL,
+	"name" varchar(255) NOT NULL,
+	"description" varchar(3072)
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "x_users_teams" (
 	"id" varchar(255) PRIMARY KEY DEFAULT LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0') NOT NULL,
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -84,7 +128,7 @@ CREATE TABLE IF NOT EXISTS "x_users_teams" (
 	"deleted_at" timestamp,
 	"updates" integer DEFAULT 0 NOT NULL,
 	"user_id" varchar(255) NOT NULL,
-	"user_role" json DEFAULT '["member"]'::json NOT NULL,
+	"user_role" jsonb DEFAULT '["member"]'::jsonb NOT NULL,
 	"team_id" varchar(255) NOT NULL,
 	CONSTRAINT "x_users_teams_id_unique" UNIQUE("id")
 );
@@ -96,7 +140,7 @@ CREATE TABLE IF NOT EXISTS "x_users_projects" (
 	"deleted_at" timestamp,
 	"updates" integer DEFAULT 0 NOT NULL,
 	"user_id" varchar(255) NOT NULL,
-	"user_role" json DEFAULT '["member"]'::json NOT NULL,
+	"user_role" jsonb DEFAULT '["member"]'::jsonb NOT NULL,
 	"team_id" varchar(255) NOT NULL,
 	CONSTRAINT "x_users_projects_id_unique" UNIQUE("id")
 );

@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 
 export type ArraySingle<T> = T extends (infer U)[] ? U : T;
 export type Truthy<T> = T extends false | '' | 0 | null | undefined ? never : T;

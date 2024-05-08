@@ -13,7 +13,7 @@ export const ListItem = () => {
 			</div>
 			<a
 				href='#'
-				className='group flex flex-col p-4 transition-all duration-100 ease-in-out hover:bg-accent/25'
+				className='group flex flex-col p-4 transition-colors duration-100 ease-in-out focus:outline-primary hocus:bg-accent/50 dark:hover:bg-accent/25'
 			>
 				<span className='text-xl font-medium underline-offset-2 group-focus:underline'>
 					Link to resources pages is broken

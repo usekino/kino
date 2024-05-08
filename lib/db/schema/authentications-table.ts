@@ -1,18 +1,16 @@
-import { relations } from 'drizzle-orm';
-import { integer, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
-import { z } from 'zod';
+import type { Refine } from 'drizzle-zod';
+import type { z } from 'zod';
 
-import { schemaDefaults } from './_shared';
+import { relations } from 'drizzle-orm';
+import { pgTable, varchar } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+
+import { defaultColumns } from './_shared';
 import { users } from './users-table';
 
 export const authentications = pgTable('authentications', {
 	// Defaults
-	id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	...defaultColumns(),
 	//
 	userId: varchar('user_id', {
 		length: 255,

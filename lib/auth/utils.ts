@@ -1,5 +1,6 @@
+import type { Session, User } from 'lucia';
+
 import { cache } from 'react';
-import { Session, User } from 'lucia';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 

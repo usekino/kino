@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useEffect } from 'react';
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
@@ -11,9 +11,25 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getThemeCookie, setThemeCookie } from '@/lib/util/theme-cookie';
 
 export function ModeToggle() {
 	const { setTheme } = useTheme();
+
+	const handleThemeChange = async (theme: string) => {
+		setThemeCookie(theme);
+		setTheme(theme);
+	};
+
+	useEffect(() => {
+		const setThemeFromCookie = async () => {
+			const themeCookie = await getThemeCookie();
+			if (themeCookie) {
+				setTheme(themeCookie);
+			}
+		};
+		setThemeFromCookie();
+	}, []);
 
 	return (
 		<DropdownMenu>
@@ -25,9 +41,9 @@ export function ModeToggle() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end'>
-				<DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => handleThemeChange('light')}>Light</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => handleThemeChange('dark')}>Dark</DropdownMenuItem>
+				<DropdownMenuItem onClick={() => handleThemeChange('system')}>System</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

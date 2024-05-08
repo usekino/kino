@@ -1,8 +1,9 @@
+import type { ProjectPageParams } from '../_lib/utils';
+
 import { notFound } from 'next/navigation';
 
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { ProjectPageParams } from '../_lib/utils';
 import { List } from './_components/list';
 import { ListSidebar } from './_components/sidebar';
 
