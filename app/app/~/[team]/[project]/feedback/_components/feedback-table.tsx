@@ -1,17 +1,18 @@
 'use client';
 
 import * as React from 'react';
-import {
+import type {
 	ColumnDef,
 	ColumnFiltersState,
+	SortingState,
+	VisibilityState} from '@tanstack/react-table';
+import {
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	SortingState,
-	useReactTable,
-	VisibilityState,
+	useReactTable
 } from '@tanstack/react-table';
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react';
 

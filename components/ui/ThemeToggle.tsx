@@ -29,7 +29,7 @@ export function ModeToggle() {
 			}
 		};
 		setThemeFromCookie();
-	}, []);
+	}, [setTheme]);
 
 	return (
 		<DropdownMenu>

@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { Ratelimit } from '@upstash/ratelimit';
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 import { redis } from '@/lib/db/upstash';
 import { t } from '@/lib/trpc/trpc';

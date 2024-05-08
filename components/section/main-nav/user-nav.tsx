@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from 'lucia';
+import type { User } from 'lucia';
 import { useRouter } from 'next/navigation';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';

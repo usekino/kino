@@ -59,7 +59,7 @@ export function CreateTeamForm() {
 								<FormControl>
 									<Input placeholder='ACME Inc.' {...field} />
 								</FormControl>
-								<FormDescription>This is your team's public display name.</FormDescription>
+								<FormDescription>This is your team&apos;s public display name.</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}

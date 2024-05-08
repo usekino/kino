@@ -41,7 +41,7 @@ export function GlobalSearch({
 
 	useEffect(() => {
 		onChange?.(open);
-	}, [open]);
+	}, [open, onChange]);
 
 	return (
 		<CommandDialog open={open} onOpenChange={setOpen}>

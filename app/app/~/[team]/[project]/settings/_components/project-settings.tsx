@@ -1,6 +1,3 @@
-import { Mountain } from 'lucide-react';
-import Link from 'next/link';
-
 import { Button } from '@/components/ui/button';
 import {
 	Card,
@@ -29,7 +26,7 @@ export function ProjectSettings() {
 				<CardHeader>
 					<CardTitle>General</CardTitle>
 					<CardDescription>
-						Update your project's name, description, and other general settings.
+						Update your project&apos;s name, description, and other general settings.
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

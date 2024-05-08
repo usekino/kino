@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { integer, jsonb, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
+import type { Refine } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from './_shared';

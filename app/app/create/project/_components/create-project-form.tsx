@@ -1,11 +1,13 @@
 'use client';
 
+import type { CreateProjectSchema } from '@/lib/validation/project-validation';
+import type { ReadTeamSchema } from '@/lib/validation/team-validation';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
@@ -20,9 +22,7 @@ import { Input } from '@/components/ui/input';
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
@@ -30,8 +30,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/lib/env/client';
 import { api } from '@/lib/trpc/clients/client';
 import { slugify } from '@/lib/utils';
-import { CreateProjectSchema, createProjectSchema } from '@/lib/validation/project-validation';
-import { ReadTeamSchema } from '@/lib/validation/team-validation';
+import { createProjectSchema } from '@/lib/validation/project-validation';
 
 export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 	const router = useRouter();
@@ -81,7 +80,7 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 											{teams.map((team) => (
 												<SelectItem
 													key={team.slug}
-													value={team.id}
+													value={team.slug}
 													onSelect={() => {
 														field.onChange(team.slug);
 													}}
@@ -107,7 +106,7 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 								<FormControl>
 									<Input placeholder='Fancy Project' {...field} />
 								</FormControl>
-								<FormDescription>This is your project's public display name.</FormDescription>
+								<FormDescription>This is your project&apos;s public display name.</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}

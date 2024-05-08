@@ -6,7 +6,7 @@ import { env } from '@/lib/env/client';
 
 // import { getBaseUrl } from '@/lib/util/get-base-url';
 
-import { AppRouter } from './routers/_app';
+import type { AppRouter } from './routers/_app';
 
 // export function getTRPCUrl() {
 // 	return getBaseUrl() + '/api/trpc';

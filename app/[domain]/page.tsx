@@ -1,6 +1,7 @@
 import { getUser } from '@/lib/auth/utils';
 
-import { DomainPageParams, getTeam } from './_lib/utils';
+import type { DomainPageParams} from './_lib/utils';
+import { getTeam } from './_lib/utils';
 
 export default async function DomainPage({ params }: DomainPageParams) {
 	const user = await getUser();

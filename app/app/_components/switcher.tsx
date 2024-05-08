@@ -3,6 +3,7 @@
 import type { API } from '@/lib/trpc/routers/_app';
 import type { TeamProjectSelect } from '@/lib/validation/dashboard-validation';
 import type { ReadProjectSchema } from '@/lib/validation/project-validation';
+import type { ReadTeamSchema } from '@/lib/validation/team-validation';
 
 import { useEffect, useState } from 'react';
 import { CheckIcon, ChevronsUpDown, PlusCircle } from 'lucide-react';
@@ -21,7 +22,6 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { api } from '@/lib/trpc/clients/client';
 import { cn } from '@/lib/utils';
-import { ReadTeamSchema } from '@/lib/validation/team-validation';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
 type _Projects = API['output']['dashboard']['projectsByTeam'];
@@ -49,7 +49,7 @@ export default function Switcher({ className, projectsByTeam }: ProjectSwitcherP
 		if (mounted) {
 			localStorage.setItem('selectedTeam', JSON.stringify(params.project));
 		}
-	}, [params.project]);
+	}, [params.project, mounted]);
 
 	useEffect(() => {
 		setMounted(true);

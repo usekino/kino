@@ -1,5 +1,5 @@
 import { query } from '@/lib/db/upstash';
-import { TeamProjectSelect } from '@/lib/validation/dashboard-validation';
+import type { TeamProjectSelect } from '@/lib/validation/dashboard-validation';
 
 export const teamProjectSelect = query.createCollection<TeamProjectSelect>('selectedTeamProjects');
 

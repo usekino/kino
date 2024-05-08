@@ -1,4 +1,4 @@
-import { JSX, SVGProps } from 'react';
+import type { JSX, SVGProps } from 'react';
 import Link from 'next/link';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';

@@ -1,3 +1,5 @@
+import type { NextRequest } from 'next/server';
+
 import { cache } from 'react';
 import * as headers from 'next/headers';
 
@@ -14,7 +16,7 @@ const createContext = cache(async () => {
 		...createInnerTRPCContext({
 			auth: await validateAuthRequest(),
 		}),
-		req: {} as any,
+		req: {} as NextRequest,
 		headers: {
 			cookie: headers.cookies().toString(),
 			'x-trpc-source': 'rsc-invoke',

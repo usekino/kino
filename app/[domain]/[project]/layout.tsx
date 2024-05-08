@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { ProjectLayoutParams } from './_lib/utils';
+import type { ProjectLayoutParams } from './_lib/utils';
 
 export default async function FrontProjectLayout({ params, children }: ProjectLayoutParams) {
 	const project = await api.project.findBySlug({

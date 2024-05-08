@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation';
 
 import { MainNav } from '@/components/section/main-nav';
 
-import { DomainPageParams, getTeam } from './_lib/utils';
+import type { DomainPageParams} from './_lib/utils';
+import { getTeam } from './_lib/utils';
 
 export default async function DomainLayout({
 	params,

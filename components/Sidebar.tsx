@@ -1,4 +1,4 @@
-import { Session } from 'lucia';
+import type { Session } from 'lucia';
 import Link from 'next/link';
 
 import { getSession, getUser } from '@/lib/auth/utils';

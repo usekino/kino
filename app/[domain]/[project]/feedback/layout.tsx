@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { api } from '@/lib/trpc/clients/server-invoker';
 
 import { ProjectHeader } from '../_components/project-header';
-import { ProjectLayoutParams } from '../_lib/utils';
+import type { ProjectLayoutParams } from '../_lib/utils';
 
 export default async function FeedbackLayout({ children, params }: ProjectLayoutParams) {
 	const project = await api.project.findBySlug({
