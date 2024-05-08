@@ -3,7 +3,7 @@ import { createDate, TimeSpan } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 
 import { db } from '@/lib/db';
-import { emailVerifications } from '@/lib/db/schema';
+import { emailVerifications } from '@/lib/db/tables';
 
 export const generateEmailVerificationCode = async (
 	userId: string,

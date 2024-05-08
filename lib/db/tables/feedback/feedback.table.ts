@@ -6,9 +6,9 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from '../_shared';
-import { projects } from '../projects-table';
-import { teams } from '../teams-table';
-import { users } from '../users-table';
+import { projects } from '../projects.table';
+import { teams } from '../teams.table';
+import { users } from '../users.table';
 import { feedbackBoards } from './feedback-boards.table';
 
 export const feedback = pgTable('feedback', {

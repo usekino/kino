@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 
 import { getUser } from '@/lib/auth/utils';
 import { db } from '@/lib/db/index';
-import { users } from '@/lib/db/schema/users-table';
+import { users } from '@/lib/db/tables/users.table';
 
 export async function PUT(request: Request) {
 	const user = await getUser();

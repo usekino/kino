@@ -1,4 +1,4 @@
-import { feedback } from '@/lib/db/schema/feedback/feedback.table';
+import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createFeedbackSchema } from '@/lib/validation/feedback.schema';
 

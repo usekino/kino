@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { selectProjectSchema, selectTeamSchema, selectUserSchema } from '../db/schema';
+import { selectProjectSchema, selectTeamSchema, selectUserSchema } from '../db/tables';
 
 export const teamSelectSchema = z.object({
 	userId: selectUserSchema.shape.id,

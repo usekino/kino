@@ -6,7 +6,7 @@ import { integer, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-cor
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { schemaDefaults } from '../_shared';
-import { projects } from '../projects-table';
+import { projects } from '../projects.table';
 
 export const feedbackBoards = pgTable('feedback_boards', {
 	id: serial('id').notNull().primaryKey(),

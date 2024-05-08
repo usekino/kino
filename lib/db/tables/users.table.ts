@@ -6,10 +6,10 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { schemaDefaults } from './_shared';
-import { authentications } from './authentications-table';
-import { sessions } from './sessions-table';
-import { xUsersProjects } from './x-users-projects-table';
-import { xUsersTeams } from './x-users-teams-table';
+import { authentications } from './authentications.table';
+import { sessions } from './sessions.table';
+import { xUsersProjects } from './x-users-projects.table';
+import { xUsersTeams } from './x-users-teams.table';
 
 export const users = pgTable(
 	'users',

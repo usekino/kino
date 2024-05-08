@@ -5,33 +5,37 @@ import badwords from '@heyooo-inc/reserved-subdomains/badwords.json';
 import names from '@heyooo-inc/reserved-subdomains/names.json';
 import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { schemaDefaults } from './_shared';
-import { teams } from './teams-table';
+import { defaultColumns } from './_shared';
+import { projects } from './projects.table';
+import { users } from './users.table';
+import { xUsersTeams } from './x-users-teams.table';
 
-export const projects = pgTable('projects', {
+export const teams = pgTable('teams', {
 	// Defaults
-	id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	...defaultColumns(),
 	//
 	name: varchar('name', { length: 255 }).notNull(),
 	slug: varchar('slug', { length: 255 }).notNull().unique(),
 	description: varchar('description', { length: 3072 }),
-	teamId: varchar('team_id', {
+	ownerId: varchar('owner_id', {
 		length: 255,
 	}).notNull(),
-	githubUrl: varchar('github_url', { length: 255 }),
+	// members: json('members').$type<string[]>().notNull(),
 });
 
-export const projectRelations = relations(projects, ({ one }) => ({
-	team: one(teams, {
-		fields: [projects.teamId],
-		references: [teams.id],
+export const teamRelations = relations(teams, ({ one, many }) => ({
+	owner: one(users, {
+		fields: [teams.ownerId],
+		references: [users.id],
+		relationName: 'owner',
+	}),
+	members: many(xUsersTeams, {
+		relationName: 'members',
+	}),
+	projects: many(projects, {
 		relationName: 'team_projects',
 	}),
 }));
@@ -72,14 +76,14 @@ const refineSchema = {
 				'Team slug is not allowed' //
 			),
 	description: ({ description }) => description.max(300),
-	githubUrl: ({ githubUrl }) => githubUrl.url(),
-} satisfies Refine<typeof projects, 'select'>;
+	// members: () => z.array(z.string()).min(1).max(3),
+} satisfies Refine<typeof teams, 'select'>;
 
-export const selectProjectSchema = createSelectSchema(projects, refineSchema);
-export const mutateProjectSchema = createInsertSchema(projects, refineSchema).omit({
+export const selectTeamSchema = createSelectSchema(teams, refineSchema);
+export const mutateTeamSchema = createInsertSchema(teams, refineSchema).omit({
 	id: true,
 	createdAt: true,
 });
 
-export type SelectProjectSchema = z.infer<typeof selectProjectSchema>;
-export type MutateProjectSchema = z.infer<typeof mutateProjectSchema>;
+export type SelectTeamSchema = z.infer<typeof selectTeamSchema>;
+export type MutateTeamSchema = z.infer<typeof mutateTeamSchema>;

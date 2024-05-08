@@ -1,6 +1,6 @@
 import { eq, sql } from 'drizzle-orm';
 
-import { users } from '@/lib/db/schema/users-table';
+import { users } from '@/lib/db/tables/users.table';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { updateUserSchema } from '@/lib/validation/user-validation';
 

@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 
 import { getTeamData } from '@/lib/db/prepared';
-import { xUsersTeams } from '@/lib/db/schema';
-import { selectTeamSchema, teams } from '@/lib/db/schema/teams-table';
+import { xUsersTeams } from '@/lib/db/tables';
+import { selectTeamSchema, teams } from '@/lib/db/tables/teams.table';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthyObject } from '@/lib/utils';
 import { teamSelectSchema } from '@/lib/validation/dashboard-validation';

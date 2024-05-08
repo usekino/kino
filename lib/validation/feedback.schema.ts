@@ -1,6 +1,6 @@
-import { mutateFeedbackSchema } from '@/lib/db/schema/feedback/feedback.table';
+import { mutateFeedbackSchema } from '@/lib/db/tables/feedback/feedback.table';
 
-import { mutateFeedbackCommentsSchema } from '../db/schema/feedback/feedback-comments.table';
+import { mutateFeedbackCommentsSchema } from '../db/tables/feedback/feedback-comments.table';
 
 export const createFeedbackSchema = mutateFeedbackSchema
 	.pick({

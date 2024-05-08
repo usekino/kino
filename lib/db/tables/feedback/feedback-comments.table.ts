@@ -5,7 +5,7 @@ import { integer, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-cor
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { schemaDefaults } from '../_shared';
-import { users } from '../users-table';
+import { users } from '../users.table';
 import { feedback } from './feedback.table';
 
 export const feedbackComments = pgTable('feedback_comments', {

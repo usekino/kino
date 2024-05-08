@@ -6,7 +6,7 @@ import { integer, pgTable, serial, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { schemaDefaults } from '../_shared';
-import { users } from '../users-table';
+import { users } from '../users.table';
 import { feedback } from './feedback.table';
 
 export const feedbackVotes = pgTable('feedback_votes', {
@@ -39,6 +39,10 @@ const refineSchema = {
 
 export const selectFeedbackVotesSchema = createSelectSchema(feedbackVotes, refineSchema);
 export const mutateFeedbackVotesSchema = createInsertSchema(feedbackVotes, refineSchema);
+
+const selectFeedbackSchemaTest = selectFeedbackVotesSchema.shape.id;
+
+selectFeedbackSchemaTest;
 
 export type SelectFeedbackVotesSchema = z.infer<typeof selectFeedbackVotesSchema>;
 export type MutateFeedbackVotesSchema = z.infer<typeof mutateFeedbackVotesSchema>;

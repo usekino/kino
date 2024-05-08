@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
-import { users } from './users-table';
+import { users } from './users.table';
 
 // Note: this sessions table differs than the rest of the tables because it is
 // managed by Lucia for sessions. AFAIK, this has specific requirements, that I

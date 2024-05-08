@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { mutateTeamSchema, selectTeamSchema } from '@/lib/db/schema/teams-table';
+import { mutateTeamSchema, selectTeamSchema } from '@/lib/db/tables/teams.table';
 
 export const createTeamSchema = z.object({
 	name: mutateTeamSchema.shape.name,

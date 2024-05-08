@@ -5,8 +5,8 @@ import { Argon2id } from 'oslo/password';
 
 // import { generateEmailVerificationCode } from '@/lib/auth/codes/email-verification';
 import { lucia } from '@/lib/auth/lucia';
-import { authentications, mutateAuthSchema } from '@/lib/db/schema/authentications-table';
-import { mutateUserSchema, users } from '@/lib/db/schema/users-table';
+import { authentications, mutateAuthSchema } from '@/lib/db/tables/authentications.table';
+import { mutateUserSchema, users } from '@/lib/db/tables/users.table';
 import { env } from '@/lib/env/server';
 // import { sendAccountVerification } from '@/lib/email/template/sendAccountVerification';
 import { procedure, router } from '@/lib/trpc/trpc';
