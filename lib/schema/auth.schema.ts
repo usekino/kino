@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { selectAuthSchema } from '@/lib/db/tables/authentications.table';
-import { selectUserSchema } from '@/lib/db/tables/users.table';
+import { selectUserSchema } from '@/lib/db/tables/lucia/users.table';
 
 export const signInEmailSchema = z.object({
 	email: selectUserSchema.shape.email,

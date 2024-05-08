@@ -20,10 +20,8 @@ export const teamRouter = router({
 	}),
 	findByOwnership: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
-
-		const ownerId = ctx.auth.user.id;
 		const teams = await ctx.db.query.teams.findMany({
-			where: (table, { eq }) => eq(table.ownerId, ownerId),
+			where: (table, { eq }) => eq(table.ownerId, user.id),
 			columns: createTruthyObject(readTeamSchema.shape),
 		});
 
@@ -40,14 +38,14 @@ export const teamRouter = router({
 		.use(isAuthed)
 		.input(createTeamSchema)
 		.mutation(async ({ ctx, input }) => {
-			const ownerId = ctx.auth.user.id;
+			const { user } = ctx.auth;
 			return ctx.db.transaction(async (trx) => {
 				// Create new team
 				const newTeam = await trx
 					.insert(teams)
 					.values({
 						...input,
-						ownerId,
+						ownerId: user.id,
 					})
 					.returning({
 						id: teams.id,
@@ -55,13 +53,13 @@ export const teamRouter = router({
 					});
 				// Add to join table
 				await trx.insert(xUsersTeams).values({
-					userId: ownerId,
+					userId: user.id,
 					teamId: newTeam[0].id,
 					userRole: ['member'],
 				});
 				// Update Upstash
-				await teamProjectSelect.update(ownerId, {
-					userId: ownerId,
+				await teamProjectSelect.update(user.id, {
+					userId: user.id,
 					team: {
 						id: newTeam[0].id,
 						slug: newTeam[0].slug,
@@ -102,7 +100,7 @@ export const teamRouter = router({
 			}
 
 			const projects = await ctx.db.query.projects.findMany({
-				where: (table, { eq }) => eq(table.teamId, user.id),
+				where: (project, { eq }) => eq(project.teamId, userTeam.id),
 				columns: createTruthyObject(readProjectSchema.shape),
 			});
 

@@ -22,8 +22,8 @@ export const dashboardRouter = router({
 			await teamProjectSelect.set(user.id, {
 				userId: user.id,
 				team: {
-					id: user.id,
-					slug: user.username,
+					id: '', // fix this
+					slug: '', // fix this
 				},
 			});
 		}
@@ -101,14 +101,14 @@ export const dashboardRouter = router({
 		// Get projects where the user is a member
 		const userProjects = await ctx.db.query.xUsersProjects.findMany({
 			columns: {},
-			where: (table, { eq, and, not, or }) => {
+			where: (userProject, { eq, and, not, or }) => {
 				return and(
-					eq(table.userId, user.id),
+					eq(userProject.userId, user.id),
 					or(
-						arrayContains(table.userRole, ['admin']),
-						arrayContains(table.userRole, ['member']) //
+						arrayContains(userProject.userRole, ['admin']),
+						arrayContains(userProject.userRole, ['member']) //
 					),
-					not(arrayContains(table.userRole, ['blocked']))
+					not(arrayContains(userProject.userRole, ['blocked']))
 				);
 			},
 			with: {

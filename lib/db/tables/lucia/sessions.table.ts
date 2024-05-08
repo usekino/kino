@@ -1,15 +1,15 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { users } from './users.table';
 
-// Note: this sessions table differs than the rest of the tables because it is
-// managed by Lucia for sessions. AFAIK, this has specific requirements, that I
-// won't really want to experiment with right now.
+// ⚠️ Note: this table differs from the rest of the non-auth tables
+// because it's managed by Lucia, and it has specific requirements, on how
+// the database it structured.
 
 export const sessions = pgTable('sessions', {
-	id: text('id').unique().primaryKey(),
-	userId: text('user_id').notNull(),
+	id: varchar('id', { length: 255 }).unique().primaryKey(),
+	userId: varchar('user_id', { length: 255 }).notNull(),
 	expiresAt: timestamp('expires_at', {
 		withTimezone: true,
 		mode: 'date',

@@ -9,9 +9,9 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { defaultColumns } from './_shared';
+import { xUsersTeams } from './join/x-users-teams.table';
+import { users } from './lucia/users.table';
 import { projects } from './projects.table';
-import { users } from './users.table';
-import { xUsersTeams } from './x-users-teams.table';
 
 export const teams = pgTable('teams', {
 	// Defaults
@@ -23,7 +23,6 @@ export const teams = pgTable('teams', {
 	ownerId: varchar('owner_id', {
 		length: 255,
 	}).notNull(),
-	// members: json('members').$type<string[]>().notNull(),
 });
 
 export const teamRelations = relations(teams, ({ one, many }) => ({

@@ -2,15 +2,17 @@ import { relations } from 'drizzle-orm';
 import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from './_shared';
-import { users } from './users.table';
+import { users } from './lucia/users.table';
 
 export const emailVerifications = pgTable('email_verifications', {
+	// Defaults
 	...defaultColumns(),
+	//
 	code: varchar('code', {
 		length: 255,
 	}).notNull(),
 	userId: varchar('user_id', {
-		length: 15,
+		length: 255,
 	})
 		.notNull()
 		.unique(),

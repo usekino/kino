@@ -1,3 +1,5 @@
+import type { User } from 'lucia';
+
 import { eq } from 'drizzle-orm';
 import { createDate, TimeSpan } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
@@ -6,7 +8,7 @@ import { db } from '@/lib/db';
 import { emailVerifications } from '@/lib/db/tables';
 
 export const generateEmailVerificationCode = async (
-	userId: string,
+	userId: User['id'],
 	email: string
 ): Promise<string> => {
 	await db.delete(emailVerifications).where(eq(emailVerifications.userId, userId));

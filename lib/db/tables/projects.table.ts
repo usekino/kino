@@ -5,26 +5,20 @@ import badwords from '@heyooo-inc/reserved-subdomains/badwords.json';
 import names from '@heyooo-inc/reserved-subdomains/names.json';
 import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { schemaDefaults } from './_shared';
+import { defaultColumns } from './_shared';
 import { teams } from './teams.table';
 
 export const projects = pgTable('projects', {
 	// Defaults
-	id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	...defaultColumns(),
 	//
 	name: varchar('name', { length: 255 }).notNull(),
 	slug: varchar('slug', { length: 255 }).notNull().unique(),
 	description: varchar('description', { length: 3072 }),
-	teamId: varchar('team_id', {
-		length: 255,
-	}).notNull(),
+	teamId: varchar('team_id').notNull(),
 	githubUrl: varchar('github_url', { length: 255 }),
 });
 

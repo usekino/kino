@@ -1,27 +1,31 @@
 import type { Refine } from 'drizzle-zod';
 
 import { relations, sql } from 'drizzle-orm';
-import { integer, json, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { json, pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { schemaDefaults } from '../_shared';
+import { defaultColumns } from '../_shared';
+import { users } from '../lucia/users.table';
 import { projects } from '../projects.table';
 import { teams } from '../teams.table';
-import { users } from '../users.table';
 import { feedbackBoards } from './feedback-boards.table';
 
 export const feedback = pgTable('feedback', {
-	id: serial('id').notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	...defaultColumns(),
 	//
-	userId: serial('user_id').notNull(),
-	teamId: serial('team_id').notNull(),
-	projectId: serial('project_id').notNull(),
-	boardId: serial('board_id').notNull(),
+	userId: varchar('user_id', {
+		length: 255,
+	}).notNull(),
+	teamId: varchar('team_id', {
+		length: 255,
+	}).notNull(),
+	projectId: varchar('project_id', {
+		length: 255,
+	}).notNull(),
+	boardId: varchar('board_id', {
+		length: 255,
+	}).notNull(),
 	//
 	title: varchar('title', {
 		length: 255,

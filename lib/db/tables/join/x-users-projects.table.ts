@@ -1,35 +1,32 @@
 import type { Refine } from 'drizzle-zod';
 
 import { relations } from 'drizzle-orm';
-import { integer, jsonb, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { jsonb, pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { schemaDefaults } from './_shared';
-import { projects } from './projects.table';
-import { users } from './users.table';
+import { defaultColumns } from '../_shared';
+import { users } from '../lucia/users.table';
+import { projects } from '../projects.table';
 
 export const xUsersProjects = pgTable('x_users_projects', {
-	// Default
-	id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	// Defaults
+	...defaultColumns(),
 	//
 	userId: varchar('user_id', {
 		length: 255,
 	}).notNull(),
-	userRole: jsonb('user_role').$type<string[]>().default(['member']).notNull(),
 	projectId: varchar('team_id', {
 		length: 255,
 	}).notNull(),
+	//
+	userRole: jsonb('user_role').$type<string[]>().default(['member']).notNull(),
 });
 
 export const xUsersProjectsRelations = relations(xUsersProjects, ({ one }) => ({
 	user: one(users, {
 		fields: [xUsersProjects.userId],
-		references: [users.id],
+		references: [users.privateId],
 		relationName: 'user',
 	}),
 	project: one(projects, {

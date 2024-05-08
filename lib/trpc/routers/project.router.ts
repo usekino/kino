@@ -1,8 +1,8 @@
 import { TRPCError } from '@trpc/server';
 
 import { getProjectData } from '@/lib/db/prepared';
-import { projects, selectProjectSchema } from '@/lib/db/tables';
-import { xUsersProjects } from '@/lib/db/tables/x-users-projects.table';
+import { xUsersProjects } from '@/lib/db/tables/join/x-users-projects.table';
+import { projects, selectProjectSchema } from '@/lib/db/tables/projects.table';
 import { teamProjectSelectSchema } from '@/lib/schema/dashboard.schema';
 import { createProjectSchema, readProjectSchema } from '@/lib/schema/project.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
@@ -89,9 +89,13 @@ export const projectRouter = router({
 	findByOwnership: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
 
-		const projects = await ctx.db.query.projects.findMany({
-			where: (table, { eq }) => eq(table.teamId, user.id),
-			columns: createTruthyObject(readProjectSchema.shape),
+		const projects = await ctx.db.query.xUsersProjects.findMany({
+			where: (userProject, { eq }) => eq(userProject.userId, user.id),
+			with: {
+				project: {
+					columns: createTruthyObject(readProjectSchema.shape),
+				},
+			},
 		});
 
 		const selected = await getTeamProjectSelect.match({
@@ -99,7 +103,7 @@ export const projectRouter = router({
 		});
 
 		return {
-			projects,
+			projects: projects.map((project) => readProjectSchema.parse(project)),
 			selected,
 		};
 	}),

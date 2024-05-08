@@ -2,22 +2,22 @@ import type { Refine } from 'drizzle-zod';
 import type { z } from 'zod';
 
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, serial, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { schemaDefaults } from '../_shared';
-import { users } from '../users.table';
+import { defaultColumns } from '../_shared';
+import { users } from '../lucia/users.table';
 import { feedback } from './feedback.table';
 
 export const feedbackVotes = pgTable('feedback_votes', {
-	id: serial('id').notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	...defaultColumns(),
 	//
-	feedbackId: serial('feedback_id').notNull(),
-	userId: serial('user_id').notNull(),
+	feedbackId: varchar('feedback_id', {
+		length: 255,
+	}).notNull(),
+	userId: varchar('user_id', {
+		length: 255,
+	}).notNull(),
 	//
 	vote: integer('vote').notNull(),
 });

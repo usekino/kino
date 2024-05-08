@@ -6,7 +6,7 @@ import { Argon2id } from 'oslo/password';
 // import { generateEmailVerificationCode } from '@/lib/auth/codes/email-verification';
 import { lucia } from '@/lib/auth/lucia';
 import { authentications, mutateAuthSchema } from '@/lib/db/tables/authentications.table';
-import { mutateUserSchema, users } from '@/lib/db/tables/users.table';
+import { mutateUserSchema, users } from '@/lib/db/tables/lucia/users.table';
 import { env } from '@/lib/env/server';
 import { signInEmailSchema, signUpEmailSchema } from '@/lib/schema/auth.schema';
 // import { sendAccountVerification } from '@/lib/email/template/sendAccountVerification';
@@ -25,7 +25,7 @@ export const authRouter = router({
 				publicId: userId,
 				email,
 				username: input.username,
-				roles: ['beta', 'member'],
+				role: ['beta', 'member'],
 				verified: true, // TODO: change to false when set up RESEND
 			});
 
@@ -99,7 +99,7 @@ export const authRouter = router({
 			});
 		}
 
-		const session = await lucia.createSession(existingUser.publicId, {});
+		const session = await lucia.createSession(existingUser.id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
 		const { sameSite, ...luciaAttr } = sessionCookie.attributes;

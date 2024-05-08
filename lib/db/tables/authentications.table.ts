@@ -6,7 +6,7 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { defaultColumns } from './_shared';
-import { users } from './users.table';
+import { users } from './lucia/users.table';
 
 export const authentications = pgTable('authentications', {
 	// Defaults

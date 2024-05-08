@@ -46,7 +46,6 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 
 	const form = useForm<CreateProjectSchema>({
 		defaultValues: {
-			teamId: '',
 			name: '',
 			slug: '',
 			githubUrl: null,

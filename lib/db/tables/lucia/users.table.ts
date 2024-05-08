@@ -5,19 +5,20 @@ import { index, integer, json, pgTable, serial, timestamp, varchar } from 'drizz
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { schemaDefaults } from './_shared';
-import { authentications } from './authentications.table';
+import { schemaDefaults } from '../_shared';
+import { authentications } from '../authentications.table';
+import { xUsersProjects } from '../join/x-users-projects.table';
+import { xUsersTeams } from '../join/x-users-teams.table';
 import { sessions } from './sessions.table';
-import { xUsersProjects } from './x-users-projects.table';
-import { xUsersTeams } from './x-users-teams.table';
+
+// ⚠️ Note: this table differs from the rest of the non-auth tables
+// because it's managed by Lucia, and it has specific requirements, on how
+// the database it structured.
 
 export const users = pgTable(
 	'users',
 	{
-		// Note: this sessions table differs than the rest of the tables because it
-		// is managed by Lucia for users. AFAIK, this has specific requirements,
-		// that I won't really want to experiment with right now.
-		id: varchar('id', { length: 255 }).unique().default(schemaDefaults.id).notNull(),
+		id: varchar('id', { length: 255 }).unique().notNull(),
 		privateId: serial('private_id').notNull().primaryKey(),
 		createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
 		updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),

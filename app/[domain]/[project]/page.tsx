@@ -1,10 +1,15 @@
 import { notFound } from 'next/navigation';
 
-import { getProjectData } from '@/lib/db/prepared';
+import { api } from '@/lib/trpc/clients/server-invoker';
 
 export default async function ProjectPage({ params }: { params: { project: string } }) {
-	const project = await getProjectData(params.project);
-	if (!project) return notFound();
+	const project = await api.project.findBySlug({
+		slug: params.project,
+	});
+
+	if (!project) {
+		return notFound();
+	}
 
 	return (
 		<div className='container py-6'>

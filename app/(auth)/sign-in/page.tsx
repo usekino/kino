@@ -1,10 +1,18 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getUser } from '@/lib/auth/utils';
 
 import { SignInForm } from './_components/sign-in-form';
 
 export default async function SignInPage() {
+	const user = await getUser();
+
+	if (user) {
+		return redirect('/authed');
+	}
+
 	return (
 		<Card>
 			<CardHeader>

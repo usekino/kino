@@ -1,5 +1,5 @@
-const plugin = require('tailwindcss/plugin');
-const { fontFamily } = require('tailwindcss/defaultTheme');
+import { fontFamily } from 'tailwindcss/defaultTheme';
+import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -79,7 +79,6 @@ module.exports = {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 			},
 			backgroundImage: {
-				// bg-[repeating-linear-gradient(45deg,hsl(var(--border))_0,hsl(var(--border))_1px,transparent_0,transparent_50%)]
 				diagonal:
 					'repeating-linear-gradient(45deg,hsl(var(--border)) 0,hsl(var(--border)) 1px,transparent 0,transparent 50%)',
 			},

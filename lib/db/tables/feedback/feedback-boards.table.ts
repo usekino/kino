@@ -2,18 +2,14 @@ import type { Refine } from 'drizzle-zod';
 import type { z } from 'zod';
 
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { schemaDefaults } from '../_shared';
+import { defaultColumns } from '../_shared';
 import { projects } from '../projects.table';
 
 export const feedbackBoards = pgTable('feedback_boards', {
-	id: serial('id').notNull().primaryKey(),
-	createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-	updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
-	deletedAt: timestamp('deleted_at'),
-	updates: integer('updates').default(0).notNull(),
+	...defaultColumns(),
 	//
 	projectId: serial('project_id').notNull(),
 	//

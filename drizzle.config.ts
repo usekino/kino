@@ -8,7 +8,7 @@ export default defineConfig({
 	dbCredentials: {
 		connectionString: env.DATABASE_URL,
 	},
-	schema: './lib/db/schema/index.ts',
+	schema: './lib/db/tables/index.ts',
 	out: './migrations',
 	driver: 'pg',
 	verbose: true,

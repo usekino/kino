@@ -20,7 +20,7 @@ export const teamProjectSelectSchema = z.object({
 	project: z
 		.object({
 			slug: selectProjectSchema.shape.slug,
-			id: selectProjectSchema.shape.id, //s
+			id: selectProjectSchema.shape.id, //
 		})
 		.optional(),
 });

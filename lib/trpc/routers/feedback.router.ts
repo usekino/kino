@@ -1,4 +1,4 @@
-import { feedback } from '@/lib/db/tables/feedback/feedback.table';
+// import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 import { createFeedbackSchema } from '@/lib/schema/feedback.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 
@@ -8,12 +8,12 @@ export const feedbackRouter = router({
 	create: procedure
 		.use(isAuthed)
 		.input(createFeedbackSchema)
-		.mutation(async ({ ctx, input }) => {
-			return ctx.db.transaction(async (trx) => {
-				return await trx.insert(feedback).values({
-					...input,
-					userId: ctx.auth.user.id,
-				});
+		.mutation(async ({ ctx }) => {
+			return ctx.db.transaction(async () => {
+				// return await trx.insert(feedback).values({
+				// 	...input,
+				// 	userId: ctx.auth.user.privateId,
+				// });
 			});
 		}),
 });
