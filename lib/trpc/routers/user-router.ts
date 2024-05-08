@@ -1,8 +1,8 @@
 import { eq, sql } from 'drizzle-orm';
 
 import { users } from '@/lib/db/tables/users.table';
+import { updateUserSchema } from '@/lib/schema/user.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { updateUserSchema } from '@/lib/validation/user-validation';
 
 import { isAuthed } from '../middleware/is-authed';
 

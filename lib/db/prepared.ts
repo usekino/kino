@@ -3,9 +3,9 @@ import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { db } from '.';
+import { readProjectSchema } from '../schema/project.schema';
+import { readTeamSchema } from '../schema/team.schema';
 import { createTruthyObject } from '../utils';
-import { readProjectSchema } from '../validation/project-validation';
-import { readTeamSchema } from '../validation/team-validation';
 
 const P_GetTeamData = db.query.teams
 	.findFirst({

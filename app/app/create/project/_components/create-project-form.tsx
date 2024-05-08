@@ -1,7 +1,7 @@
 'use client';
 
-import type { CreateProjectSchema } from '@/lib/validation/project-validation';
-import type { ReadTeamSchema } from '@/lib/validation/team-validation';
+import type { CreateProjectSchema } from '@/lib/schema/project.schema';
+import type { ReadTeamSchema } from '@/lib/schema/team.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -28,9 +28,9 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/lib/env/client';
+import { createProjectSchema } from '@/lib/schema/project.schema';
 import { api } from '@/lib/trpc/clients/client';
 import { slugify } from '@/lib/utils';
-import { createProjectSchema } from '@/lib/validation/project-validation';
 
 export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 	const router = useRouter();

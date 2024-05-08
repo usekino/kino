@@ -1,9 +1,9 @@
 import { arrayContains } from 'drizzle-orm';
 
+import { projectsByTeamSchema, readProjectSchema } from '@/lib/schema/project.schema';
+import { readTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthyObject } from '@/lib/utils';
-import { projectsByTeamSchema, readProjectSchema } from '@/lib/validation/project-validation';
-import { readTeamSchema } from '@/lib/validation/team-validation';
 
 import { isAuthed } from '../middleware/is-authed';
 import { getTeamProjectSelect, teamProjectSelect } from './lib/selectedTeamProject';

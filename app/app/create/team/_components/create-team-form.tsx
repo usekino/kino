@@ -1,6 +1,6 @@
 'use client';
 
-import type { CreateTeamSchema } from '@/lib/validation/team-validation';
+import type { CreateTeamSchema } from '@/lib/schema/team.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -20,9 +20,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/lib/env/client';
+import { createTeamSchema } from '@/lib/schema/team.schema';
 import { api } from '@/lib/trpc/clients/client';
 import { slugify } from '@/lib/utils';
-import { createTeamSchema } from '@/lib/validation/team-validation';
 
 export function CreateTeamForm() {
 	const router = useRouter();

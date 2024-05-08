@@ -1,7 +1,9 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import type { UpdateUserSchema } from '@/lib/schema/user.schema';
 import type { User } from 'lucia';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -9,9 +11,8 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { updateUserSchema } from '@/lib/schema/user.schema';
 import { api } from '@/lib/trpc/clients/client';
-import type { UpdateUserSchema} from '@/lib/validation/user-validation';
-import { updateUserSchema } from '@/lib/validation/user-validation';
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
 	const router = useRouter();

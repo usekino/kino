@@ -3,10 +3,10 @@ import { TRPCError } from '@trpc/server';
 import { getProjectData } from '@/lib/db/prepared';
 import { projects, selectProjectSchema } from '@/lib/db/tables';
 import { xUsersProjects } from '@/lib/db/tables/x-users-projects.table';
+import { teamProjectSelectSchema } from '@/lib/schema/dashboard.schema';
+import { createProjectSchema, readProjectSchema } from '@/lib/schema/project.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthyObject } from '@/lib/utils';
-import { teamProjectSelectSchema } from '@/lib/validation/dashboard-validation';
-import { createProjectSchema, readProjectSchema } from '@/lib/validation/project-validation';
 
 import { isAuthed } from '../middleware/is-authed';
 import { rateLimit } from '../middleware/rate-limit';

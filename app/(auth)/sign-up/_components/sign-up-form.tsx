@@ -1,6 +1,6 @@
 'use client';
 
-import type { SignUpEmailSchema } from '@/lib/validation/auth-validation';
+import type { SignUpEmailSchema } from '@/lib/schema/auth.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,8 +9,8 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { signUpEmailSchema } from '@/lib/schema/auth.schema';
 import { api } from '@/lib/trpc/clients/client';
-import { signUpEmailSchema } from '@/lib/validation/auth-validation';
 
 export const SignUpForm = () => {
 	const { mutate: signUpByEmail } = api.auth.signUpByEmail.useMutation({

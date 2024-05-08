@@ -1,6 +1,6 @@
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
+import { createFeedbackSchema } from '@/lib/schema/feedback.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { createFeedbackSchema } from '@/lib/validation/feedback.schema';
 
 import { isAuthed } from '../middleware/is-authed';
 

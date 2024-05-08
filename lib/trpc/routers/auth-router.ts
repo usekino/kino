@@ -8,9 +8,9 @@ import { lucia } from '@/lib/auth/lucia';
 import { authentications, mutateAuthSchema } from '@/lib/db/tables/authentications.table';
 import { mutateUserSchema, users } from '@/lib/db/tables/users.table';
 import { env } from '@/lib/env/server';
+import { signInEmailSchema, signUpEmailSchema } from '@/lib/schema/auth.schema';
 // import { sendAccountVerification } from '@/lib/email/template/sendAccountVerification';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { signInEmailSchema, signUpEmailSchema } from '@/lib/validation/auth-validation';
 
 import { isAuthed } from '../middleware/is-authed';
 

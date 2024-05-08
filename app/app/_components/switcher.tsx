@@ -1,9 +1,9 @@
 'use client';
 
+import type { TeamProjectSelect } from '@/lib/schema/dashboard.schema';
+import type { ReadProjectSchema } from '@/lib/schema/project.schema';
+import type { ReadTeamSchema } from '@/lib/schema/team.schema';
 import type { API } from '@/lib/trpc/routers/_app';
-import type { TeamProjectSelect } from '@/lib/validation/dashboard-validation';
-import type { ReadProjectSchema } from '@/lib/validation/project-validation';
-import type { ReadTeamSchema } from '@/lib/validation/team-validation';
 
 import { useEffect, useState } from 'react';
 import { CheckIcon, ChevronsUpDown, PlusCircle } from 'lucide-react';

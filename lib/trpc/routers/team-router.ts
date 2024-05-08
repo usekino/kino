@@ -3,11 +3,11 @@ import { TRPCError } from '@trpc/server';
 import { getTeamData } from '@/lib/db/prepared';
 import { xUsersTeams } from '@/lib/db/tables';
 import { selectTeamSchema, teams } from '@/lib/db/tables/teams.table';
+import { teamSelectSchema } from '@/lib/schema/dashboard.schema';
+import { readProjectSchema } from '@/lib/schema/project.schema';
+import { createTeamSchema, readTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthyObject } from '@/lib/utils';
-import { teamSelectSchema } from '@/lib/validation/dashboard-validation';
-import { readProjectSchema } from '@/lib/validation/project-validation';
-import { createTeamSchema, readTeamSchema } from '@/lib/validation/team-validation';
 
 import { isAuthed } from '../middleware/is-authed';
 import { rateLimit } from '../middleware/rate-limit';
