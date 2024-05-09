@@ -17,7 +17,7 @@ export function GlobalSearchToggle() {
 					⌘K
 				</span>
 			</button>
-			<GlobalSearch open={open} onChange={(open) => setOpen(open)} />
+			<GlobalSearch open={open} setOpen={setOpen} />
 		</>
 	);
 }

@@ -1,6 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+
+import { useEffect } from 'react';
 import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react';
 
 import {
@@ -15,14 +17,12 @@ import {
 } from '@/components/ui/command';
 
 export function GlobalSearch({
-	open: defaultOpen = false,
-	onChange,
+	open = false,
+	setOpen,
 }: {
 	open: boolean;
-	onChange?: (open: boolean) => void;
+	setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-	const [open, setOpen] = useState(defaultOpen);
-
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
 			if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -33,15 +33,7 @@ export function GlobalSearch({
 
 		document.addEventListener('keydown', down);
 		return () => document.removeEventListener('keydown', down);
-	}, []);
-
-	useEffect(() => {
-		setOpen(defaultOpen);
-	}, [defaultOpen]);
-
-	useEffect(() => {
-		onChange?.(open);
-	}, [open, onChange]);
+	}, [setOpen]);
 
 	return (
 		<CommandDialog open={open} onOpenChange={setOpen}>
