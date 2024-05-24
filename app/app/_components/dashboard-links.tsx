@@ -1,5 +1,7 @@
 'use client';
 
+import type { TeamProjectSelect } from '@/lib/schema/dashboard.schema';
+
 import { Home, MessageSquare, Rss, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
@@ -8,11 +10,29 @@ import { cn } from '@/lib/utils';
 
 // import { splitPathAfterProject } from '../_lib/splitPathAfterProject';
 
-export const DashboardLinks = () => {
+export const DashboardLinks = ({ selected }: { selected: TeamProjectSelect }) => {
 	const pathname = usePathname();
 	const params = useParams();
 
-	const base = `/~/${params.team}/${params.project}`;
+	const team = () => {
+		if (params.team) {
+			return params.team;
+		} else if (selected.team.slug) {
+			return selected.team.slug;
+		}
+		return '';
+	};
+
+	const project = () => {
+		if (params.project) {
+			return params.project;
+		} else if (selected.project?.slug) {
+			return selected.project.slug;
+		}
+		return '';
+	};
+
+	const base = `/~/${team()}/${project()}`;
 
 	const links = [
 		{

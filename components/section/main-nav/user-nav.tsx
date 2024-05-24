@@ -1,6 +1,7 @@
 'use client';
 
 import type { User } from 'lucia';
+
 import { useRouter } from 'next/navigation';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -44,6 +45,11 @@ export function UserNav({ user }: { user: User }) {
 					<DropdownMenuItem>Settings</DropdownMenuItem>
 				</DropdownMenuGroup> */}
 				<DropdownMenuSeparator />
+				<DropdownMenuItem
+					onClick={() => router.push(`https://app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)}
+				>
+					Dashboard
+				</DropdownMenuItem>
 				<DropdownMenuItem
 					onClick={() => {
 						router.push('/api/sign-out');

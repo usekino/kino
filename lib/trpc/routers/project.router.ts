@@ -41,8 +41,6 @@ export const projectRouter = router({
 					},
 				});
 
-				console.log(userTeam, input);
-
 				// ...throw if not.
 				if (!userTeam || !userTeam.id || !userTeam.team.slug) {
 					throw new TRPCError({
@@ -79,6 +77,15 @@ export const projectRouter = router({
 						id: newProject[0].id,
 					},
 				});
+
+				await teamProjectSelect.set(user.id, {
+					userId: user.id,
+					team: {
+						id: userTeam.teamId,
+						slug: userTeam.team.slug,
+					},
+				});
+
 				// Return data
 				return { projectSlug: input.slug, teamSlug: userTeam.team.slug };
 			});
@@ -98,9 +105,7 @@ export const projectRouter = router({
 			},
 		});
 
-		const selected = await getTeamProjectSelect.match({
-			userId: user.id,
-		});
+		const selected = await getTeamProjectSelect(user);
 
 		return {
 			projects: projects.map((project) => readProjectSchema.parse(project)),

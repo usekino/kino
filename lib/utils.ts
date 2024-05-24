@@ -2,6 +2,7 @@ import type { ClassValue } from 'clsx';
 
 import { clsx } from 'clsx';
 import { customAlphabet } from 'nanoid';
+import { alphabet, generateRandomString } from 'oslo/crypto';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -38,3 +39,7 @@ export function slugify(str: string) {
 		.replace(/\s+/g, '-') // replace spaces with hyphens
 		.replace(/-+/g, '-'); // remove consecutive hyphens
 }
+
+export const generateId = ({ prefix }: { prefix?: string }) => {
+	return `${prefix + `_` || ''}${generateRandomString(15, alphabet('a-z', 'A-Z', '0-9'))}`;
+};

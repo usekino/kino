@@ -14,7 +14,7 @@ export const MainNav = async ({ dashboard }: { dashboard: boolean }) => {
 		<div className='flex py-2'>
 			<div className='container flex items-center justify-between'>
 				<Link
-					href={user ? '/app' : '/'}
+					href='/'
 					className='mr-6 font-bold tracking-widest hover:underline hover:decoration-2 hover:underline-offset-2'
 				>
 					KINO

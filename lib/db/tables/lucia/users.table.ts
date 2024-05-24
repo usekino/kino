@@ -34,7 +34,6 @@ export const users = pgTable(
 		bio: varchar('bio', { length: 3072 }),
 		name: varchar('name', { length: 255 }),
 		role: json('role')
-			.$type<('member' | 'admin')[]>()
 			.default(sql`'["member"]'`)
 			.notNull(),
 		latestAgreement: timestamp('latest_terms')
@@ -70,7 +69,7 @@ const refineSchema = {
 	username: ({ username }) => username.min(3).max(100),
 	email: ({ email }) => email.email(),
 	name: ({ name }) => name.max(255),
-	role: () => z.array(z.enum(['member', 'admin'])),
+	role: () => z.array(z.enum(['member', 'admin', 'beta'])),
 	bio: ({ bio }) => bio.max(450),
 	updates: ({ updates }) => updates.min(0),
 	avatar: ({ avatar }) => avatar.url(),

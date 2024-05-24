@@ -21,6 +21,7 @@
 		"@heyooo-inc/reserved-subdomains": "^1.2.4",
 		"@hookform/resolvers": "^3.3.4",
 		"@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+		"@icons-pack/react-simple-icons": "^9.5.0",
 		"@lucia-auth/adapter-drizzle": "^1.0.7",
 		"@neondatabase/serverless": "^0.9.1",
 		"@nimpl/getters": "^1.3.4",

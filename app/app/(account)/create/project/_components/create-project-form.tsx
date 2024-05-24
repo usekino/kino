@@ -4,6 +4,7 @@ import type { CreateProjectSchema } from '@/lib/schema/project.schema';
 import type { ReadTeamSchema } from '@/lib/schema/team.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { SiGithub } from '@icons-pack/react-simple-icons';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -34,10 +35,11 @@ import { slugify } from '@/lib/utils';
 
 export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 	const router = useRouter();
+
 	const { mutate: createProject } = api.project.create.useMutation({
 		onSuccess: ({ teamSlug, projectSlug }) => {
 			toast.success('Project created');
-			router.push(`https://${teamSlug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}/project/${projectSlug}`);
+			router.push(`https://${teamSlug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}/${projectSlug}`);
 		},
 		onError: (error) => {
 			toast.error('Error', { description: error.message });
@@ -46,6 +48,7 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 
 	const form = useForm<CreateProjectSchema>({
 		defaultValues: {
+			teamId: teams[0].id,
 			name: '',
 			slug: '',
 			githubUrl: null,
@@ -54,12 +57,15 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 	});
 
 	const onSubmit = async (data: CreateProjectSchema) => {
-		// console.log(data);
 		createProject(data);
 	};
 
+	const selectedTeam = teams.find((team) => {
+		return team.id === form.watch('teamId');
+	});
+
 	return (
-		<div className='flex items-start justify-center'>
+		<div className='flex items-start justify-center rounded-lg border bg-card p-10'>
 			<Form {...form}>
 				<form className='w-full space-y-4' onSubmit={form.handleSubmit(onSubmit)}>
 					<FormField
@@ -79,9 +85,9 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 											{teams.map((team) => (
 												<SelectItem
 													key={team.slug}
-													value={team.slug}
+													value={teams[0].id}
 													onSelect={() => {
-														field.onChange(team.slug);
+														field.onChange(team.id);
 													}}
 													className='text-sm'
 												>
@@ -103,7 +109,7 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 							<FormItem>
 								<FormLabel>Project name</FormLabel>
 								<FormControl>
-									<Input placeholder='Fancy Project' {...field} />
+									<Input {...field} />
 								</FormControl>
 								<FormDescription>This is your project&apos;s public display name.</FormDescription>
 								<FormMessage />
@@ -117,22 +123,23 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 							<FormItem>
 								<FormLabel>Project slug</FormLabel>
 								<FormControl>
-									<Input
-										placeholder='acme'
-										{...field}
-										onChange={(e) => {
-											field.onChange(slugify(e.target.value));
-										}}
-									/>
+									<div className='flex items-stretch'>
+										<div className='flex items-center rounded-l-md border bg-background px-3'>
+											<span className='opacity-75'>
+												{!!selectedTeam?.slug ? selectedTeam.slug : 'acme'}.usekino.com/
+											</span>
+										</div>
+										<Input
+											className='relative z-10 rounded-l-none rounded-r-md'
+											{...field}
+											onChange={(e) => {
+												field.onChange(slugify(e.target.value));
+											}}
+											type='text'
+										/>
+									</div>
 								</FormControl>
-								<FormDescription>
-									Your project will be available at{' '}
-									<strong>
-										PLACEHOLDER.usekino.com/project/
-										{!!form.watch('slug') ? form.watch('slug') : 'fancy-project'}
-									</strong>
-									. Only letters, numbers, and dashes are allowed.
-								</FormDescription>
+								<FormDescription>Only letters, numbers, and dashes are allowed.</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -163,20 +170,31 @@ export function CreateProjectForm({ teams }: { teams: ReadTeamSchema[] }) {
 							<FormItem>
 								<FormLabel>Github (optional)</FormLabel>
 								<FormControl>
-									<Input
-										type='url'
-										placeholder='https://github.com/acme-inc/repo'
-										{...field}
-										value={field.value ?? ''}
-									/>
+									<div className='flex items-stretch'>
+										<div className='flex items-center rounded-l-md border bg-background px-3'>
+											<div className='flex items-center gap-2 opacity-75'>
+												<SiGithub size={16} />
+												https://
+											</div>
+										</div>
+										<Input
+											className='relative z-10 rounded-l-none rounded-r-md'
+											type='url'
+											placeholder='github.com/acme-inc/repo'
+											{...field}
+											value={field.value ?? ''}
+										/>
+									</div>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<Button type='submit' className='w-full'>
-						{form.formState.isSubmitting ? 'Creating...' : 'Create project'}
-					</Button>
+					<div>
+						<Button type='submit'>
+							{form.formState.isSubmitting ? 'Creating...' : 'Create project'}
+						</Button>
+					</div>
 				</form>
 			</Form>
 		</div>

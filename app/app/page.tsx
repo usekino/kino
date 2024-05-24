@@ -1,12 +1,13 @@
-import { redirect } from 'next/navigation';
+// import { redirect } from 'next/navigation';
 
-import { api } from '@/lib/trpc/clients/server-invoker';
+// import { api } from '@/lib/trpc/clients/server-invoker';
 
-export default async function AppHome() {
-	const selected = await api.dashboard.selected();
-	if (!selected) {
-		redirect('/sign-in');
-	}
-	const project = selected.project ? `/${selected.project.slug}/` : '';
-	redirect(`/~/${selected.team.slug}${project}`);
+export default async function HomePage() {
+	// const { selected, containsProject } = await api.dashboard.userProjects();
+
+	// if (containsProject && selected.team.slug) {
+	// 	redirect(`/~/${selected.team.slug}/${selected.project?.slug}`);
+	// }
+
+	return <div> You shouldn't see this page </div>;
 }

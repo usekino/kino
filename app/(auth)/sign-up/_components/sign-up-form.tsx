@@ -3,6 +3,7 @@
 import type { SignUpEmailSchema } from '@/lib/schema/auth.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -13,9 +14,12 @@ import { signUpEmailSchema } from '@/lib/schema/auth.schema';
 import { api } from '@/lib/trpc/clients/client';
 
 export const SignUpForm = () => {
+	const router = useRouter();
 	const { mutate: signUpByEmail } = api.auth.signUpByEmail.useMutation({
 		onSuccess: () => {
 			toast.success('Signed up');
+			// TODO: replace with a real redirect
+			router.push('/authed');
 		},
 		onError: (error) => {
 			toast.error('Error', { description: error.message });

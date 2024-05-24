@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { sql } from 'drizzle-orm';
+import { arrayContains, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { db } from '.';
@@ -45,4 +45,35 @@ export const getProjectData = cache(async (slug: string) => {
 		: null;
 
 	return validatedProject;
+});
+
+export const P_GetUserProjectsByUserId = db.query.xUsersTeams
+	.findMany({
+		columns: {},
+		where: (table, { eq, and, or, not }) => {
+			return and(
+				eq(table.userId, sql.placeholder('userId')),
+				or(
+					arrayContains(table.userRole, ['admin']),
+					arrayContains(table.userRole, ['member']) //
+				),
+				not(arrayContains(table.userRole, ['blocked']))
+			);
+		},
+		with: {
+			team: {
+				columns: createTruthyObject(readTeamSchema.shape),
+				with: {
+					projects: {
+						columns: createTruthyObject(readProjectSchema.shape),
+					},
+				},
+			},
+		},
+	})
+	.prepare('P_ProjectsByTeam');
+
+export const getUserProjectsByUserId = cache(async (userId: string) => {
+	const userProjects = await P_GetUserProjectsByUserId.execute({ userId });
+	return userProjects;
 });

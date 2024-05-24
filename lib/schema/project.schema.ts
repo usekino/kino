@@ -22,6 +22,8 @@ export const readProjectSchema = selectProjectSchema.pick({
 });
 export type ReadProjectSchema = z.infer<typeof readProjectSchema>;
 
-export const projectsByTeamSchema = z.object({
-	teamId: selectTeamSchema.shape.id,
-});
+export const projectsByTeamSchema = z
+	.object({
+		teamId: selectTeamSchema.shape.id,
+	})
+	.optional();

@@ -1,10 +1,10 @@
-import { redirect } from 'next/navigation';
+// import { redirect } from 'next/navigation';
 
-import { getSession } from '@/lib/auth/utils';
+// import { getSession } from '@/lib/auth/utils';
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-	const session = await getSession();
-	if (session) redirect('/app/dashboard');
+	// const session = await getSession();
+	// if (session) redirect('/authed');
 
 	return (
 		<div className='flex h-screen items-stretch justify-stretch md:items-center md:justify-center'>

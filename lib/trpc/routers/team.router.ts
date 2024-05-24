@@ -7,7 +7,7 @@ import { teamSelectSchema } from '@/lib/schema/dashboard.schema';
 import { readProjectSchema } from '@/lib/schema/project.schema';
 import { createTeamSchema, readTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { createTruthyObject } from '@/lib/utils';
+import { createTruthyObject, generateId } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
 import { rateLimit } from '../middleware/rate-limit';
@@ -18,6 +18,33 @@ export const teamRouter = router({
 		const team = await getTeamData(input.slug);
 		return team;
 	}),
+	findByMembership: procedure.use(isAuthed).query(async ({ ctx }) => {
+		const { user } = ctx.auth;
+
+		const teams = await ctx.db.query.xUsersTeams.findMany({
+			where: (userTables, { eq }) => eq(userTables.userId, user.id),
+			columns: {},
+			with: {
+				team: {
+					columns: createTruthyObject(readTeamSchema.shape),
+				},
+			},
+		});
+
+		const selected = await getTeamProjectSelect(user);
+
+		if (!teams || teams.length <= 0) {
+			return {
+				teams: null,
+				selected,
+			};
+		}
+
+		return {
+			teams: teams.map(({ team }) => readTeamSchema.parse(team)),
+			selected,
+		};
+	}),
 	findByOwnership: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
 		const teams = await ctx.db.query.teams.findMany({
@@ -25,9 +52,7 @@ export const teamRouter = router({
 			columns: createTruthyObject(readTeamSchema.shape),
 		});
 
-		const selected = await getTeamProjectSelect.match({
-			userId: user.id,
-		});
+		const selected = await getTeamProjectSelect(user);
 
 		return {
 			teams: teams.map((team) => readTeamSchema.parse(team)),
@@ -40,11 +65,16 @@ export const teamRouter = router({
 		.mutation(async ({ ctx, input }) => {
 			const { user } = ctx.auth;
 			return ctx.db.transaction(async (trx) => {
+				const newTeamId = generateId({
+					prefix: 'T',
+				});
+
 				// Create new team
 				const newTeam = await trx
 					.insert(teams)
 					.values({
 						...input,
+						id: newTeamId,
 						ownerId: user.id,
 					})
 					.returning({

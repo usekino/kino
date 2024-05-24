@@ -5,13 +5,13 @@
 @layer base {
 	:root {
 		--native: 0 0% 100%;
-		--native-foreground: 0 0% 2%;
+		--native-foreground: 0 0% 1%;
 		--primary-fade: var(--primary) / 0.4;
 		--gradient: linear-gradient(to top left, var(--primary), var(--secondary));
 	}
 	.dark {
 		--native: 0 0% 2%;
-		--native-foreground: 0 0% 98%;
+		--native-foreground: 0 0% 99%;
 		--primary-fade: var(--primary) / 0.2;
 	}
 }
@@ -41,16 +41,16 @@
 	}
 
 	.dark {
-		--background: 0 0% 6.27%;
-		--foreground: 252 37% 98%;
-		--muted: 0 0% 20%;
+		--background: 0 0% 5%;
+		--foreground: 252 37% 97%;
+		--muted: 0 0% 6%;
 		--muted-foreground: 0 0% 62.75%;
 		--popover: 0 0% 8.63%;
 		--popover-foreground: 252 37% 99%;
-		--card: 0 0% 9%;
+		--card: 0 0% 8%;
 		--card-foreground: 252 37% 99%;
-		--border: 0 0% 15.69%;
-		--input: 0 0% 25.38%;
+		--border: 0 0% 15%;
+		--input: 0 0% 20%;
 		--primary: 27.06 100% 80%;
 		--primary-foreground: 0 0% 0%;
 		--secondary: 164.12 100% 80%;

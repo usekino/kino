@@ -1,18 +1,20 @@
 'use client';
 
-import * as React from 'react';
 import type {
 	ColumnDef,
 	ColumnFiltersState,
 	SortingState,
-	VisibilityState} from '@tanstack/react-table';
+	VisibilityState,
+} from '@tanstack/react-table';
+
+import * as React from 'react';
 import {
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
-	useReactTable
+	useReactTable,
 } from '@tanstack/react-table';
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react';
 
@@ -222,7 +224,7 @@ export function UpdatesTable() {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-			<div className='rounded-md border'>
+			<div className='rounded-md border bg-native'>
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (

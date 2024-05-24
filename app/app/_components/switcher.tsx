@@ -24,7 +24,7 @@ import { api } from '@/lib/trpc/clients/client';
 import { cn } from '@/lib/utils';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
-type _Projects = API['output']['dashboard']['projectsByTeam'];
+type _Projects = API['output']['dashboard']['userProjects']['projects'];
 
 interface ProjectSwitcherProps extends PopoverTriggerProps {
 	projectsByTeam: _Projects;

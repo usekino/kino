@@ -22,7 +22,7 @@ export const authRouter = router({
 			const email = input.email.toLowerCase().trim();
 
 			const newUser = mutateUserSchema.parse({
-				publicId: userId,
+				id: userId,
 				email,
 				username: input.username,
 				role: ['beta', 'member'],
@@ -78,7 +78,7 @@ export const authRouter = router({
 			},
 		});
 
-		// console.log(existingUser, existingUser?.authentications);
+		console.log(existingUser, existingUser?.authentications);
 
 		if (!existingUser || !existingUser.authentications?.hashedPassword) {
 			throw new TRPCError({

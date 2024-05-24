@@ -1,11 +1,18 @@
 import type { NextRequest } from 'next/server';
 
+import { arrayContains, sql } from 'drizzle-orm';
 import * as context from 'next/headers';
 import { NextResponse } from 'next/server';
 
 import { env } from '@/lib/env/client';
 
 import { lucia } from './lib/auth/lucia';
+import { db } from './lib/db';
+import { P_GetUserProjectsByUserId } from './lib/db/prepared';
+import { readProjectSchema } from './lib/schema/project.schema';
+import { readTeamSchema } from './lib/schema/team.schema';
+import { getTeamProjectSelect } from './lib/trpc/routers/lib/selectedTeamProject';
+import { createTruthyObject } from './lib/utils';
 
 export const config = {
 	matcher: [
@@ -42,6 +49,32 @@ const uncachedValidateAuthRequest = async () => {
 	return result;
 };
 
+const uncachedGetUserProjectsByUserId = db.query.xUsersTeams
+	.findMany({
+		columns: {},
+		where: (table, { eq, and, or, not }) => {
+			return and(
+				eq(table.userId, sql.placeholder('userId')),
+				or(
+					arrayContains(table.userRole, ['admin']),
+					arrayContains(table.userRole, ['member']) //
+				),
+				not(arrayContains(table.userRole, ['blocked']))
+			);
+		},
+		with: {
+			team: {
+				columns: createTruthyObject(readTeamSchema.shape),
+				with: {
+					projects: {
+						columns: createTruthyObject(readProjectSchema.shape),
+					},
+				},
+			},
+		},
+	})
+	.prepare('P_ProjectsByTeam');
+
 export default async function middleware(req: NextRequest) {
 	const url = req.nextUrl;
 
@@ -68,12 +101,33 @@ export default async function middleware(req: NextRequest) {
 	// }
 
 	if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-		const { session } = await uncachedValidateAuthRequest();
+		const { session, user } = await uncachedValidateAuthRequest();
+
 		if (!session && path !== '/sign-in') {
 			return NextResponse.redirect(new URL('/sign-in', req.url));
 		} else if (session && path == '/sign-in') {
 			return NextResponse.redirect(new URL('/', req.url));
 		}
+
+		// Check if the user has a project, and if not, redirect to the create project page
+		if (path === '/' && session) {
+			const userProjects = await uncachedGetUserProjectsByUserId.execute({
+				userId: session.userId,
+			});
+			const containsProject = !!userProjects
+				.map((up) => up.team)
+				.find((team) => team.projects.length > 0);
+			if (!containsProject) {
+				return NextResponse.redirect(new URL('/create/project', req.url));
+			} else {
+				const selected = await getTeamProjectSelect(user);
+
+				return NextResponse.redirect(
+					new URL(`/~/${selected.team.slug}/${selected.project?.slug}`, req.url)
+				);
+			}
+		}
+
 		return NextResponse.rewrite(new URL(`/app${path === '/' ? '' : path}`, req.url));
 	}
 

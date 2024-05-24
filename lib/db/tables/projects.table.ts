@@ -31,14 +31,17 @@ export const projectRelations = relations(projects, ({ one }) => ({
 }));
 
 const refineSchema = {
-	name: ({ name }) => name.min(3).max(50),
+	name: ({ name }) =>
+		name
+			.min(3, 'Name must contain at least 3 characters')
+			.max(50, 'Name must contain at most 50 characters'),
 	slug: ({ slug }) =>
 		slug
-			.min(3)
-			.max(25)
+			.min(3, 'Slug must contain at least 3 characters')
+			.max(25, 'Slug must contain at most 25 characters')
 			.regex(
 				/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
-				'Invalid subdomain' //
+				'Disallowed characters' //
 			)
 			.refine(
 				(slug) => {
@@ -63,7 +66,7 @@ const refineSchema = {
 						...names,
 					].includes(slug);
 				},
-				'Team slug is not allowed' //
+				'This slug is not allowed' //
 			),
 	description: ({ description }) => description.max(300),
 	githubUrl: ({ githubUrl }) => githubUrl.url(),
