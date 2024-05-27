@@ -11,12 +11,12 @@ import { getTeamProjectSelect } from './lib/selectedTeamProject';
 
 export const dashboardRouter = router({
 	selected: procedure.use(isAuthed).query(async ({ ctx }) => {
-		return getTeamProjectSelect(ctx.auth.user);
+		return getTeamProjectSelect(ctx.auth.user.id);
 	}),
 	userProjects: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
 
-		const selected = await getTeamProjectSelect(user);
+		const selected = await getTeamProjectSelect(user.id);
 		const userProjects = await getUserProjectsByUserId(user.id);
 		const projects = userProjects.map((pbt) => pbt.team);
 		const containsProject = !!projects.find((project) => project.projects.length > 0);

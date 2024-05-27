@@ -105,7 +105,7 @@ export const projectRouter = router({
 			},
 		});
 
-		const selected = await getTeamProjectSelect(user);
+		const selected = await getTeamProjectSelect(user.id);
 
 		return {
 			projects: projects.map((project) => readProjectSchema.parse(project)),

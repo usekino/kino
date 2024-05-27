@@ -31,7 +31,7 @@ export const teamRouter = router({
 			},
 		});
 
-		const selected = await getTeamProjectSelect(user);
+		const selected = await getTeamProjectSelect(user.id);
 
 		if (!teams || teams.length <= 0) {
 			return {
@@ -52,7 +52,7 @@ export const teamRouter = router({
 			columns: createTruthyObject(readTeamSchema.shape),
 		});
 
-		const selected = await getTeamProjectSelect(user);
+		const selected = await getTeamProjectSelect(user.id);
 
 		return {
 			teams: teams.map((team) => readTeamSchema.parse(team)),

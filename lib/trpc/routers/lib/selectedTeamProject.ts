@@ -10,16 +10,16 @@ export const teamProjectSelectIndex = teamProjectSelect.createIndex({
 	terms: ['userId'],
 });
 
-export const getTeamProjectSelect = async (user: User) => {
+export const getTeamProjectSelect = async (userId: User['id']) => {
 	const selected = await teamProjectSelectIndex
 		.match({
-			userId: user.id,
+			userId,
 		})
 		.then((result) => result[0]?.data ?? null);
 
 	if (!selected) {
-		await teamProjectSelect.set(user.id, {
-			userId: user.id,
+		await teamProjectSelect.set(userId, {
+			userId,
 			team: {
 				id: '', // fix this
 				slug: '', // fix this
