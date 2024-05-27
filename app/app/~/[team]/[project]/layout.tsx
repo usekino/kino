@@ -1,8 +1,8 @@
+import type { ProjectLayoutParams } from './_lib/utils';
+
 import { notFound } from 'next/navigation';
 
 import { api } from '@/lib/trpc/clients/server-invoker';
-
-import type { ProjectLayoutParams } from './_lib/utils';
 
 export default async function ProjectPageLayout({ params, children }: ProjectLayoutParams) {
 	const project = await api.project.findBySlug({

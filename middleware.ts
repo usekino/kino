@@ -8,7 +8,6 @@ import { env } from '@/lib/env/client';
 
 import { lucia } from './lib/auth/lucia';
 import { db } from './lib/db';
-import { P_GetUserProjectsByUserId } from './lib/db/prepared';
 import { readProjectSchema } from './lib/schema/project.schema';
 import { readTeamSchema } from './lib/schema/team.schema';
 import { getTeamProjectSelect } from './lib/trpc/routers/lib/selectedTeamProject';
@@ -91,42 +90,34 @@ export default async function middleware(req: NextRequest) {
 	// Get the pathname of the request (e.g. /, /about, /blog/first-post)
 	const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ''}`;
 
-	// console.log('path', path);
-	// console.log('hostname', hostname);
-	// console.log('subdomain', subdomain);
-	// console.log('nextUrl', req.nextUrl.host);
-
-	// if (path.startsWith('/sign-out')) {
-	// 	return NextResponse.redirect(new URL('/api/sign-out', req.url));
-	// }
-
+	// If request is inside dashboard
 	if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
 		const { session, user } = await uncachedValidateAuthRequest();
 
 		if (!session && path !== '/sign-in') {
-			return NextResponse.redirect(new URL('/sign-in', req.url));
-		} else if (session && path == '/sign-in') {
-			return NextResponse.redirect(new URL('/', req.url));
+			return NextResponse.redirect(
+				new URL(`https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/sign-in`, req.url)
+			);
 		}
 
 		// Check if the user has a project, and if not, redirect to the create project page
-		if (path === '/' && session) {
-			const userProjects = await uncachedGetUserProjectsByUserId.execute({
-				userId: session.userId,
-			});
-			const containsProject = !!userProjects
-				.map((up) => up.team)
-				.find((team) => team.projects.length > 0);
-			if (!containsProject) {
-				return NextResponse.redirect(new URL('/create/project', req.url));
-			} else {
-				const selected = await getTeamProjectSelect(user);
+		// if (path === '/' && session) {
+		// 	const userProjects = await uncachedGetUserProjectsByUserId.execute({
+		// 		userId: session.userId,
+		// 	});
+		// 	const containsProject = !!userProjects
+		// 		.map((up) => up.team)
+		// 		.find((team) => team.projects.length > 0);
+		// 	if (!containsProject) {
+		// 		return NextResponse.redirect(new URL('/create/project', req.url));
+		// 	} else {
+		// 		const selected = await getTeamProjectSelect(user.id);
 
-				return NextResponse.redirect(
-					new URL(`/~/${selected.team.slug}/${selected.project?.slug}`, req.url)
-				);
-			}
-		}
+		// 		return NextResponse.redirect(
+		// 			new URL(`/~/${selected.team.slug}/${selected.project?.slug}`, req.url)
+		// 		);
+		// 	}
+		// }
 
 		return NextResponse.rewrite(new URL(`/app${path === '/' ? '' : path}`, req.url));
 	}

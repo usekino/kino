@@ -1,13 +1,22 @@
-// import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
-// import { api } from '@/lib/trpc/clients/server-invoker';
+import { getUser } from '@/lib/auth/utils';
+import { env } from '@/lib/env/server';
+import { api } from '@/lib/trpc/clients/server-invoker';
 
 export default async function HomePage() {
-	// const { selected, containsProject } = await api.dashboard.userProjects();
+	const user = await getUser();
+	if (!user) return redirect(`${env.NEXT_PUBLIC_ROOT_DOMAIN}/sign-in`);
 
-	// if (containsProject && selected.team.slug) {
-	// 	redirect(`/~/${selected.team.slug}/${selected.project?.slug}`);
-	// }
+	const { selected, containsProject } = await api.dashboard.userProjects();
 
-	return <div> You shouldn't see this page </div>;
+	if (!containsProject) {
+		redirect(`/create/project`);
+	}
+
+	if (containsProject && !!selected) {
+		redirect(`/~/${selected.team.slug}/${selected.project?.slug}`);
+	}
+
+	return notFound();
 }
