@@ -27,12 +27,12 @@ export const xUsersTeamsRelations = relations(xUsersTeams, ({ one }) => ({
 	user: one(users, {
 		fields: [xUsersTeams.userId],
 		references: [users.id],
-		relationName: 'user',
+		relationName: 'userTeamToUser',
 	}),
 	team: one(teams, {
 		fields: [xUsersTeams.teamId],
 		references: [teams.id],
-		relationName: 'team',
+		relationName: 'userTeamToTeam',
 	}),
 }));
 

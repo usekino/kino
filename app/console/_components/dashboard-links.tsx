@@ -32,7 +32,7 @@ export const DashboardLinks = ({ selected }: { selected: TeamProjectSelect }) =>
 		return '';
 	};
 
-	const base = `/~/${team()}/${project()}`;
+	const base = `/${team()}/${project()}`;
 
 	const links = [
 		{
@@ -62,7 +62,7 @@ export const DashboardLinks = ({ selected }: { selected: TeamProjectSelect }) =>
 	];
 
 	return (
-		<nav className={cn('flex items-center gap-2')}>
+		<nav className={cn('flex w-full flex-col items-center gap-2')}>
 			{links.map((link) => (
 				<Link
 					key={link.href}

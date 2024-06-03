@@ -7,7 +7,7 @@ import { MainNav } from '@/components/section/main-nav';
 // import { env } from '@/lib/env/server';
 // import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { DashboardNav } from '../_components/dashboard-nav';
+import { DashboardNav } from './_components/dashboard-nav';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
 	// const user = await getUser();
@@ -25,16 +25,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 	// }
 
 	return (
-		<main>
-			<div className='flex h-screen'>
-				<div className='flex h-screen w-full flex-col'>
-					<div className='bg-muted'>
-						<MainNav dashboard={true} />
-						<DashboardNav />
-					</div>
-					<div className='flex-auto'>{children}</div>
-				</div>
+		<main className='flex h-screen w-full'>
+			<div className='bg-muted'>
+				<DashboardNav />
 			</div>
+			<div className='flex-auto'>{children}</div>
 		</main>
 	);
 }

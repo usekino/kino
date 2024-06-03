@@ -46,7 +46,7 @@ export function UserNav({ user }: { user: User }) {
 				</DropdownMenuGroup> */}
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
-					onClick={() => router.push(`https://app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)}
+					onClick={() => router.push(`https://console.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)}
 				>
 					Dashboard
 				</DropdownMenuItem>

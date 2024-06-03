@@ -58,7 +58,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
 		relationName: 'sessions',
 	}),
 	teams: many(xUsersTeams, {
-		relationName: 'teams',
+		relationName: 'userTeamToUser',
 	}),
 	projects: many(xUsersProjects, {
 		relationName: 'projects',

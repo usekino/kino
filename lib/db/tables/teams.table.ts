@@ -32,7 +32,7 @@ export const teamRelations = relations(teams, ({ one, many }) => ({
 		relationName: 'owner',
 	}),
 	members: many(xUsersTeams, {
-		relationName: 'members',
+		relationName: 'userTeamToTeam',
 	}),
 	projects: many(projects, {
 		relationName: 'team_projects',

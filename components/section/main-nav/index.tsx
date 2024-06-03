@@ -24,7 +24,7 @@ export const MainNav = async ({ dashboard }: { dashboard: boolean }) => {
 				</div>
 				<div className='flex items-center space-x-4'>
 					{!dashboard && (
-						<a href={`https://app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}>Dashboard</a>
+						<a href={`https://console.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}>Dashboard</a>
 					)}
 					<UserNav user={user} />
 					<ModeToggle />

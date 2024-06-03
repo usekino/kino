@@ -15,7 +15,7 @@ export default async function HomePage() {
 	}
 
 	if (containsProject && !!selected) {
-		redirect(`/~/${selected.team.slug}/${selected.project?.slug}`);
+		redirect(`/${selected.team.slug}/${selected.project?.slug}`);
 	}
 
 	return notFound();

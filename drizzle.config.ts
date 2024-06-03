@@ -6,10 +6,10 @@ import { env } from '@/lib/env/server';
 
 export default defineConfig({
 	dbCredentials: {
-		connectionString: env.DATABASE_URL,
+		url: env.DATABASE_URL,
 	},
 	schema: './lib/db/tables/index.ts',
 	out: './migrations',
-	driver: 'pg',
+	dialect: 'postgresql',
 	verbose: true,
 });

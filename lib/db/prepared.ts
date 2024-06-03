@@ -11,12 +11,19 @@ const P_GetTeamData = db.query.teams
 	.findFirst({
 		columns: createTruthyObject(readTeamSchema.shape),
 		where: (team, { eq }) => eq(team.slug, sql.placeholder('slug')),
+		with: {
+			projects: {
+				columns: createTruthyObject(readProjectSchema.shape),
+			},
+		},
 	})
 	.prepare('P_GetTeamData');
 
 export const getTeamData = cache(async (slug: string) => {
 	const team = await P_GetTeamData.execute({ slug });
-	return team ? readTeamSchema.parseAsync(team) : null;
+	return team
+		? readTeamSchema.merge(z.object({ projects: z.array(readProjectSchema) })).parseAsync(team)
+		: null;
 });
 
 const P_GetProjectData = db.query.projects
