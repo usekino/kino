@@ -6,7 +6,7 @@ import { getUser } from '@/lib/auth/utils';
 
 import { UserNav } from './user-nav';
 
-export const MainNav = async ({ dashboard }: { dashboard: boolean }) => {
+export const MainNav = async () => {
 	const user = await getUser();
 	if (!user) return null;
 
@@ -23,9 +23,6 @@ export const MainNav = async ({ dashboard }: { dashboard: boolean }) => {
 					<GlobalSearchToggle />
 				</div>
 				<div className='flex items-center space-x-4'>
-					{!dashboard && (
-						<a href={`https://console.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}>Dashboard</a>
-					)}
 					<UserNav user={user} />
 					<ModeToggle />
 				</div>

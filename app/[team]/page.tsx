@@ -1,12 +1,11 @@
-import type { TeamPageParams } from './_lib/server-utils';
+import type { TeamPageParams } from './_lib/get-team';
 
 import Link from 'next/link';
 
 import { getUser } from '@/lib/auth/utils';
+import { serverRoute } from '@/lib/utils/server-route';
 
-// import { env } from '@/lib/env/server';
-
-import { getTeam, serverRoute } from './_lib/server-utils';
+import { getTeam } from './_lib/get-team';
 
 export default async function TeamPage({ params }: TeamPageParams) {
 	const user = await getUser();
@@ -16,7 +15,9 @@ export default async function TeamPage({ params }: TeamPageParams) {
 		user,
 	});
 
-	const route = await serverRoute(team.slug);
+	const route = await serverRoute({
+		teamSlug: team.slug,
+	});
 
 	return (
 		<div className='container py-6'>

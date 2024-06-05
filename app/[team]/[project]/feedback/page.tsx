@@ -15,8 +15,10 @@ export default async function FeedbackPage({ params }: ProjectPageParams) {
 
 	return (
 		<div className='container flex gap-6 py-6'>
-			<div className='w-1/3'>
-				<ListSidebar />
+			<div className='w-1/4'>
+				<div className='sticky top-12'>
+					<ListSidebar teamSlug={project.team.slug} projectSlug={project.slug} />
+				</div>
 			</div>
 			<div>
 				<List />

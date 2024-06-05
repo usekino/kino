@@ -1,5 +1,3 @@
-'use server';
-
 import { env } from '../env/server';
 
 export const getValidSubdomain = (host?: string | null) => {

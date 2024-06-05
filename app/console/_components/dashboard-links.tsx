@@ -8,8 +8,6 @@ import { useParams, usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 
-// import { splitPathAfterProject } from '../_lib/splitPathAfterProject';
-
 export const DashboardLinks = ({ selected }: { selected: TeamProjectSelect }) => {
 	const pathname = usePathname();
 	const params = useParams();

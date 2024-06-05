@@ -1,7 +1,7 @@
 // import { getPathname } from '@nimpl/getters/get-pathname';
 // import { redirect } from 'next/navigation';
 
-import { MainNav } from '@/components/section/main-nav';
+// import { MainNav } from '@/components/section/main-nav';
 
 // import { getUser } from '@/lib/auth/utils';
 // import { env } from '@/lib/env/server';

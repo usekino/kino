@@ -11,8 +11,8 @@ import { db } from './lib/db';
 import { readProjectSchema } from './lib/schema/project.schema';
 import { readTeamSchema } from './lib/schema/team.schema';
 import { getTeamProjectSelect } from './lib/trpc/routers/lib/selectedTeamProject';
-import { getValidSubdomain } from './lib/util/get-valid-subdomain';
 import { createTruthyObject } from './lib/utils';
+import { getValidSubdomain } from './lib/utils/get-valid-subdomain';
 
 export const config = {
 	matcher: [

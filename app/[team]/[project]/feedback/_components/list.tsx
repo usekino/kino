@@ -16,7 +16,6 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 
-import { AddDialog } from './add-dialog';
 import { ListItem } from './list-item';
 
 export const List = () => {
@@ -36,11 +35,11 @@ export const List = () => {
 						</SelectContent>
 					</Select>
 				</nav>
-				<div>
-					<AddDialog />
-				</div>
 			</div>
 			<ul className='grid gap-4'>
+				<ListItem />
+				<ListItem />
+				<ListItem />
 				<ListItem />
 				<ListItem />
 				<ListItem />

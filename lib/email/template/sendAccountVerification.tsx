@@ -1,5 +1,5 @@
 import { from, resend, to } from '@/lib/email';
-import { getBaseUrl } from '@/lib/util/get-base-url';
+import { getBaseUrl } from '@/lib/utils/get-base-url';
 
 type VerifyEmailProps = {
 	code: string;

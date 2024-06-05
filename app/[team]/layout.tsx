@@ -1,5 +1,5 @@
+import type { TeamPageParams } from '@/lib/util/server-utils';
 import type { PropsWithChildren } from 'react';
-import type { TeamPageParams } from './_lib/server-utils';
 
 // import { redirect } from 'next/navigation';
 
@@ -25,7 +25,7 @@ export default async function DomainLayout({
 			<div className='flex h-screen'>
 				<div className='w-full'>
 					<div className='border'>
-						<MainNav dashboard={false} />
+						<MainNav />
 					</div>
 					{children}
 				</div>

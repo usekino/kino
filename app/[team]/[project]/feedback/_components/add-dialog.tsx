@@ -20,7 +20,7 @@ export const AddDialog = () => {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button className='gap-2'>
+				<Button className='gap-2' size='sm'>
 					<Plus size={16} />
 					<span>Add feedback</span>
 				</Button>

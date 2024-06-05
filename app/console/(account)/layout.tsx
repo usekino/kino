@@ -27,7 +27,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 			<div className='flex h-screen'>
 				<div className='flex h-screen w-full flex-col'>
 					<div className='bg-card'>
-						<MainNav dashboard={true} />
+						<MainNav />
 					</div>
 					<div className='flex-auto'>{children}</div>
 				</div>

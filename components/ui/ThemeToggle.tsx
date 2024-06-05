@@ -11,7 +11,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { getThemeCookie, setThemeCookie } from '@/lib/util/theme-cookie';
+import { getThemeCookie, setThemeCookie } from '@/lib/utils/theme-cookie';
 
 export function ModeToggle() {
 	const { setTheme } = useTheme();

@@ -1,40 +1,48 @@
-'use client';
-
+import { getParams } from '@nimpl/getters/get-params';
+import { getPathname } from '@nimpl/getters/get-pathname';
 import { Home, Map, MessageSquare, Rss } from 'lucide-react';
 import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-export const ProjectLinks = () => {
-	const pathname = usePathname();
-	const params = useParams();
+import { serverRoute } from '../../../../lib/utils/server-route';
 
-	const base = `/~/${params.team}/${params.project}`;
+type Params = {
+	team: string;
+	project: string;
+};
+
+export const ProjectLinks = async () => {
+	const pathname = getPathname();
+	const params = getParams() as Params;
+	const route = await serverRoute({
+		teamSlug: params.team,
+		projectSlug: params.project,
+	});
 
 	const links = [
 		{
 			text: 'Dashboard',
-			href: base,
+			href: route(``),
 			icon: Home,
 			className: '',
 		},
 		{
 			text: 'Feedback',
-			href: `${base}/feedback`,
+			href: route(`/feedback`),
 			icon: MessageSquare,
 			className: '',
 		},
 		{
 			text: 'Roadmap',
-			href: `${base}/roadmap`,
+			href: route(`/roadmap`),
 			icon: Map,
 			className: '',
 		},
 		{
 			text: 'Updates',
-			href: `${base}/updates`,
+			href: route(`/updates`),
 			icon: Rss,
 			className: '',
 		},
@@ -49,9 +57,12 @@ export const ProjectLinks = () => {
 					className={cn(
 						buttonVariants({
 							variant: 'ghost',
-							size: 'sm',
+							size: 'xs',
 						}),
-						link.href === pathname ? 'bg-primary text-primary-foreground hocus:bg-primary' : '',
+						'text-native-foreground/70',
+						link.href === pathname
+							? 'bg-accent text-accent-foreground hover:!bg-accent hover:!text-accent-foreground focus:!bg-accent focus:!text-accent-foreground'
+							: '',
 						link.className
 					)}
 				>

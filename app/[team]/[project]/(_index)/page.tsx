@@ -1,9 +1,10 @@
-import Link from 'next/link';
+// import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { serverRoute } from '../_lib/server-utils';
+// import { serverRoute } from '../../_lib/server-utils';
+import { ProjectDashboard } from './_components/project-dashboard';
 
 export default async function ProjectPage({
 	params,
@@ -14,7 +15,9 @@ export default async function ProjectPage({
 		slug: params.project,
 	});
 
-	const route = await serverRoute(params.team);
+	// const route = await serverRoute({
+	// 	teamSlug: params.team,
+	// });
 
 	if (!project) {
 		return notFound();
@@ -22,11 +25,12 @@ export default async function ProjectPage({
 
 	return (
 		<div className='container py-6'>
-			<h1>Project Page for {project.name}</h1>
+			{/* <h1>Project Page for {project.name}</h1>
 			<p>{project.description}</p>
 			<Link className='hocus:underline' href={route(`/`)}>
 				← Back to team
-			</Link>
+			</Link> */}
+			<ProjectDashboard />
 		</div>
 	);
 }

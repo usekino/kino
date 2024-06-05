@@ -12,7 +12,7 @@ import * as headers from 'next/headers';
 import superjson from 'superjson';
 
 import { customLoggerLink, skipStream } from '@/lib/trpc/utils';
-import { getBaseUrl } from '@/lib/util/get-base-url';
+import { getBaseUrl } from '@/lib/utils/get-base-url';
 
 const options = {
 	transformer: superjson,
