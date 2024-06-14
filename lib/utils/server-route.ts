@@ -1,5 +1,6 @@
 'use server';
 
+import { getPathname } from '@nimpl/getters/get-pathname';
 import { headers } from 'next/headers';
 
 import { env } from '@/lib/env/server';
@@ -9,12 +10,20 @@ export const serverRoute = async ({
 	teamSlug,
 	projectSlug,
 }: {
-	teamSlug: string;
+	teamSlug?: string;
 	projectSlug?: string;
 }) => {
+	const pathname = getPathname();
 	const host = headers().get('host');
 	const subdomain = getValidSubdomain(host);
 	const proto = headers().get('x-forwarded-proto') ?? 'https';
+
+	const getValidatedTeamSlug = () => {
+		if (!!teamSlug) return teamSlug;
+		if (subdomain && subdomain !== 'console') return subdomain;
+
+		throw new Error('Team slug not found');
+	};
 
 	const createRoute = (route: string, options?: { console?: boolean }) => {
 		const { console = false } = options ?? {};
@@ -22,15 +31,27 @@ export const serverRoute = async ({
 		const path = projectSlug ? `/${projectSlug}${route}` : route;
 
 		if (console) {
-			return `${proto}://console.${env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSlug}${path}`;
+			return `${proto}://console.${env.NEXT_PUBLIC_ROOT_DOMAIN}/${getValidatedTeamSlug()}${path}`;
 		}
 
 		if (!!subdomain && subdomain !== 'console') {
 			return `${proto}://${subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}${path}`;
 		} else {
-			return `/${teamSlug}${path}`;
+			return `/${getValidatedTeamSlug()}${path}`;
 		}
 	};
 
-	return createRoute;
+	const checkRoute = (route: string) => {
+		console.log('checkRoute', route, pathname);
+		if (pathname) {
+			if ((!!subdomain && subdomain !== 'console') || route.includes(`http`)) {
+				return route === `${proto}://${subdomain}.${env.NEXT_PUBLIC_ROOT_DOMAIN}${pathname}`;
+			} else {
+				return route === pathname;
+			}
+		}
+		return false;
+	};
+
+	return { createRoute, checkRoute };
 };

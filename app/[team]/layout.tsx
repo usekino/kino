@@ -1,35 +1,21 @@
-import type { TeamPageParams } from '@/lib/util/server-utils';
 import type { PropsWithChildren } from 'react';
+import type { TeamPageParams } from './_lib/get-team';
 
-// import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
-import { MainNav } from '@/components/section/main-nav';
-
-// import { getTeam } from './_lib/utils';
+import { getTeam } from './_lib/get-team';
 
 export default async function DomainLayout({
-	// params,
 	children,
+	params,
 }: PropsWithChildren<TeamPageParams>) {
-	// const team = await getTeam({
-	// 	team: params.team,
-	// });
+	const team = await getTeam({
+		teamParam: params.team,
+	});
 
-	// TODO: Redirect to custom domain
-	// if (team.decodedDomain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) && team.customDomain) {
-	// 	return redirect(`https://${team.customDomain}`);
-	// }
+	if (!team.id) {
+		return notFound();
+	}
 
-	return (
-		<main>
-			<div className='flex h-screen'>
-				<div className='w-full'>
-					<div className='border'>
-						<MainNav />
-					</div>
-					{children}
-				</div>
-			</div>
-		</main>
-	);
+	return children;
 }

@@ -1,0 +1,32 @@
+import type { ProjectPageParams } from '../_lib/utils';
+
+import { MessageSquare } from 'lucide-react';
+import { notFound } from 'next/navigation';
+
+import { api } from '@/lib/trpc/clients/server-invoker';
+
+import { ProjectWrapper } from '../_components/project-wrapper';
+import { List } from './_components/list';
+import { ListSidebar } from './_components/sidebar';
+
+export default async function FeedbackPage({ params }: ProjectPageParams) {
+	const project = await api.project.findBySlug({
+		slug: params.project,
+	});
+	if (!project) return notFound();
+
+	return (
+		<ProjectWrapper project={project} title='Feedback' icon={MessageSquare}>
+			<div className='container flex gap-6 py-6'>
+				<div className='w-1/4'>
+					<div className='sticky top-12'>
+						<ListSidebar teamSlug={project.team.slug} projectSlug={project.slug} />
+					</div>
+				</div>
+				<div>
+					<List />
+				</div>
+			</div>
+		</ProjectWrapper>
+	);
+}

@@ -17,7 +17,7 @@ import { getInitials } from '@/lib/utils';
 import { serverRoute } from '@/lib/utils/server-route';
 
 export async function UserNav({ user }: { user: User }) {
-	const route = await serverRoute({
+	const { createRoute: route } = await serverRoute({
 		teamSlug: user.username,
 	});
 

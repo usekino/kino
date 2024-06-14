@@ -78,7 +78,7 @@ export const projectRouter = router({
 					},
 				});
 
-				await teamProjectSelect.set(user.id, {
+				await teamProjectSelect.update(user.id, {
 					userId: user.id,
 					team: {
 						id: userTeam.teamId,
