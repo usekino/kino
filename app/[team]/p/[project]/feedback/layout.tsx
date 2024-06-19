@@ -1,12 +1,11 @@
-import { List } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { ListSidebar } from '../_components/sidebar';
-import { ProjectPageParams } from '../../_lib/utils';
+import { ProjectLayoutParams } from '../_lib/utils';
+import { ListSidebar } from './_components/sidebar';
 
-export default async function FeedbackPageBugs({ params }: ProjectPageParams) {
+export default async function FeedbackPageLayout({ children, params }: ProjectLayoutParams) {
 	const project = await api.project.findBySlug({
 		slug: params.project,
 	});
@@ -19,9 +18,7 @@ export default async function FeedbackPageBugs({ params }: ProjectPageParams) {
 					<ListSidebar teamSlug={project.team.slug} projectSlug={project.slug} />
 				</div>
 			</div>
-			<div>
-				<List />
-			</div>
+			<div>{children}</div>
 		</div>
 	);
 }
