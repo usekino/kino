@@ -1,14 +1,8 @@
-import type { ProjectPageParams } from '../../_lib/utils';
+import type { PageProps } from './_types';
 
 import { List } from '../_components/list';
 
-type Props = {
-	params: {
-		board: string;
-	} & ProjectPageParams;
-};
-
-export default async function FeedbackPageBugs({ params }: Props) {
+export default async function FeedbackPageBugs({ params }: PageProps) {
 	return (
 		<div>
 			<h1 className='mb-4 text-3xl font-semibold'>{params.board ?? 'All'}</h1>

@@ -21,8 +21,8 @@ import { Textarea } from '@/components/ui/textarea';
 
 export function ProjectSettings() {
 	return (
-		<div className='grid gap-6'>
-			<Card>
+		<div className='grid gap-6 divide-y py-6'>
+			<div>
 				<CardHeader>
 					<CardTitle>General</CardTitle>
 					<CardDescription>
@@ -48,8 +48,8 @@ export function ProjectSettings() {
 				<CardFooter>
 					<Button>Save Changes</Button>
 				</CardFooter>
-			</Card>
-			<Card>
+			</div>
+			<div>
 				<CardHeader>
 					<CardTitle>Billing</CardTitle>
 					<CardDescription>Update your billing information and payment method.</CardDescription>
@@ -83,8 +83,8 @@ export function ProjectSettings() {
 				<CardFooter>
 					<Button>Update Billing</Button>
 				</CardFooter>
-			</Card>
-			<Card>
+			</div>
+			<div>
 				<CardHeader>
 					<CardTitle>Notifications</CardTitle>
 					<CardDescription>Manage your notification preferences for this project.</CardDescription>
@@ -123,7 +123,7 @@ export function ProjectSettings() {
 				<CardFooter>
 					<Button>Save Notification Settings</Button>
 				</CardFooter>
-			</Card>
+			</div>
 		</div>
 	);
 }

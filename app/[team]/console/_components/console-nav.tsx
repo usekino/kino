@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { DashboardLinks } from './dashboard-links';
+import { ConsoleLinks } from './console-links';
 import Switcher from './switcher';
 
-export const DashboardNav = async () => {
+export const ConsoleNav = async () => {
 	const teams = await api.team.findByMembership();
 	const { projects, selected, containsProject } = await api.dashboard.userProjects();
 
@@ -15,19 +15,19 @@ export const DashboardNav = async () => {
 
 	return (
 		<div className='flex h-full flex-col items-start gap-3 border-r'>
-			<div className='w-full border-b bg-accent/20 p-3 text-center'>
-				<Link
-					href='/console'
-					className='font-bold tracking-widest hover:underline hover:decoration-2 hover:underline-offset-2'
-				>
-					KINO
-				</Link>
-			</div>
-			<div className='p-3'>
+			<div className='w-full p-3'>
 				<Switcher projectsByTeam={projects} selected={selected} />
 			</div>
 			<div className='w-full px-3 py-1'>
-				<DashboardLinks selected={selected} />
+				<ConsoleLinks selected={selected} />
+			</div>
+			<div className='mt-auto w-full border-t p-3 text-center'>
+				<Link
+					href='/console'
+					className='tracking-widest hover:underline hover:decoration-2 hover:underline-offset-2'
+				>
+					User so and so
+				</Link>
 			</div>
 		</div>
 	);

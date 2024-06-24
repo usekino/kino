@@ -12,10 +12,11 @@ export default async function UpdatesPage() {
 	];
 
 	return (
-		<ProjectWrapper icon={Rss} title='Updates' links={links}>
+		<div>
+			<ProjectWrapper icon={Rss} title='Updates' links={links} />
 			<div className='container py-6'>
 				<UpdatesTable />
 			</div>
-		</ProjectWrapper>
+		</div>
 	);
 }

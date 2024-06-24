@@ -6,16 +6,16 @@ import { notFound } from 'next/navigation';
 import { getTeam } from './_lib/get-team';
 
 export default async function DomainLayout({
-	children,
-	params,
+  children,
+  params,
 }: PropsWithChildren<TeamPageParams>) {
-	const team = await getTeam({
-		teamParam: params.team,
-	});
+  const team = await getTeam({
+    teamParam: params.team,
+  });
 
-	if (!team.id) {
-		return notFound();
-	}
+  if (!team.id) {
+    return notFound();
+  }
 
-	return children;
+  return children;
 }

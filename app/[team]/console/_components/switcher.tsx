@@ -30,7 +30,12 @@ interface ProjectSwitcherProps extends PopoverTriggerProps {
 }
 
 export default function Switcher({ className, projectsByTeam, selected }: ProjectSwitcherProps) {
-	const projects = projectsByTeam.map((team) => team.projects).flat();
+	const projects = projectsByTeam.flatMap(({ projects, slug }) =>
+		projects.map((project) => ({
+			...project,
+			teamSlug: slug,
+		}))
+	);
 
 	const pathname = usePathname();
 	const params = useParams();
@@ -83,7 +88,7 @@ export default function Switcher({ className, projectsByTeam, selected }: Projec
 	};
 
 	return (
-		<div>
+		<>
 			<Popover open={open} onOpenChange={setOpen}>
 				<PopoverTrigger asChild>
 					<Button
@@ -91,9 +96,11 @@ export default function Switcher({ className, projectsByTeam, selected }: Projec
 						role='combobox'
 						aria-expanded={open}
 						aria-label='Select a team'
-						className={cn('w-[150px] justify-between', className)}
+						className={cn('w-full justify-between', className)}
 					>
-						{selectedProject?.name ?? 'Loading...'}
+						{selectedProject
+							? `@${selectedProject.teamSlug}/${selectedProject.slug}`
+							: 'Loading...'}
 						<ChevronsUpDown className='ml-auto h-4 w-4 shrink-0 opacity-50' />
 					</Button>
 				</PopoverTrigger>
@@ -142,6 +149,6 @@ export default function Switcher({ className, projectsByTeam, selected }: Projec
 					</Command>
 				</PopoverContent>
 			</Popover>
-		</div>
+		</>
 	);
 }

@@ -25,7 +25,7 @@ export const feedbackBoards = pgTable('feedback_boards', {
 });
 
 export const feedbackBoardsRelations = relations(feedbackBoards, ({ one }) => ({
-	projectId: one(projects, {
+	project: one(projects, {
 		fields: [feedbackBoards.projectId],
 		references: [projects.id],
 	}),

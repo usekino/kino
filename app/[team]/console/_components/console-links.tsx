@@ -8,7 +8,7 @@ import { useParams, usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 
-export const DashboardLinks = ({ selected }: { selected: TeamProjectSelect }) => {
+export const ConsoleLinks = ({ selected }: { selected: TeamProjectSelect }) => {
 	const pathname = usePathname();
 	const params = useParams();
 
@@ -57,14 +57,17 @@ export const DashboardLinks = ({ selected }: { selected: TeamProjectSelect }) =>
 					key={link.href}
 					href={link.href}
 					className={cn(
-						'flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors',
-						'hocus:bg-accent',
-						link.href === pathname ? 'bg-primary text-primary-foreground hocus:bg-primary' : '',
+						'flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-2 text-sm font-medium transition-colors',
+						'hocus:bg-accent/50',
+						link.href === pathname ? 'bg-accent text-accent-foreground hocus:bg-accent' : '',
 						link.className
 					)}
 				>
-					<span className='inline-flex items-center gap-2 text-sm'>
-						<link.icon size={12} />
+					<span className='inline-flex items-center gap-3 text-sm'>
+						<link.icon
+							className={cn(link.href === pathname ? 'opacity-100' : 'opacity-50')}
+							size={16}
+						/>
 						{link.text}
 					</span>
 				</Link>

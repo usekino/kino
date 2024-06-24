@@ -1,11 +1,12 @@
+import type { PageProps } from '../_types';
+
 import { notFound } from 'next/navigation';
 
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { ProjectLayoutParams } from '../_lib/utils';
 import { ListSidebar } from './_components/sidebar';
 
-export default async function FeedbackPageLayout({ children, params }: ProjectLayoutParams) {
+export default async function FeedbackPageLayout({ children, params }: PageProps) {
 	const project = await api.project.findBySlug({
 		slug: params.project,
 	});
