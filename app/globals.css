@@ -41,15 +41,15 @@
 	}
 
 	.dark {
-		--background: 0 0% 5%;
+		--background: 0 0% 3%;
 		--foreground: 252 37% 97%;
-		--muted: 0 0% 6%;
+		--muted: 0 0% 7.5%;
 		--muted-foreground: 0 0% 62.75%;
 		--popover: 0 0% 5%;
 		--popover-foreground: 252 37% 99%;
-		--card: 0 0% 8.5%;
+		--card: 0 0% 10%;
 		--card-foreground: 252 37% 99%;
-		--border: 0 0% 15%;
+		--border: 0 0% 18%;
 		--input: 0 0% 20%;
 		--primary: 27.06 100% 80%;
 		--primary-foreground: 0 0% 0%;
@@ -70,4 +70,32 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+}
+
+.bg-header {
+	--bg: #000000;
+	--text: #ffffff;
+	--overlay: rgba(0, 0, 0, 0.25);
+	--overlay-hover: rgba(0, 0, 0, 0.5);
+	--stop-0: #000000;
+	--stop-1: #3d3d3d;
+	--stop-2: #454545;
+	--stop-3: #6d6d6d;
+	background-color: var(--stop-2);
+	background-image: url("data:image/svg+xml,%3Csvg opacity='0.1' viewBox='00250250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='7.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
+		radial-gradient(circle at 57% 46%, var(--stop-0) 0px, transparent 60%),
+		radial-gradient(circle at 6% 76%, var(--stop-0) 0px, transparent 60%),
+		radial-gradient(circle at 69% 21%, var(--stop-0) 0px, transparent 60%),
+		radial-gradient(circle at 39% 78%, var(--stop-1) 0px, transparent 60%),
+		radial-gradient(circle at 88% 69%, var(--stop-1) 0px, transparent 60%),
+		radial-gradient(circle at 5% 37%, var(--stop-1) 0px, transparent 60%),
+		radial-gradient(circle at 53% 68%, var(--stop-0) 0px, transparent 60%),
+		radial-gradient(circle at 51% 98%, var(--stop-0) 0px, transparent 60%),
+		radial-gradient(circle at 77% 49%, var(--stop-3) 0px, transparent 60%),
+		radial-gradient(circle at 41% 51%, var(--stop-3) 0px, transparent 60%),
+		radial-gradient(circle at 12% 67%, var(--stop-3) 0px, transparent 60%),
+		radial-gradient(circle at 94% 59%, var(--stop-2) 0px, transparent 60%),
+		radial-gradient(circle at 9% 27%, var(--stop-0) 0px, transparent 60%),
+		radial-gradient(circle at 48% 3%, var(--stop-3) 0px, transparent 60%),
+		radial-gradient(circle at 8% 8%, var(--stop-2) 0px, transparent 60%);
 }

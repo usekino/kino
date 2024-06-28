@@ -20,7 +20,7 @@ export default async function ConsoleLayout({ children, params }: PageParams) {
 			<div className='hidden h-full min-w-[250px] bg-native/50 lg:fixed lg:block'>
 				<ConsoleNav />
 			</div>
-			<div className='h-full w-full bg-muted lg:ml-[250px]'>{children}</div>
+			<div className='h-full w-full lg:ml-[250px]'>{children}</div>
 		</div>
 	);
 }

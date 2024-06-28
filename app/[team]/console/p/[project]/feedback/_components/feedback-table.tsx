@@ -18,7 +18,7 @@ import {
 	useReactTable,
 } from '@tanstack/react-table';
 import { ChevronDown } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -118,158 +118,161 @@ export type Feedback = {
 	filedIn: string | null;
 };
 
-export const columns: ColumnDef<Feedback>[] = [
-	// TODO: Uncomment this when we have a use for selections
-	//
-	// {
-	// 	id: 'select',
-	// 	header: ({ table }) => (
-	// 		<Checkbox
-	// 			checked={
-	// 				table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
-	// 			}
-	// 			onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-	// 			aria-label='Select all'
-	// 		/>
-	// 	),
-	// 	cell: ({ row }) => (
-	// 		<Checkbox
-	// 			checked={row.getIsSelected()}
-	// 			onCheckedChange={(value) => row.toggleSelected(!!value)}
-	// 			aria-label='Select row'
-	// 		/>
-	// 	),
-	// 	enableSorting: false,
-	// 	// enableHiding: false,
-	// },
-	{
-		accessorKey: 'status',
-		meta: {
-			title: 'Status',
+export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
+	return [
+		// TODO: Uncomment this when we have a use for selections
+		//
+		// {
+		// 	id: 'select',
+		// 	header: ({ table }) => (
+		// 		<Checkbox
+		// 			checked={
+		// 				table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
+		// 			}
+		// 			onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+		// 			aria-label='Select all'
+		// 		/>
+		// 	),
+		// 	cell: ({ row }) => (
+		// 		<Checkbox
+		// 			checked={row.getIsSelected()}
+		// 			onCheckedChange={(value) => row.toggleSelected(!!value)}
+		// 			aria-label='Select row'
+		// 		/>
+		// 	),
+		// 	enableSorting: false,
+		// 	// enableHiding: false,
+		// },
+		{
+			accessorKey: 'status',
+			meta: {
+				title: 'Status',
+			},
+			header: ({ column }) => {
+				return (
+					<button
+						className='text-left hocus:text-native-foreground hocus:underline'
+						onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					>
+						Status
+					</button>
+				);
+			},
+			cell: ({ row }) => {
+				const status = row.getValue('status') as Feedback['status'];
+				// return class string based on status
+				const statusClass = {
+					open: 'bg-green-700/50 text-green-100',
+					planned: 'bg-blue-700/50 text-blue-100',
+					closed: 'bg-red-700/50 text-red-100',
+				};
+				return (
+					<span
+						className={cn(
+							statusClass[status],
+							'inline-block rounded px-1.5 py-0.5 text-xs capitalize'
+						)}
+					>
+						{status}
+					</span>
+				);
+			},
 		},
-		header: ({ column }) => {
-			return (
-				<button
-					className='text-left hocus:text-native-foreground hocus:underline'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Status
-				</button>
-			);
+		{
+			accessorKey: 'title',
+			meta: {
+				title: 'Title',
+			},
+			header: 'Title',
+			cell: ({ row }) => {
+				return (
+					<a
+						href={`${baseUrl}/${row.original.id}`}
+						className='pointer-events-none line-clamp-3 font-medium group-hover:underline hocus:underline'
+					>
+						{row.getValue('title')}
+					</a>
+				);
+			},
 		},
-		cell: ({ row }) => {
-			const status = row.getValue('status') as Feedback['status'];
-			// return class string based on status
-			const statusClass = {
-				open: 'bg-green-700/50 text-green-100',
-				planned: 'bg-blue-700/50 text-blue-100',
-				closed: 'bg-red-700/50 text-red-100',
-			};
-			return (
-				<span
-					className={cn(
-						statusClass[status],
-						'inline-block rounded px-1.5 py-0.5 text-xs capitalize'
-					)}
-				>
-					{status}
-				</span>
-			);
+		{
+			accessorKey: 'description',
+			meta: {
+				title: 'Description',
+			},
+			header: 'Description',
+			cell: ({ row }) => {
+				const description: string = row.getValue('description') ?? '';
+				if (!description) {
+					return <span className='line-clamp-3 text-muted-foreground/50'>No description</span>;
+				}
+				const length = description.length;
+				const max = 100;
+				return (
+					<span className='line-clamp-3 text-muted-foreground'>
+						{length > max ? description.slice(0, max) + '...' : description}
+					</span>
+				);
+			},
 		},
-	},
-	{
-		accessorKey: 'upvotes',
-		meta: {
-			title: 'Upvotes',
+		{
+			accessorKey: 'upvotes',
+			meta: {
+				title: 'Upvotes',
+			},
+			header: ({ column }) => {
+				return (
+					<button
+						className='text-left hocus:text-native-foreground hocus:underline'
+						onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+					>
+						Upvotes
+					</button>
+				);
+			},
+			cell: ({ row }) => {
+				return (
+					<div className='inline-flex size-8 items-center justify-center rounded-lg bg-native p-1 text-xs text-muted-foreground'>
+						{row.getValue('upvotes')}
+					</div>
+				);
+			},
 		},
-		header: ({ column }) => {
-			return (
-				<button
-					className='text-left hocus:text-native-foreground hocus:underline'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Upvotes
-				</button>
-			);
+		{
+			accessorKey: 'filedIn',
+			meta: {
+				title: 'Filed In',
+			},
+			header: 'Filed In',
+			cell: ({ row }) => {
+				if (!row.getValue('filedIn')) return null;
+				return (
+					<span className='inline-block rounded bg-native px-1.5 py-0.5 text-xs capitalize text-muted-foreground'>
+						{row.getValue('filedIn')}
+					</span>
+				);
+			},
 		},
-		cell: ({ row }) => {
-			return (
-				<div className='inline-flex size-8 items-center justify-center rounded-lg bg-muted p-2 font-bold text-muted-foreground'>
-					{row.getValue('upvotes')}
-				</div>
-			);
+		{
+			accessorKey: 'assignedTo',
+			meta: {
+				title: 'Assigned To',
+			},
+			header: 'Assigned To',
+			cell: ({ row }) => {
+				if (!row.getValue('assignedTo')) {
+					return <p className='line-clamp-3 text-muted-foreground/50'>None</p>;
+				}
+				return <p className='line-clamp-3 text-muted-foreground'>{row.getValue('assignedTo')}</p>;
+			},
 		},
-	},
-	{
-		accessorKey: 'title',
-		meta: {
-			title: 'Title',
-		},
-		header: 'Title',
-		cell: ({ row }) => {
-			return (
-				<a
-					href={`/feedback/${row.original.id}`}
-					className='line-clamp-3 font-medium group-hover:underline hocus:underline'
-				>
-					{row.getValue('title')}
-				</a>
-			);
-		},
-	},
-	{
-		accessorKey: 'description',
-		meta: {
-			title: 'Description',
-		},
-		header: 'Description',
-		cell: ({ row }) => {
-			const description: string = row.getValue('description') ?? '';
-			if (!description) {
-				return <span className='line-clamp-3 text-muted-foreground/50'>No description</span>;
-			}
-			const length = description.length;
-			const max = 100;
-			return (
-				<span className='line-clamp-3 text-muted-foreground'>
-					{length > max ? description.slice(0, max) + '...' : description}
-				</span>
-			);
-		},
-	},
-	{
-		accessorKey: 'filedIn',
-		meta: {
-			title: 'Filed In',
-		},
-		header: 'Filed In',
-		cell: ({ row }) => {
-			if (!row.getValue('filedIn')) return null;
-			return (
-				<span className='inline-block rounded bg-muted px-1.5 py-0.5 text-xs capitalize text-muted-foreground'>
-					{row.getValue('filedIn')}
-				</span>
-			);
-		},
-	},
-	{
-		accessorKey: 'assignedTo',
-		meta: {
-			title: 'Assigned To',
-		},
-		header: 'Assigned To',
-		cell: ({ row }) => {
-			if (!row.getValue('assignedTo')) {
-				return <p className='line-clamp-3 text-muted-foreground/50'>None</p>;
-			}
-			return <p className='line-clamp-3 text-muted-foreground'>{row.getValue('assignedTo')}</p>;
-		},
-	},
-];
+	];
+};
 
 type Meta = { title: string };
 
 export function FeedbackTable() {
+	const params = useParams();
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
@@ -282,9 +285,11 @@ export function FeedbackTable() {
 	const [rowSelection, setRowSelection] = React.useState({});
 	const router = useRouter();
 
+	const baseUrl = `/console/p/${params.project}/feedback`;
+
 	const table = useReactTable({
 		data,
-		columns,
+		columns: columns(baseUrl),
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
@@ -342,7 +347,7 @@ export function FeedbackTable() {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-			<div className='border-y bg-card'>
+			<div className='border-y'>
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -365,14 +370,14 @@ export function FeedbackTable() {
 								<TableRow
 									key={row.id}
 									data-state={row.getIsSelected() && 'selected'}
-									className='group hover:bg-accent-fade'
+									className='group hover:bg-accent/20'
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell
 											key={cell.id}
 											onClick={() => {
 												if (cell.column.id === 'select') return;
-												router.push(`/feedback/${row.getValue('id')}`);
+												router.push(`${baseUrl}/${row.original.id}`);
 											}}
 											className={cn(cell.column.id !== 'select' && 'cursor-pointer')}
 										>

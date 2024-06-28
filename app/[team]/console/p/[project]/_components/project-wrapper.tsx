@@ -1,7 +1,8 @@
 import type { LucideIcon } from 'lucide-react';
-import type { PropsWithChildren } from 'react';
 
 import Link from 'next/link';
+
+import { Heading } from '@/components/heading';
 
 type LinkData = {
 	href: string;
@@ -18,10 +19,12 @@ type ProjectHeaderProps = {
 export const ProjectWrapper = ({ icon: Icon, title, links }: ProjectHeaderProps) => {
 	return (
 		<>
-			<header className='border-y'>
+			<header className='bg-header border-y'>
 				<div className='flex items-center gap-4 px-8 pb-4 pt-12'>
 					<Icon size={24} />
-					<h1 className='text-2xl font-medium md:text-3xl'>{title}</h1>
+					<Heading tag='h1' variant='h2'>
+						{title}
+					</Heading>
 				</div>
 
 				{links && (
