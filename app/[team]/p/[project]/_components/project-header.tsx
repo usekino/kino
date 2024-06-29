@@ -1,70 +1,54 @@
 'use client';
 
-import type { LucideIcon } from 'lucide-react';
-
 import { AlertCircle, Home, Map, MessageSquare, Rss } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { API } from '@/lib/trpc/routers/_app';
 import { cn } from '@/lib/utils';
+import { useLinks } from '@/lib/utils/use-links';
 
 type Project = NonNullable<API['output']['project']['findBySlug']>;
-type Path = {
-	href: string;
-	title: string;
-	icon: LucideIcon;
-	className: string;
-};
 
 export const ProjectHeader = ({ project }: { project: Project }) => {
 	const { slug } = project;
 
-	const base = `/p/${slug}`;
-
-	const pagesData = [
-		{
-			href: `${base}`,
-			title: 'Dashboard',
-			icon: Home,
-			className: '',
-		},
-		{
-			href: `${base}/feedback`,
-			title: 'Feedback',
-			icon: MessageSquare,
-			className: '',
-		},
-		{
-			href: `${base}/updates`,
-			title: 'Updates',
-			icon: Rss,
-			className: '',
-		},
-		{
-			href: `${base}/roadmap`,
-			title: 'Roadmap',
-			icon: Map,
-			className: '',
-		},
-	] as Path[];
-
-	const pathname = usePathname();
-
 	const teamInitial = project.team.name.slice(0, 1)[0].toUpperCase();
 
-	const currentPage = pagesData.find((path) => {
-		const pName = pathname.replace(base, '');
-		const p = path.href.replace(base, '');
-		const current = (!p || p == '') && pName !== p ? false : pName.startsWith(p);
-		return current;
+	const { links, current, isActive } = useLinks({
+		base: `/p/${slug}`,
+		links: [
+			{
+				href: ``,
+				title: 'Dashboard',
+				icon: Home,
+				className: '',
+			},
+			{
+				href: `/feedback`,
+				title: 'Feedback',
+				icon: MessageSquare,
+				className: '',
+			},
+			{
+				href: `/updates`,
+				title: 'Updates',
+				icon: Rss,
+				className: '',
+			},
+			{
+				href: `/roadmap`,
+				title: 'Roadmap',
+				icon: Map,
+				className: '',
+			},
+		],
 	});
 
-	const IconElement = currentPage?.icon ?? AlertCircle;
+	const IconElement = current?.icon ?? AlertCircle;
 
-	if (!currentPage) {
+	if (!current) {
 		return <div>Loading...</div>;
 	}
 
@@ -100,32 +84,32 @@ export const ProjectHeader = ({ project }: { project: Project }) => {
 				<div className='container'>
 					<div className='mx-2 flex items-center gap-3'>
 						<IconElement size={20} />
-						<h1 className='text-2xl font-medium md:text-3xl'>{currentPage?.title}</h1>
+						<h1 className='text-2xl font-medium md:text-3xl'>{current?.title}</h1>
 					</div>
 				</div>
 				<div className='container'>
 					<nav className={cn('inline-flex items-center gap-2')}>
-						{pagesData.map((p) => {
-							const isActive = p.title === currentPage?.title;
+						{links.map((link) => {
+							const active = isActive(link);
 							return (
 								<Link
-									key={`project-link-${p.href}`}
-									href={p.href}
+									key={`project-link-${link.href}`}
+									href={link.href}
 									className={cn(
 										buttonVariants({
 											variant: 'ghost',
 											size: 'xs',
 										}),
 										'text-native-foreground/70',
-										isActive
+										active
 											? 'bg-accent text-accent-foreground hover:!bg-accent hover:!text-accent-foreground focus:!bg-accent focus:!text-accent-foreground'
 											: '',
-										p.className
+										link.className
 									)}
 								>
 									<span className='inline-flex items-center gap-2 text-sm'>
-										<p.icon size={12} />
-										{p.title}
+										<link.icon size={12} />
+										{link.title}
 									</span>
 								</Link>
 							);

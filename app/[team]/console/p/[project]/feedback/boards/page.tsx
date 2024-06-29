@@ -1,7 +1,10 @@
+import { FeedbackHeader } from '../_components/feedback-header';
+
 export default async function FeedbackBoardsPage() {
 	return (
-		<div>
+		<>
+			<FeedbackHeader />
 			<h1 className='mb-4 text-3xl font-semibold'>Feedback Boards</h1>
-		</div>
+		</>
 	);
 }

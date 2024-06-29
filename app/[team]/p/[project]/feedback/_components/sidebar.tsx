@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useLinks } from '@/lib/utils/use-links';
 
 // import { serverRoute } from '@/lib/utils/server-route';
 
@@ -18,39 +19,31 @@ type Props = {
 };
 
 export const ListSidebar = ({ projectSlug }: Props) => {
-	const pathname = usePathname();
-
-	// const { createRoute, checkRoute } = await serverRoute({
-	// 	teamSlug: props.teamSlug,
-	// 	projectSlug: props.projectSlug,
-	// });
-
-	const base = `/p/${projectSlug}/feedback`;
-
-	const links = [
-		{
-			title: 'All',
-			href: `${base}`,
-			icon: GalleryVerticalEnd,
-		},
-		{
-			title: 'Bugs',
-			href: `${base}/bugs`,
-			icon: Bug,
-		},
-		{
-			title: 'Features',
-			href: `${base}/features`,
-			icon: Gift,
-		},
-		{
-			title: 'Improvements',
-			href: `${base}/improvements`,
-			icon: Blocks,
-		},
-	];
-
-	// console.log({ pathname, base, links });
+	const { links, isActive } = useLinks({
+		base: `/p/${projectSlug}/feedback`,
+		links: [
+			{
+				title: 'All',
+				href: ``,
+				icon: GalleryVerticalEnd,
+			},
+			{
+				title: 'Bugs',
+				href: `/bugs`,
+				icon: Bug,
+			},
+			{
+				title: 'Features',
+				href: `/features`,
+				icon: Gift,
+			},
+			{
+				title: 'Improvements',
+				href: `/improvements`,
+				icon: Blocks,
+			},
+		],
+	});
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -60,9 +53,7 @@ export const ListSidebar = ({ projectSlug }: Props) => {
 			<span className='font-bold'>Boards</span>
 			<nav className='flex flex-col gap-1'>
 				{links.map((link) => {
-					const path = pathname.replace(base, '');
-					const active = !path ? link.href === base : link.href.replace(base, '').startsWith(path);
-
+					const active = isActive(link);
 					return (
 						<Link
 							key={link.title}

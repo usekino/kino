@@ -48,7 +48,7 @@ In tempora maxime. Reiciendis velit ut accusamus repudiandae quas. Consequatur e
 
 	return (
 		<div className='flex flex-col gap-6 p-2 sm:p-4 md:p-6'>
-			<div className='overflow-hidden rounded-lg border bg-card'>
+			<div className='overflow-hidden rounded-lg border bg-muted'>
 				<div className='grid grid-cols-12 '>
 					<div className='col-span-9 flex flex-col'>
 						<div className='flex flex-col gap-4 p-6'>
@@ -141,7 +141,7 @@ In tempora maxime. Reiciendis velit ut accusamus repudiandae quas. Consequatur e
 					</div>
 				</div>
 			</div>
-			<div className='rounded-lg border bg-card'>
+			<div className='rounded-lg border bg-muted'>
 				<div className='flex flex-col gap-3 p-6'>
 					<Heading tag='h3'>Timeline</Heading>
 					<Timeline />
