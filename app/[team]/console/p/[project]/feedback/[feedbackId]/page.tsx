@@ -1,3 +1,4 @@
+import { SendHorizonal } from 'lucide-react';
 import Link from 'next/link';
 
 import { Heading } from '@/components/heading';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 
-import Timeline from './_components/Timeline';
+import Updates from './_components/Updates';
 import { PageParams } from './_types';
 
 type Status = 'open' | 'planned' | 'closed';
@@ -30,65 +31,30 @@ export default function FeedbackIdPage({ params }: PageParams) {
 		id: params.feedbackId,
 		title: 'This is a feature request',
 		status: 'open',
-		description: `Eum dicta eos est sunt. Dolorem fugit amet exercitationem minus. Illo labore soluta cum cupiditate perspiciatis soluta eligendi. Maxime blanditiis corporis veritatis.<br/><br/> In soluta maxime magnam. Magnam eos dignissimos aut aut id officiis distinctio quod.
-Repellat occaecati sapiente praesentium commodi necessitatibus possimus facere sed sed. Praesentium iusto quasi consequuntur totam corrupti cum. Eligendi voluptatibus facilis repellendus culpa.
-Occaecati nam provident temporibus debitis asperiores eaque reprehenderit laborum dolorem. Aliquam in pariatur. Sit culpa fugiat beatae eius cum modi dolor. <br/><br/> Similique aut natus minima. Soluta a optio a fugiat cupiditate hic modi dolorum culpa. Dolorum aspernatur perspiciatis.
-Hic tempora quia hic saepe sequi atque fuga quaerat exercitationem. Soluta ab distinctio beatae voluptates fuga perferendis quisquam amet aperiam.<br/><br/> Earum provident consequatur nemo eligendi voluptates voluptatibus quaerat nesciunt. Sapiente ipsam nam sapiente ab. A sit fugiat maxime architecto quasi harum adipisci quo. Vitae nemo sequi iusto impedit voluptatem neque rem.
-In tempora maxime. Reiciendis velit ut accusamus repudiandae quas. Consequatur enim iure eaque aperiam officia deserunt dolore dolorem. Quae aperiam vero at.`,
 		upvotes: 0,
 		assignedTo: 'natedunn',
 		assignedBy: 'davinbuster',
 		filedIn: 'features',
-		attachments: [
-			// placeholder image
-			'https://pbs.twimg.com/media/GMUNeiIbwAA71f6?format=jpg&name=4096x4096',
-			'https://pbs.twimg.com/media/GK80s7AaoAA0OzU?format=jpg&name=4096x4096',
-		],
 	};
 
 	return (
-		<div className='flex flex-col gap-6 p-2 sm:p-4 md:p-6'>
+		<div className='flex flex-col gap-4 p-2 sm:p-3 md:p-4'>
 			<div className='overflow-hidden rounded-lg border bg-muted'>
 				<div className='grid grid-cols-12 '>
 					<div className='col-span-9 flex flex-col'>
-						<div className='flex flex-col gap-4 p-6'>
+						<div className='flex flex-col gap-4 p-4'>
 							<div className='flex flex-col gap-2'>
-								<span className='select-none text-xs font-bold uppercase tracking-wide opacity-25'>
-									Title
-								</span>
 								<Heading tag='h1' variant='h3'>
 									{feedback.title}
 								</Heading>
 							</div>
-							<div className='flex flex-col gap-2'>
-								<span className='select-none text-xs font-bold uppercase tracking-wide opacity-25'>
-									Description
-								</span>
-								<div>
-									{/* TODO: use a markdown library */}
-									<p dangerouslySetInnerHTML={{ __html: feedback.description }} />
-								</div>
-							</div>
-							<div className='flex flex-col gap-2'>
-								<span className='select-none text-xs font-bold uppercase tracking-wide opacity-25'>
-									Attachments
-								</span>
-								<div className='flex gap-2'>
-									{feedback.attachments.map((attachment) => (
-										<button
-											// onClick={() => alert('Open attachment')}
-											key={attachment}
-											className='flex gap-2 overflow-hidden rounded-lg border bg-native transition-all duration-200 ease-in-out hocus:scale-105 '
-										>
-											<img src={attachment} alt='' className='max-h-20 w-auto' />
-										</button>
-									))}
-								</div>
-							</div>
 						</div>
-						{/* Comments section */}
 					</div>
-					<div className='col-span-3 border-l p-6'>
+				</div>
+			</div>
+			<div className='grid gap-4 md:grid-cols-12'>
+				<div className='order-first md:order-last md:col-span-4'>
+					<div className='sticky top-6 rounded-lg border bg-muted p-4'>
 						<span className='select-none text-xs font-bold uppercase tracking-wide opacity-25'>
 							Details
 						</span>
@@ -140,16 +106,18 @@ In tempora maxime. Reiciendis velit ut accusamus repudiandae quas. Consequatur e
 						</ul>
 					</div>
 				</div>
-			</div>
-			<div className='rounded-lg border bg-muted'>
-				<div className='flex flex-col gap-3 p-6'>
-					<Heading tag='h3'>Timeline</Heading>
-					<Timeline />
-				</div>
-				<div className='flex flex-col gap-3 border-t p-6'>
-					<Textarea placeholder='Leave a comment...' />
-					<div>
-						<Button>Post</Button>
+				<div className='rounded-lg border bg-muted md:col-span-8'>
+					<div className='flex flex-col gap-3 p-4'>
+						<Updates />
+					</div>
+					<div className='sticky bottom-0 flex gap-3 rounded-b-lg border-t bg-muted p-4'>
+						<Textarea rows={1} placeholder='Leave a comment...' />
+						<div>
+							<Button className='gap-2'>
+								<SendHorizonal size={16} />
+								<span>Post</span>
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>

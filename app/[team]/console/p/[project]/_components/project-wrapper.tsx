@@ -12,7 +12,7 @@ export const ProjectWrapper = ({
 	children,
 }: PropsWithChildren<{ icon: LucideIcon; title: string }>) => {
 	return (
-		<div className='bg-header border-y'>
+		<div className='border-b'>
 			<div className='flex items-center gap-4 px-8 pb-4 pt-12'>
 				<Icon size={24} />
 				<Heading tag='h1' variant='h2'>
