@@ -5,6 +5,7 @@ import { env } from '@/lib/env/server';
 
 import { deconstructTeamSlug } from '../_lib/get-team';
 import { ConsoleNav } from './_components/console-nav';
+import { SidebarWithContent } from './_components/sidebar-with-content';
 import { PageParams } from './_types';
 
 export default async function ConsoleLayout({ children, params }: PageParams) {
@@ -17,10 +18,11 @@ export default async function ConsoleLayout({ children, params }: PageParams) {
 
 	return (
 		<div className='relative flex h-svh w-full'>
-			<div className='hidden h-full min-w-[225px] bg-background lg:fixed lg:block'>
+			<SidebarWithContent sidebar={<ConsoleNav />} children={children} />
+			{/* <div className='hidden h-full min-w-[225px] bg-muted lg:fixed lg:block'>
 				<ConsoleNav />
 			</div>
-			<div className='h-full w-full lg:ml-[225px]'>{children}</div>
+			<div className='h-full w-full lg:ml-[225px]'>{children}</div> */}
 		</div>
 	);
 }

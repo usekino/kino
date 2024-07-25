@@ -7,11 +7,11 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLinks } from '@/lib/utils/use-links';
 
-export const FeedbackNav = () => {
+export const SettingsNav = () => {
 	const params = useParams();
 
 	const { links, isActive } = useLinks({
-		base: `/console/p/${params.project}/feedback`,
+		base: `/console/p/${params.project}/roadmap`,
 		links: [
 			{
 				title: 'All feedback',

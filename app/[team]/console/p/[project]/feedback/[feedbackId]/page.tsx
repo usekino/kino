@@ -17,6 +17,7 @@ export const Status = ({ status }: { status: Status }) => {
 		planned: 'bg-blue-700/50 text-blue-100',
 		closed: 'bg-red-700/50 text-red-100',
 	};
+
 	return (
 		<span
 			className={cn(statusClass[status], 'inline-block rounded px-1.5 py-0.5 text-xs capitalize')}
@@ -40,7 +41,7 @@ export default function FeedbackIdPage({ params }: PageParams) {
 	return (
 		<div className='flex flex-col gap-4 p-2 sm:p-3 md:p-4'>
 			<div className='overflow-hidden rounded-lg border bg-muted'>
-				<div className='grid grid-cols-12 '>
+				<div className='grid grid-cols-12'>
 					<div className='col-span-9 flex flex-col'>
 						<div className='flex flex-col gap-4 p-4'>
 							<div className='flex flex-col gap-2'>

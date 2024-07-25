@@ -2,15 +2,21 @@
 
 import type { TeamProjectSelect } from '@/lib/schema/dashboard.schema';
 
-import { Home, MessageSquare, Rss, Settings } from 'lucide-react';
+import { useContext } from 'react';
+import { Home, Map, MessageSquare, Rss, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useLinks } from '@/lib/utils/use-links';
 
+import { SidebarContext } from './sidebar-with-content';
+
 export const ConsoleLinks = ({}: { selected: TeamProjectSelect }) => {
 	const params = useParams();
+
+	const { open: sidebarOpen } = useContext(SidebarContext);
 
 	const { links, isActive } = useLinks({
 		base: `/console/p/${params.project}`,
@@ -34,6 +40,12 @@ export const ConsoleLinks = ({}: { selected: TeamProjectSelect }) => {
 				className: '',
 			},
 			{
+				title: 'Roadmap',
+				href: `/roadmap`,
+				icon: Map,
+				className: '',
+			},
+			{
 				title: 'Settings',
 				href: `/settings`,
 				icon: Settings,
@@ -47,22 +59,36 @@ export const ConsoleLinks = ({}: { selected: TeamProjectSelect }) => {
 			{links?.map((link) => {
 				const active = isActive(link);
 				return (
-					<Link
-						key={link.href}
-						href={link.href}
-						className={cn(
-							'flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-2 text-sm font-medium transition-colors',
-							'hocus:bg-accent/50',
-							active ? 'bg-accent text-accent-foreground hocus:bg-accent' : '',
-							link.className
-						)}
-					>
-						{/* {path} - {link.href.replace(base, '')} */}
-						<span className='inline-flex items-center gap-3 text-sm'>
-							<link.icon className={cn(active ? 'opacity-100' : 'opacity-50')} size={16} />
-							{link.title}
-						</span>
-					</Link>
+					<TooltipProvider key={link.href}>
+						<Tooltip delayDuration={100} open={sidebarOpen ? false : undefined}>
+							<TooltipTrigger asChild>
+								<Link
+									href={link.href}
+									className={cn(
+										'group flex w-full items-center justify-between gap-2 rounded-md px-2.5 text-sm font-medium transition-colors',
+										'hocus:bg-accent/50',
+										active ? 'bg-accent text-accent-foreground hocus:bg-accent' : '',
+										sidebarOpen ? 'py-2' : 'py-2.5',
+										link.className
+									)}
+								>
+									<span className='inline-flex items-center gap-3 text-sm'>
+										<link.icon
+											className={cn(
+												'group-hocus:opacity-100',
+												active ? 'opacity-100' : 'opacity-50'
+											)}
+											size={16}
+										/>
+										{sidebarOpen ? link.title : null}
+									</span>
+								</Link>
+							</TooltipTrigger>
+							<TooltipContent side='right' className='z-20'>
+								<p>{link.title}</p>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				);
 			})}
 		</nav>

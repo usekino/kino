@@ -1,16 +1,10 @@
-import { Settings } from 'lucide-react';
-
-import { ProjectWrapper } from '../_components/project-wrapper';
 import { ProjectSettings } from './_components/project-settings';
+import { SettingsHeader } from './_components/settings-header';
 
 export default async function SettingsPage() {
 	return (
 		<div>
-			<ProjectWrapper
-				icon={Settings}
-				title='Project Settings'
-				links={[{ href: '/test	', title: 'Settings' }]}
-			/>
+			<SettingsHeader />
 			<ProjectSettings />
 		</div>
 	);

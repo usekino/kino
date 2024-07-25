@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, CirclePlus, CircleX, FilePlus, PenLine } from 'lucide-react';
+import { Calendar, CirclePlus, CircleX, PenLine } from 'lucide-react';
 // TODO: ^ separate this into smaller client components
 //
 import Link from 'next/link';
@@ -110,7 +110,7 @@ const Comment = ({ item }: { item: Item }) => {
 			<div className='flex flex-col gap-1'>
 				<div className='text-muted-foreground'>
 					<Link
-						className='font-semibold  hocus:underline'
+						className='font-semibold hocus:underline'
 						href={`/console/p/${params.project}/u/${item.user.username}`}
 					>
 						{item.user.name} (@{item.user.username})
@@ -129,7 +129,7 @@ const Comment = ({ item }: { item: Item }) => {
 								<button
 									// onClick={() => alert('Open attachment')}
 									key={attachment}
-									className='flex gap-2 overflow-hidden rounded-lg border bg-native transition-all duration-200 ease-in-out hocus:scale-105 '
+									className='flex gap-2 overflow-hidden rounded-lg border bg-native transition-all duration-200 ease-in-out hocus:scale-105'
 								>
 									<img src={attachment} alt='' className='max-h-20 w-auto' />
 								</button>

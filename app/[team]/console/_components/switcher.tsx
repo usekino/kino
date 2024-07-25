@@ -4,7 +4,7 @@ import type { TeamProjectSelect } from '@/lib/schema/dashboard.schema';
 import type { ReadProjectSchema } from '@/lib/schema/project.schema';
 import type { API } from '@/lib/trpc/routers/_app';
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CheckIcon, ChevronsUpDown, PlusCircle } from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 
@@ -20,6 +20,8 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+
+import { SidebarContext } from './sidebar-with-content';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
 type _Projects = API['output']['dashboard']['userProjects']['projects'];
@@ -47,6 +49,8 @@ export default function Switcher({ className, projectsByTeam, selected }: Projec
 	const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | undefined>(
 		paramSelectedProject
 	);
+
+	const { open: sidebarOpen } = useContext(SidebarContext);
 
 	useEffect(() => {
 		if (!params.project) {
@@ -96,12 +100,20 @@ export default function Switcher({ className, projectsByTeam, selected }: Projec
 						role='combobox'
 						aria-expanded={open}
 						aria-label='Select a team'
+						// size={!sidebarOpen ? 'sm' : 'default'}
+						size='sm'
 						className={cn('w-full justify-between', className)}
 					>
 						{selectedProject
-							? `@${selectedProject.teamSlug}/${selectedProject.slug}`
+							? sidebarOpen
+								? `@${selectedProject.teamSlug}/${selectedProject.slug}`
+								: selectedProject.slug.slice(0, 1).toUpperCase()
 							: 'Loading...'}
-						<ChevronsUpDown className='ml-auto h-4 w-4 shrink-0 opacity-50' />
+						<ChevronsUpDown
+							className={cn('ml-auto h-4 w-4 shrink-0 opacity-50', {
+								hidden: !sidebarOpen,
+							})}
+						/>
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent align='start' className='w-[200px] p-0' asChild>
