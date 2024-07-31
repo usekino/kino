@@ -1,23 +1,45 @@
 'use client';
 
-import { Calendar, CirclePlus, CircleX, PenLine } from 'lucide-react';
-// TODO: ^ separate this into smaller client components
-//
+import {
+	Calendar,
+	CirclePlus,
+	CircleX,
+	Copy,
+	EyeOff,
+	LucideIcon,
+	MoreHorizontal,
+	PenLine,
+	Reply,
+	SmileIcon,
+	SmilePlus,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+import { Button } from '@/components/ui/button';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 const items = [
-	{
-		type: 'status',
-		status: 'open',
-		content: `Feedback created`,
-		commentAttachments: null,
-		createdAt: new Date(),
-		user: {
-			name: 'John Doe',
-			username: 'johndoe',
-		},
-	},
+	// {
+	// 	type: 'status',
+	// 	status: 'open',
+	// 	content: `Feedback created`,
+	// 	commentAttachments: null,
+	// 	createdAt: new Date(),
+	// 	user: {
+	// 		name: 'John Doe',
+	// 		username: 'johndoe',
+	// 	},
+	// },
 	{
 		type: 'comment',
 		status: null,
@@ -103,99 +125,178 @@ const Comment = ({ item }: { item: Item }) => {
 	const params = useParams();
 
 	return (
-		<li className='update-comment flex gap-4 py-8 first-of-type:mt-0'>
-			<div className='flex items-start gap-2'>
-				<div className='mt-0.5 size-10 rounded-full border bg-gradient-to-tr from-native to-accent'></div>
-			</div>
-			<div className='flex flex-col gap-1'>
-				<div className='text-muted-foreground'>
-					<Link
-						className='font-semibold hocus:underline'
-						href={`/console/p/${params.project}/u/${item.user.username}`}
-					>
-						{item.user.name} (@{item.user.username})
-					</Link>
-					{/* {` `}
-					<span>commented:</span> */}
+		<li className='update-comment relative flex rounded-lg border bg-muted'>
+			<div className='flex flex-col items-center justify-start rounded-l-lg border-r bg-accent/30 pl-4 pt-3'>
+				<div className='relative z-10 -mr-4 size-8 overflow-hidden rounded-full border bg-gradient-to-tr from-white/50 to-accent shadow-xl shadow-black'>
+					<img
+						className='mt-0.5 size-8'
+						src={`https://i.pravatar.cc/150?img=${item.user.username}`}
+						alt=''
+					/>
 				</div>
-				<div dangerouslySetInnerHTML={{ __html: item.content }} />
-				{!!item.commentAttachments && (
-					<div>
-						<span className='select-none text-xs font-bold uppercase tracking-wide opacity-25'>
-							Attachments
-						</span>
+			</div>
+			<div className='flex w-full flex-col'>
+				<div className='flex w-full justify-between gap-2 px-6 py-4 text-muted-foreground'>
+					<span>
+						<Link
+							className='hocus:underline'
+							href={`/console/p/${params.project}/u/${item.user.username}`}
+						>
+							@{item.user.username}
+						</Link>
+						{` `}
+						commented
+					</span>
+					<div>12/12/2023</div>
+				</div>
+				<Separator className='w-full' />
+				<div className='flex flex-col gap-4 p-4'>
+					<div dangerouslySetInnerHTML={{ __html: item.content }} />
+					{!!item.commentAttachments && (
+						<div className='flex flex-col gap-2'>
+							<span className='select-none text-xs font-bold uppercase tracking-wide opacity-25'>
+								Attachments
+							</span>
+							<div className='flex gap-2'>
+								{item.commentAttachments?.map((attachment) => (
+									<button
+										// onClick={() => alert('Open attachment')}
+										key={attachment}
+										className='flex gap-2 overflow-hidden rounded-lg border bg-native transition-all duration-200 ease-in-out hocus:scale-105'
+									>
+										<img src={attachment} alt='' className='max-h-20 w-auto' />
+									</button>
+								))}
+							</div>
+						</div>
+					)}
+					<div className='flex items-center justify-between'>
 						<div className='flex gap-2'>
-							{item.commentAttachments?.map((attachment) => (
-								<button
-									// onClick={() => alert('Open attachment')}
-									key={attachment}
-									className='flex gap-2 overflow-hidden rounded-lg border bg-native transition-all duration-200 ease-in-out hocus:scale-105'
-								>
-									<img src={attachment} alt='' className='max-h-20 w-auto' />
-								</button>
-							))}
+							<Button className='gap-2 rounded-full' variant='ghost' size='xs'>
+								<SmilePlus size={16} />
+								<span className='sr-only'>Add reaction</span>
+							</Button>
+							<Button variant='outline' className='gap-2 rounded-full' size='xs'>
+								<span>❤️</span>
+								<span>2</span>
+							</Button>
+							<Button variant='outline' className='gap-2 rounded-full' size='xs'>
+								<span>👍</span>
+								<span>2</span>
+							</Button>
+						</div>
+						<div className='flex justify-items-center gap-2'>
+							<TooltipProvider delayDuration={100}>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Button variant='ghost' size='xs' className='gap-2'>
+											<Reply size={16} />
+											<span className='sr-only'>Quote comment</span>
+										</Button>
+									</TooltipTrigger>
+									<TooltipContent>
+										<p>Quote comment</p>
+									</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant='ghost' size='xs'>
+										<MoreHorizontal className='h-4 w-4' />
+										<span className='sr-only'>More Actions</span>
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align='end'>
+									<DropdownMenuItem>
+										<Copy size={14} />
+										Copy link
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem>
+										<PenLine size={14} />
+										Edit
+									</DropdownMenuItem>
+									<DropdownMenuItem>
+										<EyeOff size={14} />
+										Hide
+									</DropdownMenuItem>
+									<DropdownMenuItem>
+										<CircleX size={14} />
+										Delete
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
 						</div>
 					</div>
-				)}
+				</div>
 			</div>
 		</li>
 	);
 };
 
-const Edit = ({ item }: { item: Item }) => {
-	const params = useParams();
-	return (
-		<li className='flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent/50 to-transparent p-4 first-of-type:mt-0'>
-			<div>
-				<PenLine size={20} className='text-primary' />
-			</div>
-			{/* TODO: add icons for different types of items */}
-			<div className='text-sm'>{item.content}</div>
-			<div className='flex items-center gap-1 text-sm text-muted-foreground'>
-				<span>by</span>
-				<Link
-					className='hocus:underline'
-					href={`/console/p/${params.project}/u/${item.user.username}`}
-				>
-					@{item.user.username}
-				</Link>
-			</div>
-		</li>
-	);
-};
+// const Edit = ({ item }: { item: Item }) => {
+// 	const params = useParams();
+// 	return (
+// 		<li className='flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent/50 to-transparent p-4 first-of-type:mt-0'>
+// 			<div>
+// 				<PenLine size={20} className='text-primary' />
+// 			</div>
+// 			{/* TODO: add icons for different types of items */}
+// 			<div className='text-sm'>{item.content}</div>
+// 			<div className='flex items-center gap-1 text-sm text-muted-foreground'>
+// 				<span>by</span>
+// 				<Link
+// 					className='hocus:underline'
+// 					href={`/console/p/${params.project}/u/${item.user.username}`}
+// 				>
+// 					@{item.user.username}
+// 				</Link>
+// 			</div>
+// 		</li>
+// 	);
+// };
 
 const Status = ({ item }: { item: Item }) => {
 	const params = useParams();
 
-	const status = item.status as 'open' | 'planned' | 'closed';
+	const type = item.type as 'status' | 'comment' | 'edit';
+	const status = item.status as 'open' | 'planned' | 'closed' | null;
+	let Icon: LucideIcon = SmileIcon;
 
-	if (!status) {
+	if (type === 'status' && !status) {
 		return null;
 	}
 
-	const statusIcon = {
-		open: CirclePlus,
-		planned: Calendar,
-		closed: CircleX,
-	} as const;
+	if (type === 'edit') {
+		Icon = PenLine;
+	}
 
-	const Icon = statusIcon[status];
+	if (type === 'status' && !!status) {
+		const statusIcon = {
+			open: CirclePlus,
+			planned: Calendar,
+			closed: CircleX,
+		} as const;
+		Icon = statusIcon[status];
+	}
 
 	return (
-		<li className='flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent/50 to-transparent p-4 first-of-type:mt-0'>
-			<div>
-				<Icon size={20} className='text-primary' />
-			</div>
-			{/* TODO: add icons for different types of items */}
-			<div className='text-sm'>{item.content}</div>
-			<div className='flex items-center gap-1 text-sm text-muted-foreground'>
-				<span>by</span>
-				<Link
-					className='hocus:underline'
-					href={`/console/p/${params.project}/u/${item.user.username}`}
-				>
-					@{item.user.username}
-				</Link>
+		<li className='relative z-10 bg-background'>
+			<div className='flex items-center gap-2 rounded-lg border border-primary/20 bg-gradient-to-r from-primary/10 to-muted p-4 first-of-type:mt-0'>
+				<div>
+					<Icon size={20} className='text-primary' />
+				</div>
+				{/* TODO: add icons for different types of items */}
+				<div className='text-sm'>{item.content}</div>
+				<div className='flex items-center gap-1 text-sm text-muted-foreground'>
+					<span>by</span>
+					<Link
+						className='hocus:underline'
+						href={`/console/p/${params.project}/u/${item.user.username}`}
+					>
+						@{item.user.username}
+					</Link>
+				</div>
 			</div>
 		</li>
 	);
@@ -206,19 +307,22 @@ export default function Updates() {
 		return <div>No history found.</div>;
 	}
 	return (
-		<ul className='flex flex-col'>
-			{items.map((item, index) => {
-				switch (item.type) {
-					case 'comment':
-						return <Comment key={index} item={item} />;
-					case 'edit':
-						return <Edit key={index} item={item} />;
-					case 'status':
-						return <Status key={index} item={item} />;
-					default:
-						return null;
-				}
-			})}
-		</ul>
+		<div className='relative'>
+			<div className='absolute left-[33px] h-full border-r opacity-50'></div>
+			<ul className='flex flex-col gap-6'>
+				{items.map((item, index) => {
+					switch (item.type) {
+						case 'comment':
+							return <Comment key={index} item={item} />;
+						case 'edit':
+							return <Status key={index} item={item} />;
+						case 'status':
+							return <Status key={index} item={item} />;
+						default:
+							return null;
+					}
+				})}
+			</ul>
+		</div>
 	);
 }

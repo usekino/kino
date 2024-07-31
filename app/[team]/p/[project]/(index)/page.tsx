@@ -1,11 +1,11 @@
 import type { PageProps } from '../_types';
 
-import { ProjectDashboard } from './_components/project-dashboard';
+import { Heading } from '@/components/heading';
 
 export default async function ProjectPage({}: PageProps) {
 	return (
 		<div className='container py-6'>
-			<ProjectDashboard />
+			<Heading tag='h1'>Project dashboard</Heading>
 		</div>
 	);
 }

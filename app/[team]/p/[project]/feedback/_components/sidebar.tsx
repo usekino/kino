@@ -1,15 +1,11 @@
 'use client';
 
-// import { getPathname } from '@nimpl/getters/get-pathname';
 import { Blocks, Bug, GalleryVerticalEnd, Gift } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLinks } from '@/lib/utils/use-links';
-
-// import { serverRoute } from '@/lib/utils/server-route';
 
 import { AddDialog } from './add-dialog';
 
@@ -19,7 +15,7 @@ type Props = {
 };
 
 export const ListSidebar = ({ projectSlug }: Props) => {
-	const { links, isActive } = useLinks({
+	const { links } = useLinks({
 		base: `/p/${projectSlug}/feedback`,
 		links: [
 			{
@@ -52,25 +48,22 @@ export const ListSidebar = ({ projectSlug }: Props) => {
 			</div>
 			<span className='font-bold'>Boards</span>
 			<nav className='flex flex-col gap-1'>
-				{links.map((link) => {
-					const active = isActive(link);
-					return (
-						<Link
-							key={link.title}
-							href={link.href}
-							className={cn(
-								buttonVariants({
-									variant: 'ghost',
-								}),
-								'justify-start gap-3 hocus:underline',
-								active ? 'bg-accent text-accent-foreground' : ''
-							)}
-						>
-							<link.icon size={16} />
-							<span>{link.title}</span>
-						</Link>
-					);
-				})}
+				{links.map((link) => (
+					<Link
+						key={link.title}
+						href={link.href}
+						className={cn(
+							buttonVariants({
+								variant: 'ghost',
+							}),
+							'justify-start gap-3 hocus:underline',
+							link.active ? 'bg-accent text-accent-foreground' : ''
+						)}
+					>
+						<link.icon size={16} />
+						<span>{link.title}</span>
+					</Link>
+				))}
 			</nav>
 		</div>
 	);

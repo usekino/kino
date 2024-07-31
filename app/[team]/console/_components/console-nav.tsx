@@ -22,7 +22,7 @@ export const ConsoleNav = async () => {
 				<ConsoleLinks selected={selected} />
 			</div>
 			<div className='mt-auto flex w-full flex-col items-center justify-center p-3'>
-				<ToggleSidebarButton />
+				<ToggleSidebarButton className='flex w-full justify-start' />
 				<UserButton />
 			</div>
 		</div>

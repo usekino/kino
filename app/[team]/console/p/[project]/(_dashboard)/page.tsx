@@ -1,25 +1,16 @@
 import type { PageParams } from '../_types';
 
-import { Home } from 'lucide-react';
+import { Heading } from '@/components/heading';
 
-import { Dashboard } from '@/components/dashboard';
-
-import { ProjectWrapper } from '../_components/project-wrapper';
+import { DashboardHeader } from './_components/dashboard-header';
 
 export default async function ProjectPage({}: PageParams) {
 	return (
 		<div>
-			<ProjectWrapper
-				icon={Home}
-				title='Dashboard'
-				links={[
-					{
-						title: 'Settings',
-						href: '#',
-					},
-				]}
-			/>
-			<Dashboard />
+			<DashboardHeader />
+			<div className='p-2 sm:p-4 md:p-6'>
+				<Heading tag='h1'>Here's how your project is looking</Heading>
+			</div>
 		</div>
 	);
 }

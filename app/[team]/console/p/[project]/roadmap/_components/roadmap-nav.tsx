@@ -10,7 +10,7 @@ import { useLinks } from '@/lib/utils/use-links';
 export const SettingsNav = () => {
 	const params = useParams();
 
-	const { links, isActive } = useLinks({
+	const { links } = useLinks({
 		base: `/console/p/${params.project}/roadmap`,
 		links: [
 			{
@@ -31,7 +31,6 @@ export const SettingsNav = () => {
 	return (
 		<nav className='inline-flex items-center gap-2 px-6 pb-2'>
 			{links?.map((link) => {
-				const active = isActive(link);
 				return (
 					<Link
 						key={`project-link-${link.href}`}
@@ -42,7 +41,7 @@ export const SettingsNav = () => {
 								size: 'xs',
 							}),
 							'text-native-foreground/70',
-							active
+							link.active
 								? 'bg-accent text-accent-foreground hover:!bg-accent hover:!text-accent-foreground focus:!bg-accent focus:!text-accent-foreground'
 								: ''
 						)}

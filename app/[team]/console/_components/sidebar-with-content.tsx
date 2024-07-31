@@ -14,15 +14,15 @@ export const SidebarContext = createContext<{
 	open: boolean;
 	toggle: () => void;
 }>({
-	open: true,
+	open: false,
 	toggle: () => {},
 });
 
-export const ToggleSidebarButton = () => {
+export const ToggleSidebarButton = ({ className }: { className?: string }) => {
 	const { open, toggle } = useContext(SidebarContext);
 
 	return (
-		<Button className='flex w-full justify-start' variant='ghost' size='sm' onClick={toggle}>
+		<Button className={className} variant='ghost' size='sm' onClick={toggle}>
 			{open ? (
 				<span className='flex items-center gap-2'>
 					<ArrowLeftFromLine size={16} />
@@ -36,7 +36,7 @@ export const ToggleSidebarButton = () => {
 };
 
 export const SidebarWithContent = ({ children, sidebar }: MainLayoutProps) => {
-	const [open, setOpen] = useState(true);
+	const [open, setOpen] = useState(false);
 
 	const toggle = () => setOpen((open) => !open);
 
@@ -48,7 +48,7 @@ export const SidebarWithContent = ({ children, sidebar }: MainLayoutProps) => {
 			}}
 		>
 			<div
-				className={cn('z-10 hidden h-full bg-muted lg:fixed lg:block', {
+				className={cn('z-20 hidden h-full bg-muted lg:fixed lg:block', {
 					'w-[225px]': open,
 					'w-16': !open,
 				})}

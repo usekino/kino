@@ -16,7 +16,7 @@ export const ProjectHeader = ({ project }: { project: Project }) => {
 
 	const teamInitial = project.team.name.slice(0, 1)[0].toUpperCase();
 
-	const { links, current, isActive } = useLinks({
+	const { links, current } = useLinks({
 		base: `/p/${slug}`,
 		links: [
 			{
@@ -89,31 +89,28 @@ export const ProjectHeader = ({ project }: { project: Project }) => {
 				</div>
 				<div className='container'>
 					<nav className={cn('inline-flex items-center gap-2')}>
-						{links.map((link) => {
-							const active = isActive(link);
-							return (
-								<Link
-									key={`project-link-${link.href}`}
-									href={link.href}
-									className={cn(
-										buttonVariants({
-											variant: 'ghost',
-											size: 'xs',
-										}),
-										'text-native-foreground/70',
-										active
-											? 'bg-accent text-accent-foreground hover:!bg-accent hover:!text-accent-foreground focus:!bg-accent focus:!text-accent-foreground'
-											: '',
-										link.className
-									)}
-								>
-									<span className='inline-flex items-center gap-2 text-sm'>
-										<link.icon size={12} />
-										{link.title}
-									</span>
-								</Link>
-							);
-						})}
+						{links.map((link) => (
+							<Link
+								key={`project-link-${link.href}`}
+								href={link.href}
+								className={cn(
+									buttonVariants({
+										variant: 'ghost',
+										size: 'xs',
+									}),
+									'text-native-foreground/70',
+									link.active
+										? 'bg-accent text-accent-foreground hover:!bg-accent hover:!text-accent-foreground focus:!bg-accent focus:!text-accent-foreground'
+										: '',
+									link.className
+								)}
+							>
+								<span className='inline-flex items-center gap-2 text-sm'>
+									<link.icon size={12} />
+									{link.title}
+								</span>
+							</Link>
+						))}
 					</nav>
 				</div>
 			</header>
