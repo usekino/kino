@@ -2,25 +2,31 @@ import type { Refine } from 'drizzle-zod';
 import type { z } from 'zod';
 
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgTable, unique, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { defaultColumns } from '../_shared';
 import { users } from '../lucia/users.table';
 import { feedback } from './feedback.table';
 
-export const feedbackVotes = pgTable('feedback_votes', {
-	...defaultColumns(),
-	//
-	feedbackId: varchar('feedback_id', {
-		length: 255,
-	}).notNull(),
-	userId: varchar('user_id', {
-		length: 255,
-	}).notNull(),
-	//
-	vote: integer('vote').notNull(),
-});
+export const feedbackVotes = pgTable(
+	'feedback_votes',
+	{
+		...defaultColumns(),
+		//
+		feedbackId: varchar('feedback_id', {
+			length: 255,
+		}).notNull(),
+		userId: varchar('user_id', {
+			length: 255,
+		}).notNull(),
+		//
+		vote: integer('vote').notNull(),
+	},
+	(table) => ({
+		uniqueConstraint: unique('unique_feedback_user').on(table.feedbackId, table.userId),
+	})
+);
 
 export const feedbackVotesRelations = relations(feedbackVotes, ({ one }) => ({
 	user: one(users, {
@@ -39,10 +45,8 @@ const refineSchema = {
 
 export const selectFeedbackVotesSchema = createSelectSchema(feedbackVotes, refineSchema);
 export const mutateFeedbackVotesSchema = createInsertSchema(feedbackVotes, refineSchema);
-
-const selectFeedbackSchemaTest = selectFeedbackVotesSchema.shape.id;
-
-selectFeedbackSchemaTest;
+export const seedFeedbackVotesSchema = createInsertSchema(feedbackVotes, refineSchema);
 
 export type SelectFeedbackVotesSchema = z.infer<typeof selectFeedbackVotesSchema>;
 export type MutateFeedbackVotesSchema = z.infer<typeof mutateFeedbackVotesSchema>;
+export type SeedFeedbackVotesSchema = z.infer<typeof seedFeedbackVotesSchema>;

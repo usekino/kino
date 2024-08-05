@@ -20,6 +20,9 @@ export const feedback = pgTable('feedback', {
 	teamId: varchar('team_id', {
 		length: 255,
 	}).notNull(),
+	assignedTo: varchar('assigned_to', {
+		length: 255,
+	}),
 	projectId: varchar('project_id', {
 		length: 255,
 	}).notNull(),
@@ -42,6 +45,10 @@ export const feedback = pgTable('feedback', {
 export const feedbackRelations = relations(feedback, ({ one }) => ({
 	user: one(users, {
 		fields: [feedback.userId],
+		references: [users.id],
+	}),
+	assignedTo: one(users, {
+		fields: [feedback.assignedTo],
 		references: [users.id],
 	}),
 	team: one(teams, {
