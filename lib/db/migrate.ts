@@ -1,21 +1,13 @@
-import type { NeonQueryFunction } from '@neondatabase/serverless';
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
 
-import 'dotenv/config';
-
-import { env } from '@/lib/env/server';
+import { httpDb } from '.';
 
 const runMigrate = async () => {
-	const sql: NeonQueryFunction<boolean, boolean> = neon(env.DATABASE_URL);
-	const db = drizzle(sql);
-
 	console.log('⏳ Running migrations...');
 
 	const start = Date.now();
 
-	await migrate(db, { migrationsFolder: './migrations' });
+	await migrate(httpDb, { migrationsFolder: './migrations' });
 
 	const end = Date.now();
 

@@ -158,5 +158,5 @@ CREATE TABLE IF NOT EXISTS "x_users_projects" (
 	CONSTRAINT "x_users_projects_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "user_id_idx" ON "users" ("id");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "user_username_idx" ON "users" ("username");
+CREATE INDEX IF NOT EXISTS "user_id_idx" ON "users" USING btree ("id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_username_idx" ON "users" USING btree ("username");

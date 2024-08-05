@@ -1,4 +1,4 @@
-import { CircleCheck, CircleDotDashed, MessageCirclePlus } from 'lucide-react';
+import { CircleCheck, CircleDotDashed } from 'lucide-react';
 import Link from 'next/link';
 
 // import { Heading } from '@/components/heading';

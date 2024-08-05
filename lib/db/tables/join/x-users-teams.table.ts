@@ -45,6 +45,8 @@ export const mutateXUsersTeamsSchema = createInsertSchema(xUsersTeams, refineSch
 	id: true,
 	createdAt: true,
 });
+export const seedXUsersTeamsSchema = createInsertSchema(xUsersTeams, refineSchema);
 
 export type SelectXUsersTeamsSchema = z.infer<typeof selectXUsersTeamsSchema>;
 export type MutateXUsersTeamsSchema = z.infer<typeof mutateXUsersTeamsSchema>;
+export type SeedXUsersTeamsSchema = z.infer<typeof seedXUsersTeamsSchema>;

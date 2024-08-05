@@ -1,10 +1,10 @@
 {
-  "id": "04e16abd-df33-452f-a588-8303d5a6d0ac",
+  "id": "a0e702bf-d88c-4929-93d1-9820151ced2f",
   "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -103,16 +103,32 @@
         "user_id_idx": {
           "name": "user_id_idx",
           "columns": [
-            "id"
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "user_username_idx": {
           "name": "user_username_idx",
           "columns": [
-            "username"
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": false
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -141,7 +157,7 @@
         }
       }
     },
-    "sessions": {
+    "public.sessions": {
       "name": "sessions",
       "schema": "",
       "columns": {
@@ -177,7 +193,7 @@
         }
       }
     },
-    "authentications": {
+    "public.authentications": {
       "name": "authentications",
       "schema": "",
       "columns": {
@@ -273,7 +289,7 @@
         }
       }
     },
-    "email_verifications": {
+    "public.email_verifications": {
       "name": "email_verifications",
       "schema": "",
       "columns": {
@@ -369,7 +385,7 @@
         }
       }
     },
-    "teams": {
+    "public.teams": {
       "name": "teams",
       "schema": "",
       "columns": {
@@ -458,7 +474,7 @@
         }
       }
     },
-    "projects": {
+    "public.projects": {
       "name": "projects",
       "schema": "",
       "columns": {
@@ -553,7 +569,7 @@
         }
       }
     },
-    "feedback": {
+    "public.feedback": {
       "name": "feedback",
       "schema": "",
       "columns": {
@@ -654,7 +670,7 @@
         }
       }
     },
-    "feedback_votes": {
+    "public.feedback_votes": {
       "name": "feedback_votes",
       "schema": "",
       "columns": {
@@ -730,7 +746,7 @@
         }
       }
     },
-    "feedback_boards": {
+    "public.feedback_boards": {
       "name": "feedback_boards",
       "schema": "",
       "columns": {
@@ -812,7 +828,7 @@
         }
       }
     },
-    "x_users_teams": {
+    "public.x_users_teams": {
       "name": "x_users_teams",
       "schema": "",
       "columns": {
@@ -889,7 +905,7 @@
         }
       }
     },
-    "x_users_projects": {
+    "public.x_users_projects": {
       "name": "x_users_projects",
       "schema": "",
       "columns": {
@@ -969,6 +985,7 @@
   },
   "enums": {},
   "schemas": {},
+  "sequences": {},
   "_meta": {
     "columns": {},
     "schemas": {},

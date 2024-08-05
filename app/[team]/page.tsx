@@ -1,11 +1,11 @@
 import type { TeamPageParams } from './_lib/get-team';
 
-import Link from 'next/link';
+// import Link from 'next/link';
 
-import { getUser } from '@/lib/auth/utils';
-import { serverRoute } from '@/lib/utils/server-route';
+// import { getUser } from '@/lib/auth/utils';
+// import { serverRoute } from '@/lib/utils/server-route';
 
-import { getTeam } from './_lib/get-team';
+// import { getTeam } from './_lib/get-team';
 
 export default async function TeamPage({ params }: TeamPageParams) {
 	// const user = await getUser();

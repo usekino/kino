@@ -1,4 +1,4 @@
-import { MessageSquare, Rss } from 'lucide-react';
+import { Rss } from 'lucide-react';
 
 import { ProjectWrapper } from '../../_components/project-wrapper';
 

@@ -78,8 +78,6 @@ export const authRouter = router({
 			},
 		});
 
-		console.log(existingUser, existingUser?.authentications);
-
 		if (!existingUser || !existingUser.authentications?.hashedPassword) {
 			throw new TRPCError({
 				code: 'UNAUTHORIZED',

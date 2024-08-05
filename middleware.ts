@@ -1,17 +1,17 @@
 import type { NextRequest } from 'next/server';
 
-import { arrayContains, sql } from 'drizzle-orm';
-import * as context from 'next/headers';
+// import { arrayContains, sql } from 'drizzle-orm';
+// import * as context from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { env } from '@/lib/env/client';
+// import { env } from '@/lib/env/client';
 
-import { lucia } from './lib/auth/lucia';
-import { db } from './lib/db';
-import { readProjectSchema } from './lib/schema/project.schema';
-import { readTeamSchema } from './lib/schema/team.schema';
-import { getTeamProjectSelect } from './lib/trpc/routers/lib/selectedTeamProject';
-import { createTruthyObject } from './lib/utils';
+// import { lucia } from './lib/auth/lucia';
+// import { db } from './lib/db';
+// import { readProjectSchema } from './lib/schema/project.schema';
+// import { readTeamSchema } from './lib/schema/team.schema';
+// import { getTeamProjectSelect } from './lib/trpc/routers/lib/selectedTeamProject';
+// import { createTruthyObject } from './lib/utils';
 import { getValidSubdomain } from './lib/utils/get-valid-subdomain';
 
 export const config = {
@@ -27,53 +27,53 @@ export const config = {
 	],
 };
 
-const uncachedValidateAuthRequest = async () => {
-	const sessionId = context.cookies().get(lucia.sessionCookieName)?.value ?? null;
-	if (!sessionId) {
-		return {
-			user: null,
-			session: null,
-		};
-	}
-	const result = await lucia.validateSession(sessionId);
-	try {
-		if (result.session && result.session.fresh) {
-			const sessionCookie = lucia.createSessionCookie(result.session.id);
-			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-		}
-		if (!result.session) {
-			const sessionCookie = lucia.createBlankSessionCookie();
-			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-		}
-	} catch {}
-	return result;
-};
+// const uncachedValidateAuthRequest = async () => {
+// 	const sessionId = context.cookies().get(lucia.sessionCookieName)?.value ?? null;
+// 	if (!sessionId) {
+// 		return {
+// 			user: null,
+// 			session: null,
+// 		};
+// 	}
+// 	const result = await lucia.validateSession(sessionId);
+// 	try {
+// 		if (result.session && result.session.fresh) {
+// 			const sessionCookie = lucia.createSessionCookie(result.session.id);
+// 			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+// 		}
+// 		if (!result.session) {
+// 			const sessionCookie = lucia.createBlankSessionCookie();
+// 			context.cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+// 		}
+// 	} catch {}
+// 	return result;
+// };
 
-const uncachedGetUserProjectsByUserId = db.query.xUsersTeams
-	.findMany({
-		columns: {},
-		where: (table, { eq, and, or, not }) => {
-			return and(
-				eq(table.userId, sql.placeholder('userId')),
-				or(
-					arrayContains(table.userRole, ['admin']),
-					arrayContains(table.userRole, ['member']) //
-				),
-				not(arrayContains(table.userRole, ['blocked']))
-			);
-		},
-		with: {
-			team: {
-				columns: createTruthyObject(readTeamSchema.shape),
-				with: {
-					projects: {
-						columns: createTruthyObject(readProjectSchema.shape),
-					},
-				},
-			},
-		},
-	})
-	.prepare('P_ProjectsByTeam');
+// const uncachedGetUserProjectsByUserId = db.query.xUsersTeams
+// 	.findMany({
+// 		columns: {},
+// 		where: (table, { eq, and, or, not }) => {
+// 			return and(
+// 				eq(table.userId, sql.placeholder('userId')),
+// 				or(
+// 					arrayContains(table.userRole, ['admin']),
+// 					arrayContains(table.userRole, ['member']) //
+// 				),
+// 				not(arrayContains(table.userRole, ['blocked']))
+// 			);
+// 		},
+// 		with: {
+// 			team: {
+// 				columns: createTruthyObject(readTeamSchema.shape),
+// 				with: {
+// 					projects: {
+// 						columns: createTruthyObject(readProjectSchema.shape),
+// 					},
+// 				},
+// 			},
+// 		},
+// 	})
+// 	.prepare('P_ProjectsByTeam');
 
 const urlData = (req: NextRequest) => {
 	const url = req.nextUrl;

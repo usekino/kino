@@ -83,6 +83,8 @@ export const mutateTeamSchema = createInsertSchema(teams, refineSchema).omit({
 	id: true,
 	createdAt: true,
 });
+export const seedTeamSchema = createInsertSchema(teams, refineSchema);
 
 export type SelectTeamSchema = z.infer<typeof selectTeamSchema>;
 export type MutateTeamSchema = z.infer<typeof mutateTeamSchema>;
+export type SeedTeamSchema = z.infer<typeof seedTeamSchema>;

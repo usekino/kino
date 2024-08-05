@@ -45,6 +45,8 @@ export const mutateXUsersProjectsSchema = createInsertSchema(xUsersProjects, ref
 	id: true,
 	createdAt: true,
 });
+export const seedXUsersProjectsSchema = createInsertSchema(xUsersProjects, refineSchema);
 
 export type SelectXUsersProjectsSchema = z.infer<typeof selectXUsersProjectsSchema>;
 export type MutateXUsersProjectsSchema = z.infer<typeof mutateXUsersProjectsSchema>;
+export type SeedXUsersProjectsSchema = z.infer<typeof seedXUsersProjectsSchema>;

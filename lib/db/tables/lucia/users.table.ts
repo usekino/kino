@@ -79,6 +79,8 @@ export const selectUserSchema = createSelectSchema(users, refineSchema);
 export const mutateUserSchema = createInsertSchema(users, refineSchema).omit({
 	createdAt: true,
 });
+export const seedUserSchema = createInsertSchema(users, refineSchema);
 
 export type SelectUserSchema = z.infer<typeof selectUserSchema>;
 export type MutateUserSchema = z.infer<typeof mutateUserSchema>;
+export type SeedUserSchema = z.infer<typeof seedUserSchema>;

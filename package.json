@@ -8,12 +8,15 @@
 		"start": "next start",
 		"lint": "next lint",
 		"db:studio": "drizzle-kit studio",
-		"db:check": "drizzle-kit check:pg",
-		"db:push": "drizzle-kit push:pg",
-		"db:generate": "drizzle-kit generate:pg",
+		"db:check": "drizzle-kit check",
+		"db:push": "drizzle-kit push",
+		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx --env-file .env lib/db/migrate.ts",
+		"db:seed": "tsx --env-file .env lib/db/seed/index.ts",
+		"db:reseed": "pnpm run db:reset && pnpm run db:migrate && pnpm run db:seed",
+		"db:reset": "tsx --env-file .env lib/db/reset.ts",
 		"db:drop": "drizzle-kit drop",
-		"db:introspect": "drizzle-kit introspect:pg",
+		"db:introspect": "drizzle-kit introspect",
 		"prettier": "prettier --write .",
 		"tsc": "tsc --incremental false"
 	},
@@ -79,6 +82,7 @@
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^8.4.1",
 		"@types/node": "^22.0.0",
 		"@types/react": "^18.3.3",
 		"@types/react-dom": "^18.3.0",

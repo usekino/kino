@@ -35,6 +35,8 @@ const refineSchema = {
 
 export const selectAuthSchema = createSelectSchema(authentications, refineSchema);
 export const mutateAuthSchema = createInsertSchema(authentications, refineSchema);
+export const seedAuthSchema = createInsertSchema(authentications, refineSchema);
 
 export type SelectAuthSchema = z.infer<typeof selectAuthSchema>;
 export type CreateAuthSchema = z.infer<typeof mutateAuthSchema>;
+export type SeedAuthSchema = z.infer<typeof seedAuthSchema>;

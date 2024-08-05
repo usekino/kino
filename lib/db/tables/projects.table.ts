@@ -40,7 +40,7 @@ const refineSchema = {
 			.min(3, 'Slug must contain at least 3 characters')
 			.max(25, 'Slug must contain at most 25 characters')
 			.regex(
-				/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
+				/^[a-zA-Z0-9_]+$/,
 				'Disallowed characters' //
 			)
 			.refine(
@@ -77,6 +77,8 @@ export const mutateProjectSchema = createInsertSchema(projects, refineSchema).om
 	id: true,
 	createdAt: true,
 });
+export const seedProjectSchema = createInsertSchema(projects, refineSchema);
 
 export type SelectProjectSchema = z.infer<typeof selectProjectSchema>;
 export type MutateProjectSchema = z.infer<typeof mutateProjectSchema>;
+export type SeedProjectSchema = z.infer<typeof seedProjectSchema>;
