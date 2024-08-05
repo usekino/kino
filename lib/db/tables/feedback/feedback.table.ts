@@ -35,7 +35,7 @@ export const feedback = pgTable('feedback', {
 	}).notNull(),
 	status: json('status')
 		.$type<string[]>()
-		.default(sql`'["pending"]'`)
+		.default(sql`'["planned"]'`)
 		.notNull(),
 });
 
@@ -67,6 +67,8 @@ const refineSchema = {
 
 export const selectFeedbackSchema = createSelectSchema(feedback, refineSchema);
 export const mutateFeedbackSchema = createInsertSchema(feedback, refineSchema);
+export const seedFeedbackSchema = createInsertSchema(feedback, refineSchema);
 
 export type SelectFeedbackSchema = z.infer<typeof selectFeedbackSchema>;
 export type MutateFeedbackSchema = z.infer<typeof mutateFeedbackSchema>;
+export type SeedFeedbackSchema = z.infer<typeof seedFeedbackSchema>;

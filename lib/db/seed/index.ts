@@ -1,6 +1,8 @@
 import 'dotenv/config';
 
 import { seedAuthentications } from './authentications.seed';
+import { seedFeedbackComments } from './feedback/feedback-comments.seed';
+import { seedFeedback } from './feedback/feedback.seed';
 import { seedXUsersProjects } from './join/x-users-project.seed';
 import { seedXUsersTeams } from './join/x-users-teams.seed';
 import { seedProjects } from './projects.seed';
@@ -17,6 +19,8 @@ const seed = async () => {
 	await seedProjects();
 	await seedXUsersTeams();
 	await seedXUsersProjects();
+	await seedFeedback();
+	await seedFeedbackComments();
 
 	const end = Date.now();
 	console.log('✅ Seeding completed in', end - start, 'ms');

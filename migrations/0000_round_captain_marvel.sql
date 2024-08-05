@@ -101,11 +101,11 @@ CREATE TABLE IF NOT EXISTS "feedback" (
 	"board_id" varchar(255) NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" varchar(3072) NOT NULL,
-	"status" json DEFAULT '["pending"]' NOT NULL,
+	"status" json DEFAULT '["planned"]' NOT NULL,
 	CONSTRAINT "feedback_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "feedback_votes" (
+CREATE TABLE IF NOT EXISTS "feedback_comments" (
 	"auto_id" serial PRIMARY KEY NOT NULL,
 	"id" varchar(255) DEFAULT LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0') NOT NULL,
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -114,22 +114,8 @@ CREATE TABLE IF NOT EXISTS "feedback_votes" (
 	"updates" integer DEFAULT 0 NOT NULL,
 	"feedback_id" varchar(255) NOT NULL,
 	"user_id" varchar(255) NOT NULL,
-	"vote" integer NOT NULL,
-	CONSTRAINT "feedback_votes_id_unique" UNIQUE("id")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "feedback_boards" (
-	"auto_id" serial PRIMARY KEY NOT NULL,
-	"id" varchar(255) DEFAULT LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0') NOT NULL,
-	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"deleted_at" timestamp,
-	"updates" integer DEFAULT 0 NOT NULL,
-	"project_id" serial NOT NULL,
-	"slug" varchar(255) NOT NULL,
-	"name" varchar(255) NOT NULL,
-	"description" varchar(3072),
-	CONSTRAINT "feedback_boards_id_unique" UNIQUE("id")
+	"content" varchar(3072) NOT NULL,
+	CONSTRAINT "feedback_comments_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "x_users_teams" (
