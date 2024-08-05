@@ -13,13 +13,20 @@ export const seedFeedback = async () => {
 
 		for (let i = 0; i < count; i++) {
 			feedback.push({
-				id: i.toString(),
 				userId: faker.number
 					.int({
 						min: 1,
 						max: 10,
 					})
 					.toString(),
+				assignedTo: faker.datatype.boolean()
+					? faker.number
+							.int({
+								min: 1,
+								max: 10,
+							})
+							.toString()
+					: null,
 				teamId: faker.number
 					.int({
 						min: 1,
