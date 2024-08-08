@@ -8,11 +8,11 @@ import { cn } from '@/lib/utils';
 
 import { AssignedTo } from './_components/AssignedTo';
 import Updates from './_components/Updates';
-import { PageParams } from './_types';
+import { PageProps } from './_types';
 
 type Status = 'open' | 'planned' | 'closed';
 
-export const Status = ({ status }: { status: Status }) => {
+const Status = ({ status }: { status: Status }) => {
 	const statusClass = {
 		open: 'bg-green-700/50 text-green-100',
 		planned: 'bg-blue-700/50 text-blue-100',
@@ -28,7 +28,7 @@ export const Status = ({ status }: { status: Status }) => {
 	);
 };
 
-export default async function FeedbackIdPage({ params }: PageParams) {
+export default async function FeedbackIdPage({ params }: PageProps) {
 	const feedback = {
 		id: params.feedbackId,
 		title: 'This is a feature request',

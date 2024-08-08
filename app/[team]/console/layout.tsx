@@ -6,9 +6,9 @@ import { env } from '@/lib/env/server';
 import { deconstructTeamSlug } from '../_lib/get-team';
 import { ConsoleNav } from './_components/console-nav';
 import { SidebarWithContent } from './_components/sidebar-with-content';
-import { PageParams } from './_types';
+import { LayoutProps } from './_types';
 
-export default async function ConsoleLayout({ children, params }: PageParams) {
+export default async function ConsoleLayout({ children, params }: LayoutProps) {
 	const user = await getUser();
 	const { subdomain: teamSlug } = deconstructTeamSlug(params.team);
 

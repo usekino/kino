@@ -1,6 +1,8 @@
-// import { feedback } from '@/lib/db/tables/feedback/feedback.table';
-import { createFeedbackSchema } from '@/lib/schema/feedback.schema';
+import { z } from 'zod';
+
+import { createFeedbackSchema, selectFeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
+import { createTruthyObject } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
 
@@ -16,4 +18,11 @@ export const feedbackRouter = router({
 				// });
 			});
 		}),
+	findByTeam: procedure.input(z.object({ slug: z.string() })).query(async ({ input, ctx }) => {
+		const data = await ctx.db.query.feedback.findMany({
+			where: (table, { eq }) => eq(table.teamId, input.slug),
+			columns: createTruthyObject(selectFeedbackSchema.shape),
+		});
+		return data;
+	}),
 });

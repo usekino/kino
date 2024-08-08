@@ -1,9 +1,5 @@
-import type { Refine } from 'drizzle-zod';
-
 import { relations, sql } from 'drizzle-orm';
 import { json, pgTable, varchar } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
 
 import { defaultColumns } from '../_shared';
 import { users } from '../lucia/users.table';
@@ -64,18 +60,3 @@ export const feedbackRelations = relations(feedback, ({ one }) => ({
 		references: [feedbackBoards.id],
 	}),
 }));
-
-const refineSchema = {
-	title: ({ title }) => title.min(3).max(120),
-	description: ({ description }) => description.max(1500),
-	status: () => z.array(z.string()),
-	boardId: () => z.string().min(3),
-} satisfies Refine<typeof feedback, 'select'>;
-
-export const selectFeedbackSchema = createSelectSchema(feedback, refineSchema);
-export const mutateFeedbackSchema = createInsertSchema(feedback, refineSchema);
-export const seedFeedbackSchema = createInsertSchema(feedback, refineSchema);
-
-export type SelectFeedbackSchema = z.infer<typeof selectFeedbackSchema>;
-export type MutateFeedbackSchema = z.infer<typeof mutateFeedbackSchema>;
-export type SeedFeedbackSchema = z.infer<typeof seedFeedbackSchema>;

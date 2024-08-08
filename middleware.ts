@@ -103,7 +103,7 @@ const urlData = (req: NextRequest) => {
 export default async function middleware(req: NextRequest) {
 	const { host, subdomain, path } = urlData(req);
 
-	console.log('MIDDLEWARE >>>>>>', { host, subdomain, path });
+	// console.log('MIDDLEWARE >>>>>>', { host, subdomain, path });
 
 	// rewrite root application to `/home` folder
 	// if (host === 'localhost:3000' || host === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {

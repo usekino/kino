@@ -2,9 +2,9 @@ import { CircleDot } from 'lucide-react';
 
 import { Heading } from '@/components/heading';
 
-import { PageParams } from './_types';
+import { LayoutProps } from './_types';
 
-export default async function FeedbackIdLayoutPage({ children }: PageParams) {
+export default async function FeedbackIdLayoutPage({ children }: LayoutProps) {
 	return (
 		<div>
 			<header>

@@ -1,4 +1,4 @@
-import type { SeedFeedbackSchema } from '@/lib/db/tables/feedback/feedback.table';
+import type { SeedFeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
 
 import { faker } from '@faker-js/faker';
 

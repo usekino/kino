@@ -2,10 +2,10 @@ import { TRPCError } from '@trpc/server';
 
 import { getTeamData } from '@/lib/db/prepared';
 import { xUsersTeams } from '@/lib/db/tables';
-import { selectTeamSchema, teams } from '@/lib/db/tables/teams.table';
+import { teams } from '@/lib/db/tables/teams.table';
 import { teamSelectSchema } from '@/lib/schema/dashboard.schema';
 import { readProjectSchema } from '@/lib/schema/project.schema';
-import { createTeamSchema, readTeamSchema } from '@/lib/schema/team.schema';
+import { createTeamSchema, selectTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthyObject, generateId } from '@/lib/utils';
 
@@ -26,7 +26,7 @@ export const teamRouter = router({
 			columns: {},
 			with: {
 				team: {
-					columns: createTruthyObject(readTeamSchema.shape),
+					columns: createTruthyObject(selectTeamSchema.shape),
 				},
 			},
 		});
@@ -41,7 +41,7 @@ export const teamRouter = router({
 		}
 
 		return {
-			teams: teams.map(({ team }) => readTeamSchema.parse(team)),
+			teams: teams.map(({ team }) => selectTeamSchema.parse(team)),
 			selected,
 		};
 	}),
@@ -49,13 +49,13 @@ export const teamRouter = router({
 		const { user } = ctx.auth;
 		const teams = await ctx.db.query.teams.findMany({
 			where: (table, { eq }) => eq(table.ownerId, user.id),
-			columns: createTruthyObject(readTeamSchema.shape),
+			columns: createTruthyObject(selectTeamSchema.shape),
 		});
 
 		const selected = await getTeamProjectSelect(user.id);
 
 		return {
-			teams: teams.map((team) => readTeamSchema.parse(team)),
+			teams: teams.map((team) => selectTeamSchema.parse(team)),
 			selected,
 		};
 	}),

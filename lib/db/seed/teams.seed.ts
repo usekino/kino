@@ -1,4 +1,4 @@
-import type { SeedTeamSchema } from '@/lib/db/tables/teams.table';
+import type { SeedTeamSchema } from '@/lib/schema/team.schema';
 
 import { faker } from '@faker-js/faker';
 
@@ -29,7 +29,6 @@ export const seedTeams = async () => {
 
 			for (let i = 0; i < count; i++) {
 				teams.push({
-					id: (3 + i).toString(),
 					ownerId: '1',
 					name: faker.company.name(),
 					slug: faker.helpers.slugify(faker.company.name()),

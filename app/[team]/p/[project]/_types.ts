@@ -1,3 +1,5 @@
+import { PropsWithChildren } from 'react';
+
 import { TeamPageProps } from '@/app/[team]/_types';
 
 export type PageProps = TeamPageProps & {
@@ -5,3 +7,5 @@ export type PageProps = TeamPageProps & {
 		project: string;
 	};
 };
+
+export type LayoutProps = PropsWithChildren<PageProps>;

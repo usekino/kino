@@ -1,10 +1,10 @@
-import type { PageParams } from '../_types';
+// import type { PageParams } from '../_types';
 
 import { Heading } from '@/components/heading';
 
 import { DashboardHeader } from './_components/dashboard-header';
 
-export default async function ProjectPage({}: PageParams) {
+export default async function ProjectPage() {
 	return (
 		<div>
 			<DashboardHeader />

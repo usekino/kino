@@ -1,4 +1,4 @@
-import type { LayoutParams } from './_types';
+import type { LayoutProps } from './_types';
 
 import { LockKeyhole } from 'lucide-react';
 
@@ -6,7 +6,7 @@ import { deconstructTeamSlug } from '@/app/[team]/_lib/get-team';
 import { Heading } from '@/components/heading';
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-export default async function ProjectPageLayout({ params, children }: LayoutParams) {
+export default async function ProjectPageLayout({ params, children }: LayoutProps) {
 	const project = await api.project.findBySlug({
 		slug: params.project,
 	});

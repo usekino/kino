@@ -4,12 +4,12 @@ import { z } from 'zod';
 
 import { db } from '.';
 import { readProjectSchema } from '../schema/project.schema';
-import { readTeamSchema } from '../schema/team.schema';
+import { selectTeamSchema } from '../schema/team.schema';
 import { createTruthyObject } from '../utils';
 
 const P_GetTeamData = db.query.teams
 	.findFirst({
-		columns: createTruthyObject(readTeamSchema.shape),
+		columns: createTruthyObject(selectTeamSchema.shape),
 		where: (team, { eq }) => eq(team.slug, sql.placeholder('slug')),
 		with: {
 			projects: {
@@ -22,7 +22,7 @@ const P_GetTeamData = db.query.teams
 export const getTeamData = cache(async (slug: string) => {
 	const team = await P_GetTeamData.execute({ slug });
 	return team
-		? readTeamSchema.merge(z.object({ projects: z.array(readProjectSchema) })).parseAsync(team)
+		? selectTeamSchema.merge(z.object({ projects: z.array(readProjectSchema) })).parseAsync(team)
 		: null;
 });
 
@@ -32,7 +32,7 @@ const P_GetProjectData = db.query.projects
 		where: (project, { eq }) => eq(project.slug, sql.placeholder('slug')),
 		with: {
 			team: {
-				columns: createTruthyObject(readTeamSchema.shape),
+				columns: createTruthyObject(selectTeamSchema.shape),
 			},
 		},
 	})
@@ -45,7 +45,7 @@ export const getProjectData = cache(async (slug: string) => {
 		? readProjectSchema
 				.merge(
 					z.object({
-						team: readTeamSchema,
+						team: selectTeamSchema,
 					})
 				)
 				.parse(project)
@@ -69,7 +69,7 @@ export const P_GetUserProjectsByUserId = db.query.xUsersTeams
 		},
 		with: {
 			team: {
-				columns: createTruthyObject(readTeamSchema.shape),
+				columns: createTruthyObject(selectTeamSchema.shape),
 				with: {
 					projects: {
 						columns: createTruthyObject(readProjectSchema.shape),

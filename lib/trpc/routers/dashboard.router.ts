@@ -2,7 +2,7 @@ import { arrayContains } from 'drizzle-orm';
 
 import { getUserProjectsByUserId } from '@/lib/db/prepared';
 import { readProjectSchema } from '@/lib/schema/project.schema';
-import { readTeamSchema } from '@/lib/schema/team.schema';
+import { selectTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthyObject } from '@/lib/utils';
 
@@ -45,7 +45,7 @@ export const dashboardRouter = router({
 			},
 			with: {
 				team: {
-					columns: createTruthyObject(readTeamSchema.shape),
+					columns: createTruthyObject(selectTeamSchema.shape),
 				},
 			},
 		});
@@ -59,7 +59,7 @@ export const dashboardRouter = router({
 		// }
 
 		// Define teams
-		const teams = userTeams.map((team) => readTeamSchema.parse(team.team));
+		const teams = userTeams.map((team) => selectTeamSchema.parse(team.team));
 
 		// Get projects where the user is a member
 		const userProjects = await ctx.db.query.xUsersProjects.findMany({
