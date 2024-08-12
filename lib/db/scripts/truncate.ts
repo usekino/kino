@@ -19,8 +19,7 @@ export const truncate = async () => {
 
 	const query = sql<string>`SELECT table_name
       FROM information_schema.tables
-      WHERE table_schema = 'public'
-        AND table_type = 'BASE TABLE';
+      WHERE table_schema = 'public';
     `;
 
 	const result = await httpDb.execute(query);
