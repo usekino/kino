@@ -1,5 +1,5 @@
 {
-  "id": "4d9e8168-4f57-4bf8-ba1a-b8aceb1f9003",
+  "id": "65689dee-84eb-4968-95d9-9e2831230436",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -613,20 +613,20 @@
           "notNull": true,
           "default": 0
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "team_id": {
           "name": "team_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "assigned_to": {
-          "name": "assigned_to",
+        "user_owner": {
+          "name": "user_owner",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_assigned": {
+          "name": "user_assigned",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
