@@ -32,21 +32,11 @@ export const feedbackVotesRelations = relations(feedbackVotes, ({ one }) => ({
 	user: one(users, {
 		fields: [feedbackVotes.userId],
 		references: [users.id],
+		relationName: 'user_votes',
 	}),
 	feedback: one(feedback, {
 		fields: [feedbackVotes.feedbackId],
 		references: [feedback.id],
+		relationName: 'feedback_votes',
 	}),
 }));
-
-const refineSchema = {
-	vote: ({ vote }) => vote.min(-1).max(1),
-} satisfies Refine<typeof feedbackVotes, 'select'>;
-
-export const selectFeedbackVotesSchema = createSelectSchema(feedbackVotes, refineSchema);
-export const mutateFeedbackVotesSchema = createInsertSchema(feedbackVotes, refineSchema);
-export const seedFeedbackVotesSchema = createInsertSchema(feedbackVotes, refineSchema);
-
-export type SelectFeedbackVotesSchema = z.infer<typeof selectFeedbackVotesSchema>;
-export type MutateFeedbackVotesSchema = z.infer<typeof mutateFeedbackVotesSchema>;
-export type SeedFeedbackVotesSchema = z.infer<typeof seedFeedbackVotesSchema>;

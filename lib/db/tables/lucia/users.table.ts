@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import { schemaDefaults } from '../_shared';
 import { authentications } from '../authentications.table';
+import { feedbackVotes } from '../feedback/feedback-votes.table';
 import { feedback } from '../feedback/feedback.table';
 import { xUsersProjects } from '../join/x-users-projects.table';
 import { xUsersTeams } from '../join/x-users-teams.table';
@@ -64,11 +65,14 @@ export const userRelations = relations(users, ({ many, one }) => ({
 	projects: many(xUsersProjects, {
 		relationName: 'projects',
 	}),
-	feedback: many(feedback, {
-		relationName: 'feedback',
+	ownedFeedback: many(feedback, {
+		relationName: 'user_owner_feedback',
 	}),
 	assignedFeedback: many(feedback, {
-		relationName: 'assignedFeedback',
+		relationName: 'user_assigned_feedback',
+	}),
+	feedbackVotes: many(feedbackVotes, {
+		relationName: 'user_votes',
 	}),
 }));
 

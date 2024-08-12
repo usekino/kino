@@ -5,6 +5,7 @@ import { router } from '@/lib/trpc/trpc';
 
 import { authRouter } from './auth.router';
 import { dashboardRouter } from './dashboard.router';
+import { feedbackRouter } from './feedback.router';
 import { projectRouter } from './project.router';
 import { teamRouter } from './team.router';
 import { userRouter } from './user.router';
@@ -15,6 +16,7 @@ export const appRouter = router({
 	team: teamRouter,
 	project: projectRouter,
 	dashboard: dashboardRouter,
+	feedback: feedbackRouter,
 });
 
 export type AppRouter = typeof appRouter;

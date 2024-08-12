@@ -13,11 +13,13 @@ export const seedProjects = async () => {
 		const generateProjects = (count: number) => {
 			const projects: SeedProjectSchema[] = [
 				{
+					id: '1',
 					name: 'Rad',
 					slug: 'rad',
 					teamId: '1',
 				},
 				{
+					id: '2',
 					name: 'Fake Project',
 					slug: 'fake_project',
 					teamId: '2',
@@ -26,6 +28,7 @@ export const seedProjects = async () => {
 
 			for (let i = 0; i < count; i++) {
 				projects.push({
+					id: (3 + i).toString(),
 					name: faker.company.name(),
 					slug: generateId({
 						prefix: 'P',

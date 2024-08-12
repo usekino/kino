@@ -32,6 +32,6 @@ export const teamRelations = relations(teams, ({ one, many }) => ({
 		relationName: 'team_projects',
 	}),
 	feedback: many(feedback, {
-		relationName: 'feedback',
+		relationName: 'team_feedback',
 	}),
 }));

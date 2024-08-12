@@ -6,7 +6,7 @@ import { projects, selectProjectSchema } from '@/lib/db/tables/projects.table';
 import { teamProjectSelectSchema } from '@/lib/schema/dashboard.schema';
 import { createProjectSchema, readProjectSchema } from '@/lib/schema/project.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { createTruthyObject } from '@/lib/utils';
+import { createTruthy } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
 import { rateLimit } from '../middleware/rate-limit';
@@ -100,7 +100,7 @@ export const projectRouter = router({
 			where: (userProject, { eq }) => eq(userProject.userId, user.id),
 			with: {
 				project: {
-					columns: createTruthyObject(readProjectSchema.shape),
+					columns: createTruthy(readProjectSchema.shape),
 				},
 			},
 		});

@@ -4,7 +4,7 @@ import { getUserProjectsByUserId } from '@/lib/db/prepared';
 import { readProjectSchema } from '@/lib/schema/project.schema';
 import { selectTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { createTruthyObject } from '@/lib/utils';
+import { createTruthy } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
 import { getTeamProjectSelect } from './lib/selectedTeamProject';
@@ -45,7 +45,7 @@ export const dashboardRouter = router({
 			},
 			with: {
 				team: {
-					columns: createTruthyObject(selectTeamSchema.shape),
+					columns: createTruthy(selectTeamSchema.shape),
 				},
 			},
 		});
@@ -76,7 +76,7 @@ export const dashboardRouter = router({
 			},
 			with: {
 				project: {
-					columns: createTruthyObject(readProjectSchema.shape),
+					columns: createTruthy(readProjectSchema.shape),
 				},
 			},
 		});

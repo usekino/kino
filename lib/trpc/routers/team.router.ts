@@ -7,7 +7,7 @@ import { teamSelectSchema } from '@/lib/schema/dashboard.schema';
 import { readProjectSchema } from '@/lib/schema/project.schema';
 import { createTeamSchema, selectTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { createTruthyObject, generateId } from '@/lib/utils';
+import { createTruthy, generateId } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
 import { rateLimit } from '../middleware/rate-limit';
@@ -26,7 +26,7 @@ export const teamRouter = router({
 			columns: {},
 			with: {
 				team: {
-					columns: createTruthyObject(selectTeamSchema.shape),
+					columns: createTruthy(selectTeamSchema.shape),
 				},
 			},
 		});
@@ -49,7 +49,7 @@ export const teamRouter = router({
 		const { user } = ctx.auth;
 		const teams = await ctx.db.query.teams.findMany({
 			where: (table, { eq }) => eq(table.ownerId, user.id),
-			columns: createTruthyObject(selectTeamSchema.shape),
+			columns: createTruthy(selectTeamSchema.shape),
 		});
 
 		const selected = await getTeamProjectSelect(user.id);
@@ -131,7 +131,7 @@ export const teamRouter = router({
 
 			const projects = await ctx.db.query.projects.findMany({
 				where: (project, { eq }) => eq(project.teamId, userTeam.id),
-				columns: createTruthyObject(readProjectSchema.shape),
+				columns: createTruthy(readProjectSchema.shape),
 			});
 
 			const project = {

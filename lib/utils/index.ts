@@ -23,7 +23,7 @@ export const getInitials = (name: string): string => {
 	return initials.join('') || name.charAt(0).toUpperCase();
 };
 
-export const createTruthyObject = <T extends object>(schema: T): { [K in keyof T]: true } => {
+export const createTruthy = <T extends object>(schema: T): { [K in keyof T]: true } => {
 	return Object.fromEntries(
 		Object.keys(schema).map((key): [keyof T, true] => [key as keyof T, true])
 	) as { [K in keyof T]: true };

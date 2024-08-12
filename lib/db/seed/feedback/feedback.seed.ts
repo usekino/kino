@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker';
 import { httpDb } from '@/lib/db';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 
-export const maxFeedbackCount = 100;
+export const maxFeedbackCount = 500;
 
 export const seedFeedback = async () => {
 	const generateFeedback = (count: number) => {
@@ -13,13 +13,14 @@ export const seedFeedback = async () => {
 
 		for (let i = 0; i < count; i++) {
 			feedback.push({
-				userId: faker.number
+				id: (1 + i).toString(),
+				userOwner: faker.number
 					.int({
 						min: 1,
 						max: 10,
 					})
 					.toString(),
-				assignedTo: faker.datatype.boolean()
+				userAssigned: faker.datatype.boolean()
 					? faker.number
 							.int({
 								min: 1,

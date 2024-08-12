@@ -8,7 +8,7 @@ const refineSchema = {
 	title: ({ title }) => title.min(3).max(120),
 	description: ({ description }) => description.max(1500),
 	status: () => z.array(z.string()),
-	boardId: () => z.string().min(3),
+	// boardId: () => z.string().min(3),
 } satisfies Refine<typeof feedback, 'select'>;
 
 const select = createSelectSchema(feedback, refineSchema);
@@ -33,8 +33,10 @@ export const selectFeedbackSchema = select.pick({
 	teamId: true,
 	projectId: true,
 	boardId: true,
+	userAssigned: true,
+	userOwner: true,
 });
 
-export type SelectFeedbackSchema = z.infer<typeof select>;
+export type SelectFeedbackSchema = z.infer<typeof selectFeedbackSchema>;
 export type MutateFeedbackSchema = z.infer<typeof mutate>;
 export type SeedFeedbackSchema = z.infer<typeof seed>;

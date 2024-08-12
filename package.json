@@ -15,8 +15,8 @@
 		"db:seed": "tsx --env-file .env lib/db/scripts/seed.ts",
 		"db:truncate": "tsx --env-file .env lib/db/scripts/truncate.ts",
 		"db:drop-tables": "tsx --env-file .env lib/db/scripts/drop-tables.ts",
-		"db:reseed": "pnpm run db:reset && pnpm run db:migrate && pnpm run db:seed",
 		"db:drop": "drizzle-kit drop",
+		"db:reseed": "pnpm run db:truncate && pnpm run db:seed",
 		"db:introspect": "drizzle-kit introspect",
 		"prettier": "prettier --write .",
 		"tsc": "tsc --incremental false"

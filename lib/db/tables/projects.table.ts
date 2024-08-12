@@ -9,6 +9,7 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { defaultColumns } from './_shared';
+import { feedback } from './feedback/feedback.table';
 import { teams } from './teams.table';
 
 export const projects = pgTable('projects', {
@@ -22,11 +23,14 @@ export const projects = pgTable('projects', {
 	githubUrl: varchar('github_url', { length: 255 }),
 });
 
-export const projectRelations = relations(projects, ({ one }) => ({
+export const projectRelations = relations(projects, ({ one, many }) => ({
 	team: one(teams, {
 		fields: [projects.teamId],
 		references: [teams.id],
 		relationName: 'team_projects',
+	}),
+	feedback: many(feedback, {
+		relationName: 'project_feedback',
 	}),
 }));
 

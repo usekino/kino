@@ -5,15 +5,15 @@ import { z } from 'zod';
 import { db } from '.';
 import { readProjectSchema } from '../schema/project.schema';
 import { selectTeamSchema } from '../schema/team.schema';
-import { createTruthyObject } from '../utils';
+import { createTruthy } from '../utils';
 
 const P_GetTeamData = db.query.teams
 	.findFirst({
-		columns: createTruthyObject(selectTeamSchema.shape),
+		columns: createTruthy(selectTeamSchema.shape),
 		where: (team, { eq }) => eq(team.slug, sql.placeholder('slug')),
 		with: {
 			projects: {
-				columns: createTruthyObject(readProjectSchema.shape),
+				columns: createTruthy(readProjectSchema.shape),
 			},
 		},
 	})
@@ -28,11 +28,11 @@ export const getTeamData = cache(async (slug: string) => {
 
 const P_GetProjectData = db.query.projects
 	.findFirst({
-		columns: createTruthyObject(readProjectSchema.shape),
+		columns: createTruthy(readProjectSchema.shape),
 		where: (project, { eq }) => eq(project.slug, sql.placeholder('slug')),
 		with: {
 			team: {
-				columns: createTruthyObject(selectTeamSchema.shape),
+				columns: createTruthy(selectTeamSchema.shape),
 			},
 		},
 	})
@@ -69,10 +69,10 @@ export const P_GetUserProjectsByUserId = db.query.xUsersTeams
 		},
 		with: {
 			team: {
-				columns: createTruthyObject(selectTeamSchema.shape),
+				columns: createTruthy(selectTeamSchema.shape),
 				with: {
 					projects: {
-						columns: createTruthyObject(readProjectSchema.shape),
+						columns: createTruthy(readProjectSchema.shape),
 					},
 				},
 			},

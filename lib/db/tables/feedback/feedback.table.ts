@@ -6,17 +6,19 @@ import { users } from '../lucia/users.table';
 import { projects } from '../projects.table';
 import { teams } from '../teams.table';
 import { feedbackBoards } from './feedback-boards.table';
+import { feedbackVotes } from './feedback-votes.table';
 
 export const feedback = pgTable('feedback', {
 	...defaultColumns(),
 	//
-	userId: varchar('user_id', {
-		length: 255,
-	}).notNull(),
+
 	teamId: varchar('team_id', {
 		length: 255,
 	}).notNull(),
-	assignedTo: varchar('assigned_to', {
+	userOwner: varchar('user_owner', {
+		length: 255,
+	}).notNull(),
+	userAssigned: varchar('user_assigned', {
 		length: 255,
 	}),
 	projectId: varchar('project_id', {
@@ -38,25 +40,32 @@ export const feedback = pgTable('feedback', {
 		.notNull(),
 });
 
-export const feedbackRelations = relations(feedback, ({ one }) => ({
-	user: one(users, {
-		fields: [feedback.userId],
+export const feedbackRelations = relations(feedback, ({ one, many }) => ({
+	userOwner: one(users, {
+		fields: [feedback.userOwner],
 		references: [users.id],
+		relationName: 'user_owner_feedback',
 	}),
-	assignedTo: one(users, {
-		fields: [feedback.assignedTo],
+	userAssigned: one(users, {
+		fields: [feedback.userAssigned],
 		references: [users.id],
+		relationName: 'user_assigned_feedback',
 	}),
 	team: one(teams, {
 		fields: [feedback.teamId],
 		references: [teams.id],
+		relationName: 'team_feedback',
 	}),
 	project: one(projects, {
 		fields: [feedback.projectId],
 		references: [projects.id],
+		relationName: 'project_feedback',
 	}),
 	board: one(feedbackBoards, {
 		fields: [feedback.boardId],
 		references: [feedbackBoards.id],
+	}),
+	votes: many(feedbackVotes, {
+		relationName: 'feedback_votes',
 	}),
 }));

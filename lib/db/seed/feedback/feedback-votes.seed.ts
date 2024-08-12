@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { httpDb } from '@/lib/db';
 import { feedbackVotes } from '@/lib/db/tables/feedback/feedback-votes.table';
 
-export const seedFeedbackVotes = async (count: number = 200) => {
+export const seedFeedbackVotes = async (count: number = 1000) => {
 	let feedbackVotesValues = [];
 
 	for (let i = 0; i < count; i++) {
@@ -17,7 +17,7 @@ export const seedFeedbackVotes = async (count: number = 200) => {
 			feedbackId: faker.number
 				.int({
 					min: 1,
-					max: 10,
+					max: 500,
 				})
 				.toString(),
 			vote: 1,
