@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
+import { selectUserSchema } from '@/lib/db/tables/lucia/users.table';
+import { selectFeedbackVotesSchema } from '@/lib/schema/feedback/feedback-votes.schema';
 import { createFeedbackSchema, selectFeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
-import { createTruthyObject } from '@/lib/utils';
+import { createTruthy } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
 
@@ -18,11 +20,57 @@ export const feedbackRouter = router({
 				// });
 			});
 		}),
-	findByTeam: procedure.input(z.object({ slug: z.string() })).query(async ({ input, ctx }) => {
-		const data = await ctx.db.query.feedback.findMany({
-			where: (table, { eq }) => eq(table.teamId, input.slug),
-			columns: createTruthyObject(selectFeedbackSchema.shape),
+	findByProject: procedure.input(z.object({ slug: z.string() })).query(async ({ input, ctx }) => {
+		const data = await ctx.db.query.projects.findFirst({
+			where: (table, { eq }) => eq(table.slug, input.slug),
+			with: {
+				feedback: {
+					columns: createTruthy(selectFeedbackSchema.shape),
+					with: {
+						userAssigned: {
+							columns: createTruthy(selectUserSchema.shape),
+						},
+						votes: {
+							columns: {
+								id: true,
+							},
+						},
+					},
+				},
+			},
 		});
-		return data;
+
+		return data
+			? data.feedback.map((feedback) => {
+					const voteCount = feedback.votes.length;
+
+					// Remove the votes, since we just want to count them
+					const { votes, ...f } = feedback;
+
+					const parsed = selectFeedbackSchema
+						.merge(
+							z.object({
+								userAssigned: selectUserSchema.nullable(),
+								votes: z.number(),
+							})
+						)
+						.safeParse({
+							...f,
+							votes: voteCount,
+						});
+
+					// If there's an error, log it and throw an error
+					if (parsed.error) {
+						if (process.env.NODE_ENV === 'development') {
+							console.log(parsed.error);
+							throw new Error('Error parsing feedback: ', parsed.error);
+						}
+						throw new Error('Error parsing feedback');
+					}
+
+					// Return the parsed feedback
+					return parsed.data;
+				})
+			: null;
 	}),
 });

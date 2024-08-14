@@ -1,5 +1,8 @@
 'use client';
 
+import type { SelectUserSchema } from '@/lib/db/tables/lucia/users.table';
+import type { API } from '@/lib/trpc/routers/_app';
+import type { ArraySingle } from '@/lib/types';
 import type {
 	ColumnDef,
 	ColumnFiltersState,
@@ -38,85 +41,7 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-const data: Feedback[] = [
-	{
-		id: 'e34609d0-222e-4df7-ab6d-6df0f8f6fc87',
-		status: 'open',
-		title: 'I want to be able to do this',
-		description:
-			'Ullamco non irure veniam labore voluptate commodo aute et aliquip fugiat eiusmod veniam.',
-		upvotes: 25,
-		assignedTo: '@natedunn',
-		filedIn: null,
-	},
-	{
-		id: '310a1901-2130-4575-9527-ca771208c907',
-		status: 'planned',
-		title: 'It would be great if we had this.',
-		description: '',
-		upvotes: 2,
-		assignedTo: '@thecoolguy',
-		filedIn: 'improvements',
-	},
-	{
-		id: 'bac21731-9861-41b4-bd6c-7231c3a61c78',
-		status: 'open',
-		title: 'This is not working?',
-		description:
-			'Duis aliqua cillum elit mollit commodo cillum reprehenderit occaecat mollit ex veniam laboris exercitation.',
-		upvotes: 6,
-		assignedTo: null,
-		filedIn: 'improvements',
-	},
-	{
-		id: '2ea2b942-c6c0-48d0-8a93-d1c93913b79a',
-		status: 'closed',
-		title: 'This is bugged',
-		description:
-			'Dolore mollit cupidatat eiusmod ad ad proident anim irure. Consectetur deserunt qui non laborum sit reprehenderit id cupidatat laborum. Incididunt excepteur anim officia.',
-		upvotes: 15,
-		assignedTo: '@thecoolguy',
-		filedIn: 'bugs',
-	},
-	{
-		id: 'a52af6e2-6803-4584-928a-9ab3886efedd',
-		status: 'planned',
-		title: 'This is a feature request',
-		description: 'Anim ea mollit est dolore incididunt non quis Lorem ex ad ex sint.',
-		upvotes: 0,
-		assignedTo: '@natedunn',
-		filedIn: 'features',
-	},
-	{
-		id: '0a9ef55f-f0e2-4d4c-b8dc-d3988a32cbf1',
-		status: 'closed',
-		title: 'WHY DONT WE HAVE',
-		description: '',
-		upvotes: 9,
-		assignedTo: null,
-		filedIn: null,
-	},
-	{
-		id: 'ee974de7-963c-4475-9f3c-f1e3b71746d4',
-		status: 'planned',
-		title: 'Lets do this',
-		description:
-			'Officia magna adipisicing non deserunt sint adipisicing incididunt voluptate excepteur consequat mollit. Aliquip et elit sit occaecat laboris enim.',
-		upvotes: 9,
-		assignedTo: '@natedunn',
-		filedIn: 'bugs',
-	},
-];
-
-export type Feedback = {
-	id: string;
-	status: 'open' | 'planned' | 'closed';
-	title: string;
-	description: string;
-	upvotes: number;
-	assignedTo: string | null;
-	filedIn: string | null;
-};
+type Feedback = NonNullable<ArraySingle<API['output']['feedback']['findByProject']>>;
 
 export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 	return [
@@ -159,17 +84,25 @@ export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 				);
 			},
 			cell: ({ row }) => {
-				const status = row.getValue('status') as Feedback['status'];
-				// return class string based on status
-				const statusClass = {
-					open: 'bg-green-700/50 text-green-100',
-					planned: 'bg-blue-700/50 text-blue-100',
-					closed: 'bg-red-700/50 text-red-100',
+				const status = row.getValue('status') as NonNullable<Feedback>['status'];
+
+				const getStatusClass = (status: string) => {
+					switch (status) {
+						case 'open':
+							return 'bg-green-700/50 text-green-100';
+						case 'planned':
+							return 'bg-blue-700/50 text-blue-100';
+						case 'closed':
+							return 'bg-red-700/50 text-red-100';
+						default:
+							return 'bg-green-700/50 text-green-100';
+					}
 				};
+
 				return (
 					<span
 						className={cn(
-							statusClass[status],
+							getStatusClass(status[0]),
 							'inline-block rounded px-1.5 py-0.5 text-xs capitalize'
 						)}
 					>
@@ -187,7 +120,7 @@ export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 			cell: ({ row }) => {
 				return (
 					<a
-						href={`${baseUrl}/${row.original.id}`}
+						href={`${baseUrl}/${row.original?.id}`}
 						className='pointer-events-none line-clamp-3 font-medium group-hover:underline hocus:underline'
 					>
 						{row.getValue('title')}
@@ -216,9 +149,9 @@ export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 			},
 		},
 		{
-			accessorKey: 'upvotes',
+			accessorKey: 'votes',
 			meta: {
-				title: 'Upvotes',
+				title: 'Votes',
 			},
 			header: ({ column }) => {
 				return (
@@ -226,52 +159,56 @@ export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 						className='text-left hocus:text-native-foreground hocus:underline'
 						onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 					>
-						Upvotes
+						Votes
 					</button>
 				);
 			},
 			cell: ({ row }) => {
 				return (
 					<div className='inline-flex size-8 items-center justify-center rounded-lg bg-native p-1 text-xs text-muted-foreground'>
-						{row.getValue('upvotes')}
+						{row.getValue('votes')}
 					</div>
 				);
 			},
 		},
 		{
-			accessorKey: 'filedIn',
+			accessorKey: 'boardId',
 			meta: {
-				title: 'Filed In',
+				title: 'Board',
 			},
-			header: 'Filed In',
+			header: 'Board',
 			cell: ({ row }) => {
-				if (!row.getValue('filedIn')) return null;
+				if (!row.getValue('boardId')) return null;
 				return (
-					<span className='inline-block rounded bg-native px-1.5 py-0.5 text-xs capitalize text-muted-foreground'>
-						{row.getValue('filedIn')}
-					</span>
+					<div className='inline-flex size-8 items-center justify-center rounded-lg bg-native p-1 text-xs text-muted-foreground'>
+						{row.getValue('boardId')}
+					</div>
 				);
 			},
 		},
 		{
-			accessorKey: 'assignedTo',
+			accessorKey: 'userAssigned',
 			meta: {
 				title: 'Assigned To',
 			},
 			header: 'Assigned To',
 			cell: ({ row }) => {
-				if (!row.getValue('assignedTo')) {
+				const userAssigned = row.getValue('userAssigned') as SelectUserSchema | null;
+
+				if (!userAssigned) {
 					return <p className='line-clamp-3 text-muted-foreground/50'>None</p>;
 				}
-				return <p className='line-clamp-3 text-muted-foreground'>{row.getValue('assignedTo')}</p>;
+				return (
+					<p className='line-clamp-3 text-muted-foreground'>
+						{userAssigned.username.toLowerCase()}
+					</p>
+				);
 			},
 		},
 	];
 };
 
-type Meta = { title: string };
-
-export function FeedbackTable() {
+export function FeedbackTable({ feedback }: { feedback: Feedback[] }) {
 	const params = useParams();
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -280,7 +217,7 @@ export function FeedbackTable() {
 	});
 	const [pagination, setPagination] = React.useState<PaginationState>({
 		pageIndex: 0,
-		pageSize: 5,
+		pageSize: 10,
 	});
 	const [rowSelection, setRowSelection] = React.useState({});
 	const router = useRouter();
@@ -288,8 +225,8 @@ export function FeedbackTable() {
 	const baseUrl = `/console/p/${params.project}/feedback`;
 
 	const table = useReactTable({
-		data,
 		columns: columns(baseUrl),
+		data: feedback,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
@@ -312,6 +249,10 @@ export function FeedbackTable() {
 			pagination,
 		},
 	});
+
+	if (!feedback) {
+		return <div>No feedback found</div>;
+	}
 
 	return (
 		<div className='w-full'>
@@ -340,7 +281,7 @@ export function FeedbackTable() {
 										checked={column.getIsVisible()}
 										onCheckedChange={(value) => column.toggleVisibility(!!value)}
 									>
-										{(column.columnDef?.meta as Meta)?.title ?? column.id}
+										{(column.columnDef?.meta as { title: string })?.title ?? column.id}
 									</DropdownMenuCheckboxItem>
 								);
 							})}
@@ -377,7 +318,7 @@ export function FeedbackTable() {
 											key={cell.id}
 											onClick={() => {
 												if (cell.column.id === 'select') return;
-												router.push(`${baseUrl}/${row.original.id}`);
+												router.push(`${baseUrl}/${row.original?.id}`);
 											}}
 											className={cn(cell.column.id !== 'select' && 'cursor-pointer')}
 										>
