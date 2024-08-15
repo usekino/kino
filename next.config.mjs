@@ -23,11 +23,11 @@ const nextConfig = {
 	},
 	redirects: async () => {
 		return [
-			{
-				source: '/sign-out',
-				destination: '/api/sign-out',
-				permanent: true,
-			},
+			// {
+			// 	source: '/sign-out',
+			// 	destination: '/api/sign-out',
+			// 	permanent: true,
+			// },
 		];
 	},
 };

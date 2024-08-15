@@ -3,19 +3,25 @@
 import type { SignInEmailSchema } from '@/lib/schema/auth.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { env } from '@/lib/env/client';
 import { signInEmailSchema } from '@/lib/schema/auth.schema';
 import { api } from '@/lib/trpc/clients/client';
 
 export const SignInForm = () => {
+	const router = useRouter();
+
 	const { mutate: signInByEmail } = api.auth.signInByEmail.useMutation({
 		onSuccess: () => {
-			toast.success('Signed up');
+			toast.success('Signed in');
+
+			router.push(`/console`);
 		},
 		onError: (error) => {
 			toast.error('Error', { description: error.message });
@@ -33,6 +39,7 @@ export const SignInForm = () => {
 	const onSubmit = (data: SignInEmailSchema) => {
 		signInByEmail(data);
 	};
+
 	return (
 		<div>
 			<form className='grid gap-4' onSubmit={handleSubmit(onSubmit)}>

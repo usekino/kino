@@ -7,6 +7,8 @@ import { env } from '@/lib/env/server';
 import { api } from '@/lib/trpc/clients/server-invoker';
 
 const signOut = async (request: NextRequest) => {
+	console.log('>>>>>> sign out request');
+
 	const session = await getSession();
 
 	if (session) {
@@ -18,7 +20,7 @@ const signOut = async (request: NextRequest) => {
 			? request.url.replace('localhost:3000', env.NEXT_PUBLIC_ROOT_DOMAIN)
 			: request.url;
 
-	return NextResponse.redirect(new URL('/sign-in', url));
+	return NextResponse.redirect(new URL('/', url));
 };
 
 export async function GET(request: NextRequest) {
