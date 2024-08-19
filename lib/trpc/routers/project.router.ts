@@ -3,14 +3,12 @@ import { TRPCError } from '@trpc/server';
 import { getProjectData } from '@/lib/db/prepared';
 import { xUsersProjects } from '@/lib/db/tables/join/x-users-projects.table';
 import { projects, selectProjectSchema } from '@/lib/db/tables/projects.table';
-import { teamProjectSelectSchema } from '@/lib/schema/dashboard.schema';
 import { createProjectSchema, readProjectSchema } from '@/lib/schema/project.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
-import { rateLimit } from '../middleware/rate-limit';
-import { getTeamProjectSelect, teamProjectSelect } from './lib/selectedTeamProject';
+import { getTeamProjectSelect } from './lib/selectedTeamProject';
 
 export const projectRouter = router({
 	create: procedure
@@ -65,26 +63,6 @@ export const projectRouter = router({
 					projectId: newProject[0].id,
 					userRole: ['member', 'admin'],
 				});
-				// Update Upstash
-				await teamProjectSelect.update(user.id, {
-					userId: user.id,
-					team: {
-						id: userTeam.teamId,
-						slug: userTeam.team.slug,
-					},
-					project: {
-						slug: newProject[0].slug,
-						id: newProject[0].id,
-					},
-				});
-
-				await teamProjectSelect.update(user.id, {
-					userId: user.id,
-					team: {
-						id: userTeam.teamId,
-						slug: userTeam.team.slug,
-					},
-				});
 
 				// Return data
 				return { projectSlug: input.slug, teamSlug: userTeam.team.slug };
@@ -112,46 +90,4 @@ export const projectRouter = router({
 			selected,
 		};
 	}),
-	switch: procedure
-		.use(
-			rateLimit({
-				tokens: 3,
-				duration: '60 s',
-			})
-		)
-		.use(isAuthed)
-		.input(teamProjectSelectSchema.omit({ userId: true }))
-		.mutation(async ({ ctx, input }) => {
-			const { user } = ctx.auth;
-
-			// NOTE: once we add project specific members/invites, we will need to
-			// remove just check in favor of a project check
-			const userTeam = await ctx.db.query.xUsersTeams.findFirst({
-				columns: {
-					id: true,
-				},
-				where: (table, { eq, and }) => {
-					return and(
-						eq(table.userId, user.id),
-						eq(table.teamId, input.team.id) //
-					);
-				},
-			});
-
-			if (!userTeam || !userTeam.id) {
-				throw new TRPCError({
-					code: 'FORBIDDEN',
-					message: `User is not authorized member of project's team.`,
-				});
-			}
-
-			const project = {
-				userId: user.id,
-				...input,
-			};
-
-			await teamProjectSelect.update(user.id, project);
-
-			return project;
-		}),
 });

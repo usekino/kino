@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { selectUserSchema } from '@/lib/db/tables/lucia/users.table';
-import { selectFeedbackVotesSchema } from '@/lib/schema/feedback/feedback-votes.schema';
 import { createFeedbackSchema, selectFeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy } from '@/lib/utils';

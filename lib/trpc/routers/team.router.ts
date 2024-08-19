@@ -1,17 +1,12 @@
-import { TRPCError } from '@trpc/server';
-
 import { getTeamData } from '@/lib/db/prepared';
 import { xUsersTeams } from '@/lib/db/tables';
 import { teams } from '@/lib/db/tables/teams.table';
-import { teamSelectSchema } from '@/lib/schema/dashboard.schema';
-import { readProjectSchema } from '@/lib/schema/project.schema';
 import { createTeamSchema, selectTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy, generateId } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
-import { rateLimit } from '../middleware/rate-limit';
-import { getTeamProjectSelect, teamProjectSelect } from './lib/selectedTeamProject';
+import { getTeamProjectSelect } from './lib/selectedTeamProject';
 
 export const teamRouter = router({
 	findBySlug: procedure.input(selectTeamSchema.pick({ slug: true })).query(async ({ input }) => {
@@ -87,64 +82,9 @@ export const teamRouter = router({
 					teamId: newTeam[0].id,
 					userRole: ['member'],
 				});
-				// Update Upstash
-				await teamProjectSelect.update(user.id, {
-					userId: user.id,
-					team: {
-						id: newTeam[0].id,
-						slug: newTeam[0].slug,
-					},
-				});
+
 				// Return data
 				return { slug: input.slug };
 			});
-		}),
-	switch: procedure
-		.use(
-			rateLimit({
-				tokens: 3,
-				duration: '60 s',
-			})
-		)
-		.use(isAuthed)
-		.input(teamSelectSchema.omit({ userId: true }))
-		.mutation(async ({ ctx, input }) => {
-			const { user } = ctx.auth;
-
-			const userTeam = await ctx.db.query.xUsersTeams.findFirst({
-				columns: {
-					id: true,
-				},
-				where: (table, { eq, and }) =>
-					and(
-						eq(table.userId, user.id),
-						eq(table.teamId, input.team.id) //
-					),
-			});
-
-			if (!userTeam || !userTeam.id) {
-				throw new TRPCError({
-					code: 'FORBIDDEN',
-					message: `User is not authorized member of project's team.`,
-				});
-			}
-
-			const projects = await ctx.db.query.projects.findMany({
-				where: (project, { eq }) => eq(project.teamId, userTeam.id),
-				columns: createTruthy(readProjectSchema.shape),
-			});
-
-			const project = {
-				userId: user.id,
-				project: {
-					slug: projects[0].slug,
-					id: projects[0].id,
-				},
-				...input,
-			};
-
-			await teamProjectSelect.update(user.id, project);
-
-			return project;
 		}),
 });

@@ -1,7 +1,5 @@
 'use client';
 
-import type { TeamProjectSelect } from '@/lib/schema/dashboard.schema';
-
 import { useContext } from 'react';
 import { Home, LucideIcon, Map, MessageSquare, Rss, Settings } from 'lucide-react';
 import Link from 'next/link';
