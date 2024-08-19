@@ -62,7 +62,7 @@ const ConsoleLink = ({
 	);
 };
 
-export const ConsoleLinks = ({}: { selected: TeamProjectSelect }) => {
+export const ConsoleLinks = () => {
 	const params = useParams();
 
 	const base = `/console/p/${params.project}`;

@@ -19,10 +19,6 @@ export default async function ConsoleLayout({ children, params }: LayoutProps) {
 	return (
 		<div className='relative flex h-svh w-full'>
 			<SidebarWithContent sidebar={<ConsoleNav />} children={children} />
-			{/* <div className='hidden h-full min-w-[225px] bg-muted lg:fixed lg:block'>
-				<ConsoleNav />
-			</div>
-			<div className='h-full w-full lg:ml-[225px]'>{children}</div> */}
 		</div>
 	);
 }
