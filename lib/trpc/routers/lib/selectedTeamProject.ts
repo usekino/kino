@@ -10,7 +10,10 @@ export const teamProjectSelectIndex = teamProjectSelect.createIndex({
 	terms: ['userId'],
 });
 
-export const getTeamProjectSelect = async (userId: User['id']) => {
+export const getTeamProjectSelect = async (
+	userId: User['id'],
+	defaultProject?: TeamProjectSelect
+) => {
 	const selected = await teamProjectSelectIndex
 		.match({
 			userId,
@@ -18,13 +21,10 @@ export const getTeamProjectSelect = async (userId: User['id']) => {
 		.then((result) => result[0]?.data ?? null);
 
 	if (!selected) {
-		await teamProjectSelect.set(userId, {
-			userId,
-			team: {
-				id: '', // fix this
-				slug: '', // fix this
-			},
-		});
+		if (!defaultProject) {
+			return null;
+		}
+		await teamProjectSelect.set(userId, defaultProject);
 	}
 
 	return selected;

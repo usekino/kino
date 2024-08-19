@@ -5,8 +5,10 @@ import type { ReadProjectSchema } from '@/lib/schema/project.schema';
 import type { API } from '@/lib/trpc/routers/_app';
 
 import { useContext, useEffect, useState } from 'react';
+import { User } from 'lucia';
 import { CheckIcon, ChevronsUpDown, PlusCircle } from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,6 +21,7 @@ import {
 	CommandSeparator,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { api } from '@/lib/trpc/clients/client';
 import { cn } from '@/lib/utils';
 
 import { SidebarContext } from './sidebar-with-content';
@@ -27,11 +30,17 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 type _Projects = API['output']['dashboard']['userProjects']['projects'];
 
 interface ProjectSwitcherProps extends PopoverTriggerProps {
+	user: User;
 	projectsByTeam: _Projects;
-	selected: TeamProjectSelect;
+	selected: TeamProjectSelect | null;
 }
 
-export default function Switcher({ className, projectsByTeam, selected }: ProjectSwitcherProps) {
+export default function Switcher({
+	user,
+	className,
+	projectsByTeam,
+	selected,
+}: ProjectSwitcherProps) {
 	const projects = projectsByTeam.flatMap(({ projects, slug }) =>
 		projects.map((project) => ({
 			...project,
@@ -50,32 +59,22 @@ export default function Switcher({ className, projectsByTeam, selected }: Projec
 		paramSelectedProject
 	);
 
+	const { mutate: updateSelectedProject } = api.dashboard.updateSelectedProject.useMutation({
+		onError: (error) => {
+			toast.error('Error', { description: error.message });
+		},
+	});
+
 	const { open: sidebarOpen } = useContext(SidebarContext);
 
 	useEffect(() => {
 		if (!params.project) {
-			const redisSelectedProject = projects.find(
-				(project) => project.slug === selected.project?.slug
-			);
+			const redisSelectedProject = projects.find((project) => project.slug === selected?.slug);
 			setSelectedProject(redisSelectedProject);
 		} else {
 			setSelectedProject(paramSelectedProject);
 		}
 	}, [params.project, selected]);
-
-	// const { data: project } = api.project.findBySlug.useQuery({
-	// 	slug: String(params.project),
-	// });
-
-	// useEffect(() => {
-	// 	if (mounted) {
-	// 		localStorage.setItem('selectedTeam', JSON.stringify(params.project));
-	// 	}
-	// }, [params.project, mounted]);
-
-	// useEffect(() => {
-	// 	setMounted(true);
-	// }, [mounted]);
 
 	const handleSelect = (project: ReadProjectSchema) => {
 		setOpen(false);
@@ -83,6 +82,12 @@ export default function Switcher({ className, projectsByTeam, selected }: Projec
 		if (!project) {
 			return router.push(`/console`);
 		}
+
+		updateSelectedProject({
+			userId: user.id,
+			id: project.id,
+			slug: project.slug,
+		});
 
 		const existingPath =
 			pathname.split(`/console/p/${params.project}`)[1].replace(/^\/|\/$/g, '') ?? '';

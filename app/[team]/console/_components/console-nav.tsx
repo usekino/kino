@@ -1,3 +1,4 @@
+import { getUser } from '@/lib/auth/utils';
 import { api } from '@/lib/trpc/clients/server-invoker';
 
 import { ConsoleLinks } from './console-links';
@@ -6,20 +7,21 @@ import Switcher from './switcher';
 import { UserButton } from './user-button';
 
 export const ConsoleNav = async () => {
+	const user = await getUser();
 	const teams = await api.team.findByMembership();
 	const { projects, selected, containsProject } = await api.dashboard.userProjects();
 
-	if (!containsProject || !teams) {
-		return null;
+	if (!containsProject || !teams || !user) {
+		return <div>There was an error.</div>;
 	}
 
 	return (
 		<div className='flex h-full flex-col items-start gap-3 border-r'>
 			<div className='w-full p-3'>
-				<Switcher projectsByTeam={projects} selected={selected} />
+				<Switcher projectsByTeam={projects} selected={selected} user={user} />
 			</div>
 			<div className='w-full px-3 py-1'>
-				<ConsoleLinks selected={selected} />
+				<ConsoleLinks />
 			</div>
 			<div className='mt-auto flex w-full flex-col items-center justify-center p-3'>
 				<ToggleSidebarButton className='flex w-full justify-start' />
