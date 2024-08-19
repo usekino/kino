@@ -56,7 +56,7 @@ export const SidebarWithContent = ({ children, sidebar }: MainLayoutProps) => {
 				{sidebar}
 			</div>
 			<div
-				className={cn('h-full w-full', {
+				className={cn('flex h-full w-full flex-col', {
 					'lg:ml-[225px]': open,
 					'lg:ml-16': !open,
 				})}

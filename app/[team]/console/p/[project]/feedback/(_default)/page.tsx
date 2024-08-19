@@ -13,8 +13,8 @@ export default async function FeedbackPage({ params }: PageProps) {
 	const feedback = await api.feedback.findByProject({ slug });
 
 	return (
-		<div className='p-2 sm:p-4 md:p-6'>
-			<div className='overflow-hidden rounded-lg border bg-muted'>
+		<div className='h-full p-2 sm:p-4 md:p-6'>
+			<div className='h-full overflow-scroll rounded-lg border bg-muted'>
 				{feedback ? <FeedbackTable feedback={feedback} /> : <div>No feedback found</div>}
 			</div>
 		</div>

@@ -255,7 +255,7 @@ export function FeedbackTable({ feedback }: { feedback: Feedback[] }) {
 	}
 
 	return (
-		<div className='w-full'>
+		<div className='flex h-full w-full flex-col'>
 			<div className='flex items-center gap-4 px-4 py-4'>
 				<Input
 					placeholder='Filter titles...'
@@ -288,7 +288,7 @@ export function FeedbackTable({ feedback }: { feedback: Feedback[] }) {
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-			<div className='border-y'>
+			<div className='h-full border-y'>
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
@@ -337,7 +337,7 @@ export function FeedbackTable({ feedback }: { feedback: Feedback[] }) {
 					</TableBody>
 				</Table>
 			</div>
-			<div className='flex items-center justify-end space-x-2 px-4 py-4'>
+			<div className='mt-auto flex items-center justify-end space-x-2 px-4 py-4'>
 				<div className='flex-1 text-sm text-muted-foreground'>
 					{table.getFilteredSelectedRowModel().rows.length === 0 ? null : (
 						<>
