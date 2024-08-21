@@ -10,7 +10,7 @@ export default async function FeedbackPage({ params }: PageProps) {
 
 	const { project: slug } = params;
 
-	const feedback = await api.feedback.findByProject({ slug });
+	const feedback = await api.feedback.byProject({ project: slug });
 
 	return (
 		<div className='h-full p-2 sm:p-4 md:p-6'>
