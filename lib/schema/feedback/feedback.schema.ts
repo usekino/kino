@@ -1,4 +1,6 @@
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
+import type { Refine } from 'drizzle-zod';
+
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { mutateFeedbackCommentsSchema } from '@/lib/db/tables/feedback/feedback-comments.table';
@@ -20,8 +22,8 @@ export const createFeedbackSchema = mutate
 		title: true,
 		description: true,
 		boardId: true,
-		teamId: true,
-		projectId: true,
+		// teamId: true,
+		// projectId: true,
 	})
 	.and(mutateFeedbackCommentsSchema.pick({ content: true }));
 
@@ -30,8 +32,8 @@ export const selectFeedbackSchema = select.pick({
 	title: true,
 	description: true,
 	status: true,
-	teamId: true,
-	projectId: true,
+	// teamId: true,
+	// projectId: true,
 	boardId: true,
 	userAssigned: true,
 	userOwner: true,

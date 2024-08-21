@@ -9,6 +9,8 @@ const refineSchema = {} satisfies Refine<typeof feedbackBoards, 'select'>;
 
 export const selectFeedbackBoardsSchema = createSelectSchema(feedbackBoards, refineSchema);
 export const mutateFeedbackBoardsSchema = createInsertSchema(feedbackBoards, refineSchema);
+export const seedFeedbackBoardsSchema = createInsertSchema(feedbackBoards, refineSchema);
 
 export type SelectFeedbackBoardsSchema = z.infer<typeof selectFeedbackBoardsSchema>;
 export type MutateFeedbackBoardsSchema = z.infer<typeof mutateFeedbackBoardsSchema>;
+export type SeedFeedbackBoardsSchema = z.infer<typeof seedFeedbackBoardsSchema>;

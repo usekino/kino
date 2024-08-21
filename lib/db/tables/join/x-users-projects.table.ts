@@ -27,12 +27,12 @@ export const xUsersProjectsRelations = relations(xUsersProjects, ({ one }) => ({
 	user: one(users, {
 		fields: [xUsersProjects.userId],
 		references: [users.privateId],
-		relationName: 'user',
+		relationName: 'x_user_projects_user',
 	}),
 	project: one(projects, {
 		fields: [xUsersProjects.projectId],
 		references: [projects.id],
-		relationName: 'projects',
+		relationName: 'user_projects',
 	}),
 }));
 

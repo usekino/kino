@@ -4,7 +4,7 @@ import { httpDb } from '@/lib/db';
 import { feedbackVotes } from '@/lib/db/tables/feedback/feedback-votes.table';
 
 export const seedFeedbackVotes = async (count: number = 1000) => {
-	let feedbackVotesValues = [];
+	const feedbackVotesValues = [];
 
 	for (let i = 0; i < count; i++) {
 		feedbackVotesValues.push({

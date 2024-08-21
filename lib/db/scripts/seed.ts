@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 import { seedAuthentications } from '@/lib/db/seed/authentications.seed';
+import { seedFeedbackBoards } from '@/lib/db/seed/feedback/feedback-boards.seed';
 import { seedFeedbackComments } from '@/lib/db/seed/feedback/feedback-comments.seed';
 import { seedFeedbackVotes } from '@/lib/db/seed/feedback/feedback-votes.seed';
 import { seedFeedback } from '@/lib/db/seed/feedback/feedback.seed';
@@ -23,6 +24,7 @@ const seed = async () => {
 	await seedFeedback();
 	await seedFeedbackComments();
 	await seedFeedbackVotes();
+	await seedFeedbackBoards();
 
 	const end = Date.now();
 	console.log('✅ Seeding completed in', end - start, 'ms');

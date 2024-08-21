@@ -9,7 +9,9 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { defaultColumns } from './_shared';
-import { feedback } from './feedback/feedback.table';
+import { feedbackBoards } from './feedback/feedback-boards.table';
+import { xUsersProjects } from './join/x-users-projects.table';
+// import { feedback } from './feedback/feedback.table';
 import { teams } from './teams.table';
 
 export const projects = pgTable('projects', {
@@ -29,9 +31,15 @@ export const projectRelations = relations(projects, ({ one, many }) => ({
 		references: [teams.id],
 		relationName: 'team_projects',
 	}),
-	feedback: many(feedback, {
-		relationName: 'project_feedback',
+	boards: many(feedbackBoards, {
+		relationName: 'project_feedback_boards',
 	}),
+	users: many(xUsersProjects, {
+		relationName: 'user_projects',
+	}),
+	// feedback: many(feedback, {
+	// 	relationName: 'project_feedback',
+	// }),
 }));
 
 const refineSchema = {

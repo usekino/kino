@@ -5,6 +5,10 @@ import { faker } from '@faker-js/faker';
 import { httpDb } from '@/lib/db';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 
+import { maxProjectsCount } from '../projects.seed';
+import { maxTeamsCount } from '../teams.seed';
+import { maxUsersCount } from '../users.seed';
+
 export const maxFeedbackCount = 500;
 
 export const seedFeedback = async () => {
@@ -14,36 +18,42 @@ export const seedFeedback = async () => {
 		for (let i = 0; i < count; i++) {
 			feedback.push({
 				id: (1 + i).toString(),
+				teamId: faker.number
+					.int({
+						min: 1,
+						max: maxTeamsCount,
+					})
+					.toString(),
 				userOwner: faker.number
 					.int({
 						min: 1,
-						max: 10,
+						max: maxUsersCount,
 					})
 					.toString(),
 				userAssigned: faker.datatype.boolean()
 					? faker.number
 							.int({
 								min: 1,
-								max: 10,
+								max: maxUsersCount,
 							})
 							.toString()
 					: null,
-				teamId: faker.number
-					.int({
-						min: 1,
-						max: 10,
-					})
-					.toString(),
-				projectId: faker.number
-					.int({
-						min: 1,
-						max: 10,
-					})
-					.toString(),
+				// teamId: faker.number
+				// 	.int({
+				// 		min: 1,
+				// 		max: maxTeamsCount,
+				// 	})
+				// 	.toString(),
+				// projectId: faker.number
+				// 	.int({
+				// 		min: 1,
+				// 		max: maxProjectsCount,
+				// 	})
+				// 	.toString(),
 				boardId: faker.number
 					.int({
 						min: 1,
-						max: 10,
+						max: maxProjectsCount,
 					})
 					.toString(),
 				title: faker.lorem.sentence(),

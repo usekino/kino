@@ -98,7 +98,6 @@ CREATE TABLE IF NOT EXISTS "feedback" (
 	"team_id" varchar(255) NOT NULL,
 	"user_owner" varchar(255) NOT NULL,
 	"user_assigned" varchar(255),
-	"project_id" varchar(255) NOT NULL,
 	"board_id" varchar(255) NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" varchar(3072) NOT NULL,
@@ -131,6 +130,20 @@ CREATE TABLE IF NOT EXISTS "feedback_votes" (
 	"vote" integer NOT NULL,
 	CONSTRAINT "feedback_votes_id_unique" UNIQUE("id"),
 	CONSTRAINT "unique_feedback_user" UNIQUE("feedback_id","user_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "feedback_boards" (
+	"auto_id" serial PRIMARY KEY NOT NULL,
+	"id" varchar(255) DEFAULT LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0') NOT NULL,
+	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	"deleted_at" timestamp,
+	"updates" integer DEFAULT 0 NOT NULL,
+	"project_id" varchar(255) NOT NULL,
+	"slug" varchar(255) NOT NULL,
+	"name" varchar(255) NOT NULL,
+	"description" varchar(3072),
+	CONSTRAINT "feedback_boards_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "x_users_teams" (
