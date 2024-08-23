@@ -8,38 +8,32 @@ import { relations } from 'drizzle-orm';
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { defaultColumns } from './_shared';
-import { feedbackBoards } from './feedback/feedback-boards.table';
-import { xUsersProjects } from './join/x-users-projects.table';
-// import { feedback } from './feedback/feedback.table';
-import { teams } from './teams.table';
+import { defaultColumns } from '../_shared';
+import { boards } from '../boards/boards.table';
+import { teams } from '../teams/teams.table';
+import { projectUsers } from './project-users.table';
 
 export const projects = pgTable('projects', {
-	// Defaults
 	...defaultColumns(),
-	//
 	name: varchar('name', { length: 255 }).notNull(),
 	slug: varchar('slug', { length: 255 }).notNull().unique(),
 	description: varchar('description', { length: 3072 }),
 	teamId: varchar('team_id').notNull(),
-	githubUrl: varchar('github_url', { length: 255 }),
+	websiteUrl: varchar('website_url', { length: 255 }),
 });
 
 export const projectRelations = relations(projects, ({ one, many }) => ({
 	team: one(teams, {
 		fields: [projects.teamId],
 		references: [teams.id],
-		relationName: 'team_projects',
+		relationName: 'teams_projects',
 	}),
-	boards: many(feedbackBoards, {
-		relationName: 'project_feedback_boards',
+	boards: many(boards, {
+		relationName: 'boards_projects',
 	}),
-	users: many(xUsersProjects, {
-		relationName: 'user_projects',
+	users: many(projectUsers, {
+		relationName: 'projectUsers_project',
 	}),
-	// feedback: many(feedback, {
-	// 	relationName: 'project_feedback',
-	// }),
 }));
 
 const refineSchema = {
@@ -81,7 +75,7 @@ const refineSchema = {
 				'This slug is not allowed' //
 			),
 	description: ({ description }) => description.max(300),
-	githubUrl: ({ githubUrl }) => githubUrl.url(),
+	websiteUrl: ({ websiteUrl }) => websiteUrl.url(),
 } satisfies Refine<typeof projects, 'select'>;
 
 export const selectProjectSchema = createSelectSchema(projects, refineSchema);

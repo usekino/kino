@@ -3,7 +3,6 @@ import { arrayContains } from 'drizzle-orm';
 
 import { getUserProjectsByUserId } from '@/lib/db/prepared';
 import { teamProjectSelectSchema } from '@/lib/schema/dashboard.schema';
-import { readProjectSchema } from '@/lib/schema/project.schema';
 import { selectTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy } from '@/lib/utils';
@@ -20,7 +19,7 @@ export const dashboardRouter = router({
 		.input(teamProjectSelectSchema)
 		.mutation(async ({ ctx, input }) => {
 			// check if user is a part of the team
-			const userTeam = await ctx.db.query.xUsersTeams.findFirst({
+			const userTeam = await ctx.db.query.teamUsers.findFirst({
 				columns: {
 					id: true,
 				},
@@ -68,11 +67,9 @@ export const dashboardRouter = router({
 			containsProject,
 		};
 	}),
-	available: procedure.use(isAuthed).query(async ({ ctx }) => {
+	userTeams: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
-
-		// Get teams where the user is a member
-		const userTeams = await ctx.db.query.xUsersTeams.findMany({
+		return await ctx.db.query.teamUsers.findMany({
 			columns: {},
 			where: (table, { eq, and, or, not }) => {
 				return and(
@@ -90,43 +87,5 @@ export const dashboardRouter = router({
 				},
 			},
 		});
-
-		// ...throw if none found.
-		// if (userTeams.length <= 0) {
-		// 	throw new TRPCError({
-		// 		code: 'NOT_FOUND',
-		// 		message: 'Cannot find an authorized team for user',
-		// 	});
-		// }
-
-		// Define teams
-		const teams = userTeams.map((team) => selectTeamSchema.parse(team.team));
-
-		// Get projects where the user is a member
-		const userProjects = await ctx.db.query.xUsersProjects.findMany({
-			columns: {},
-			where: (userProject, { eq, and, not, or }) => {
-				return and(
-					eq(userProject.userId, user.id),
-					or(
-						arrayContains(userProject.userRole, ['admin']),
-						arrayContains(userProject.userRole, ['member']) //
-					),
-					not(arrayContains(userProject.userRole, ['blocked']))
-				);
-			},
-			with: {
-				project: {
-					columns: createTruthy(readProjectSchema.shape),
-				},
-			},
-		});
-		// Define projects
-		const projects = userProjects.map((project) => readProjectSchema.parse(project.project));
-
-		return {
-			teams,
-			projects,
-		};
 	}),
 });

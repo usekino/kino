@@ -1,7 +1,6 @@
 'use client';
 
 import type { CreateProjectSchema } from '@/lib/schema/project.schema';
-import type { SelectTeamSchema } from '@/lib/schema/team.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SiGithub } from '@icons-pack/react-simple-icons';
@@ -31,10 +30,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/lib/env/client';
 import { createProjectSchema } from '@/lib/schema/project.schema';
 import { api } from '@/lib/trpc/clients/client';
+import { API } from '@/lib/trpc/routers/_app';
 import { slugify } from '@/lib/utils';
 
-export function CreateProjectForm({ teams }: { teams: SelectTeamSchema[] }) {
+type CreateProjectProps = {
+	teams: API['output']['dashboard']['userTeams'];
+};
+
+export function CreateProjectForm({ teams: initialTeams }: CreateProjectProps) {
 	const router = useRouter();
+
+	const teams = initialTeams.map((team) => {
+		return team.team;
+	});
 
 	const { mutate: createProject } = api.project.create.useMutation({
 		onSuccess: ({ teamSlug, projectSlug }) => {

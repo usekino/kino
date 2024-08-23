@@ -5,25 +5,23 @@ import { index, integer, json, pgTable, serial, timestamp, varchar } from 'drizz
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { schemaDefaults } from '../_shared';
-import { authentications } from '../authentications.table';
-import { feedbackVotes } from '../feedback/feedback-votes.table';
-import { feedback } from '../feedback/feedback.table';
-import { xUsersProjects } from '../join/x-users-projects.table';
-import { xUsersTeams } from '../join/x-users-teams.table';
+import { defaults } from './_shared';
+import { authentications } from './authentications.table';
+import { feedbackUsers } from './feedback/feedback-users.table';
+import { projectUsers } from './projects/project-users.table';
 import { sessions } from './sessions.table';
+import { teamUsers } from './teams/teams-users.table';
 
 // ⚠️ Note: this table differs from the rest of the non-auth tables
 // because it's managed by Lucia, and it has specific requirements, on how
 // the database it structured.
-
 export const users = pgTable(
 	'users',
 	{
 		id: varchar('id', { length: 255 }).unique().notNull(),
 		privateId: serial('private_id').notNull().primaryKey(),
-		createdAt: timestamp('created_at').default(schemaDefaults.currentTimestamp).notNull(),
-		updatedAt: timestamp('updated_at').default(schemaDefaults.currentTimestamp).notNull(),
+		createdAt: timestamp('created_at').default(defaults.currentTimestamp).notNull(),
+		updatedAt: timestamp('updated_at').default(defaults.currentTimestamp).notNull(),
 		deletedAt: timestamp('deleted_at'),
 		updates: integer('updates').default(0).notNull(),
 		//
@@ -54,25 +52,19 @@ export const userRelations = relations(users, ({ many, one }) => ({
 	authentications: one(authentications, {
 		fields: [users.id],
 		references: [authentications.userId],
-		relationName: 'authentications',
+		relationName: 'users_authentications',
 	}),
 	sessions: many(sessions, {
-		relationName: 'sessions',
+		relationName: 'users_sessions',
 	}),
-	teams: many(xUsersTeams, {
-		relationName: 'userTeamToUser',
+	teams: many(teamUsers, {
+		relationName: 'users_teamUsers',
 	}),
-	projects: many(xUsersProjects, {
-		relationName: 'x_user_projects_user',
+	projects: many(projectUsers, {
+		relationName: 'users_projectUsers',
 	}),
-	ownedFeedback: many(feedback, {
-		relationName: 'user_owner_feedback',
-	}),
-	assignedFeedback: many(feedback, {
-		relationName: 'user_assigned_feedback',
-	}),
-	feedbackVotes: many(feedbackVotes, {
-		relationName: 'user_votes',
+	feedback: many(feedbackUsers, {
+		relationName: 'users_feedbackUsers',
 	}),
 }));
 

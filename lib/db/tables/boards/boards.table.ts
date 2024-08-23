@@ -2,14 +2,12 @@ import { relations } from 'drizzle-orm';
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
-import { projects } from '../projects.table';
-import { feedback } from './feedback.table';
+import { boardsFeedback } from '../boards/boards-feedback.table';
+import { projects } from '../projects/projects.table';
 
-export const feedbackBoards = pgTable('feedback_boards', {
+export const boards = pgTable('boards', {
 	...defaultColumns(),
-	//
 	projectId: varchar('project_id', { length: 255 }).notNull(),
-	//
 	slug: varchar('slug', {
 		length: 255,
 	}).notNull(),
@@ -21,13 +19,13 @@ export const feedbackBoards = pgTable('feedback_boards', {
 	}),
 });
 
-export const feedbackBoardsRelations = relations(feedbackBoards, ({ one, many }) => ({
+export const boardsRelations = relations(boards, ({ one, many }) => ({
 	project: one(projects, {
-		fields: [feedbackBoards.projectId],
+		fields: [boards.projectId],
 		references: [projects.id],
-		relationName: 'project_feedback_boards',
+		relationName: 'boards_projects',
 	}),
-	feedback: many(feedback, {
-		relationName: 'feedback_board',
+	feedback: many(boardsFeedback, {
+		relationName: 'boards_feedback',
 	}),
 }));

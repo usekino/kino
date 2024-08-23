@@ -6,46 +6,43 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { defaultColumns } from '../_shared';
-import { users } from '../lucia/users.table';
-import { teams } from '../teams.table';
+import { users } from '../users.table';
+import { teams } from './teams.table';
 
-export const xUsersTeams = pgTable('x_users_teams', {
-	// Default
+export const teamUsers = pgTable('team_users', {
 	...defaultColumns(),
-	//
 	userId: varchar('user_id', {
 		length: 255,
 	}).notNull(),
 	teamId: varchar('team_id', {
 		length: 255,
 	}).notNull(),
-	//
 	userRole: jsonb('user_role').$type<string[]>().default(['member']).notNull(),
 });
 
-export const xUsersTeamsRelations = relations(xUsersTeams, ({ one }) => ({
+export const teamUsersRelations = relations(teamUsers, ({ one }) => ({
 	user: one(users, {
-		fields: [xUsersTeams.userId],
+		fields: [teamUsers.userId],
 		references: [users.id],
-		relationName: 'userTeamToUser',
+		relationName: 'users_teamUsers',
 	}),
 	team: one(teams, {
-		fields: [xUsersTeams.teamId],
+		fields: [teamUsers.teamId],
 		references: [teams.id],
-		relationName: 'userTeamToTeam',
+		relationName: 'teams_teamUsers',
 	}),
 }));
 
 const refineSchema = {
 	userRole: () => z.array(z.enum(['member', 'admin', 'blocked'])),
-} satisfies Refine<typeof xUsersTeams, 'select'>;
+} satisfies Refine<typeof teamUsers, 'select'>;
 
-export const selectXUsersTeamsSchema = createSelectSchema(xUsersTeams, refineSchema);
-export const mutateXUsersTeamsSchema = createInsertSchema(xUsersTeams, refineSchema).omit({
+export const selectXUsersTeamsSchema = createSelectSchema(teamUsers, refineSchema);
+export const mutateXUsersTeamsSchema = createInsertSchema(teamUsers, refineSchema).omit({
 	id: true,
 	createdAt: true,
 });
-export const seedXUsersTeamsSchema = createInsertSchema(xUsersTeams, refineSchema);
+export const seedXUsersTeamsSchema = createInsertSchema(teamUsers, refineSchema);
 
 export type SelectXUsersTeamsSchema = z.infer<typeof selectXUsersTeamsSchema>;
 export type MutateXUsersTeamsSchema = z.infer<typeof mutateXUsersTeamsSchema>;

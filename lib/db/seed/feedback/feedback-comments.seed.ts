@@ -1,9 +1,9 @@
-import type { SeedFeedbackCommentsSchema } from '@/lib/db/tables/feedback/feedback-comments.table';
+import type { SeedFeedbackCommentsSchema } from '@/lib/schema/feedback/comments/feedback-comments.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
-import { feedbackComments } from '@/lib/db/tables/feedback/feedback-comments.table';
+import { feedbackComments } from '@/lib/db/tables/feedback/comments/feedback-comments.table';
 
 export const maxFeedbackCommentsCount = 100;
 
@@ -26,6 +26,7 @@ export const seedFeedbackComments = async () => {
 					})
 					.toString(),
 				content: faker.lorem.sentence(),
+				status: ['open'],
 			});
 		}
 		return feedbackComments;

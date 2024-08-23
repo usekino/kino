@@ -5,7 +5,6 @@ import { seedFeedbackBoards } from '@/lib/db/seed/feedback/feedback-boards.seed'
 import { seedFeedbackComments } from '@/lib/db/seed/feedback/feedback-comments.seed';
 import { seedFeedbackVotes } from '@/lib/db/seed/feedback/feedback-votes.seed';
 import { seedFeedback } from '@/lib/db/seed/feedback/feedback.seed';
-import { seedXUsersProjects } from '@/lib/db/seed/join/x-users-project.seed';
 import { seedXUsersTeams } from '@/lib/db/seed/join/x-users-teams.seed';
 import { seedProjects } from '@/lib/db/seed/projects.seed';
 import { seedTeams } from '@/lib/db/seed/teams.seed';
@@ -20,7 +19,6 @@ const seed = async () => {
 	await seedTeams();
 	await seedProjects();
 	await seedXUsersTeams();
-	await seedXUsersProjects();
 	await seedFeedback();
 	await seedFeedbackComments();
 	await seedFeedbackVotes();

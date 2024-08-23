@@ -4,7 +4,7 @@ import { api } from '@/lib/trpc/clients/server-invoker';
 import { CreateProjectForm } from './_components/create-project-form';
 
 export default async function CreateProjectPage() {
-	const { teams } = await api.dashboard.available();
+	const teams = await api.dashboard.userTeams();
 	return (
 		<div className='mx-auto mt-20 max-w-2xl'>
 			<div className='mx-auto flex max-w-md flex-col items-center text-center'>

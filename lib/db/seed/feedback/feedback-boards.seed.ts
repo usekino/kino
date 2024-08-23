@@ -1,9 +1,9 @@
-import type { SeedFeedbackBoardsSchema } from '@/lib/schema/feedback/feedback-boards.schema';
+import type { SeedBoardsSchema } from '@/lib/schema/boards.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
-import { feedbackBoards } from '@/lib/db/tables/feedback/feedback-boards.table';
+import { boards } from '@/lib/db/tables/boards/boards.table';
 
 import { maxProjectsCount } from '../projects.seed';
 
@@ -11,7 +11,7 @@ export const maxFeedbackBoardsCount = 800;
 
 export const seedFeedbackBoards = async () => {
 	const generateFeedbackBoards = (count: number) => {
-		const feedbackBoards: SeedFeedbackBoardsSchema[] = [];
+		const feedbackBoards: SeedBoardsSchema[] = [];
 
 		for (let i = 0; i < count; i++) {
 			feedbackBoards.push({
@@ -31,7 +31,7 @@ export const seedFeedbackBoards = async () => {
 	};
 
 	try {
-		await httpDb.insert(feedbackBoards).values(generateFeedbackBoards(maxFeedbackBoardsCount));
+		await httpDb.insert(boards).values(generateFeedbackBoards(maxFeedbackBoardsCount));
 	} catch (error) {
 		console.error(error);
 		throw new Error('Seed error with FEEDBACK_BOARDS...');

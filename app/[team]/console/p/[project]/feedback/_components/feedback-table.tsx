@@ -1,6 +1,6 @@
 'use client';
 
-import type { SelectUserSchema } from '@/lib/db/tables/lucia/users.table';
+import type { SelectUserSchema } from '@/lib/db/tables/users.table';
 import type { API } from '@/lib/trpc/routers/_app';
 import type { ArraySingle } from '@/lib/types';
 import type {
@@ -41,7 +41,7 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-type Feedback = NonNullable<ArraySingle<API['output']['feedback']['findByProject']>>;
+type Feedback = NonNullable<ArraySingle<API['output']['feedback']['byProject']>>;
 
 export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 	return [

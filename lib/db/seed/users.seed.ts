@@ -1,9 +1,9 @@
-import type { SeedUserSchema } from '@/lib/db/tables/lucia/users.table';
+import type { SeedUserSchema } from '@/lib/db/tables/users.table';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
-import { users } from '@/lib/db/tables/lucia/users.table';
+import { users } from '@/lib/db/tables/users.table';
 
 export const maxUsersCount = 10;
 

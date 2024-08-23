@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { maxUsersCount } from '@/lib/db/seed/users.seed';
-import { SeedXUsersTeamsSchema, xUsersTeams } from '@/lib/db/tables/join/x-users-teams.table';
+import { SeedXUsersTeamsSchema, teamUsers } from '@/lib/db/tables/teams/teams-users.table';
 
 export const seedXUsersTeams = async () => {
 	try {
@@ -34,7 +34,7 @@ export const seedXUsersTeams = async () => {
 			return xUsersTeams;
 		};
 
-		await httpDb.insert(xUsersTeams).values(generateXUsersTeams(maxUsersCount));
+		await httpDb.insert(teamUsers).values(generateXUsersTeams(maxUsersCount));
 	} catch (error) {
 		console.error(error);
 		throw new Error('Seed error with xUsersTeams...');

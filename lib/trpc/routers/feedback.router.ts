@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { db } from '@/lib/db';
-import { xUsersTeams } from '@/lib/db/tables/join/x-users-teams.table';
-import { selectUserSchema } from '@/lib/db/tables/lucia/users.table';
+import { teamUsers } from '@/lib/db/tables/teams/teams-users.table';
+import { selectUserSchema } from '@/lib/db/tables/users.table';
 import { createFeedbackSchema, selectFeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy } from '@/lib/utils';
@@ -40,14 +40,11 @@ export const feedbackRouter = router({
 							table.teamId,
 							db
 								.select({
-									teamId: xUsersTeams.teamId,
+									teamId: teamUsers.teamId,
 								})
-								.from(xUsersTeams)
+								.from(teamUsers)
 								.where(
-									and(
-										eq(xUsersTeams.userId, ctx.auth.user.id),
-										eq(xUsersTeams.teamId, table.teamId)
-									)
+									and(eq(teamUsers.userId, ctx.auth.user.id), eq(teamUsers.teamId, table.teamId))
 								)
 						)
 					);
@@ -63,7 +60,7 @@ export const feedbackRouter = router({
 							feedback: {
 								columns: createTruthy(selectFeedbackSchema.shape),
 								with: {
-									userAssigned: {
+									assignedUser: {
 										columns: createTruthy(selectUserSchema.shape),
 									},
 									votes: {

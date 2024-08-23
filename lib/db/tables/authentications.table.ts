@@ -6,7 +6,7 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { defaultColumns } from './_shared';
-import { users } from './lucia/users.table';
+import { users } from './users.table';
 
 export const authentications = pgTable('authentications', {
 	// Defaults
@@ -26,6 +26,7 @@ export const authenticationRelations = relations(authentications, ({ one }) => (
 	user: one(users, {
 		fields: [authentications.userId],
 		references: [users.id],
+		relationName: 'users_authentications',
 	}),
 }));
 

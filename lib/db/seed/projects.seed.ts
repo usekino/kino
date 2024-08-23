@@ -1,9 +1,9 @@
-import type { SeedProjectSchema } from '@/lib/db/tables/projects.table';
+import type { SeedProjectSchema } from '@/lib/db/tables/projects/projects.table';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
-import { projects } from '@/lib/db/tables/projects.table';
+import { projects } from '@/lib/db/tables/projects/projects.table';
 import { generateId } from '@/lib/utils';
 
 export const maxProjectsCount = 10;

@@ -3,7 +3,7 @@ import type { SeedTeamSchema } from '@/lib/schema/team.schema';
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
-import { teams } from '@/lib/db/tables/teams.table';
+import { teams } from '@/lib/db/tables/teams/teams.table';
 
 export const maxTeamsCount = 10;
 

@@ -54,7 +54,7 @@ export const getProjectData = cache(async (slug: string) => {
 	return validatedProject;
 });
 
-export const P_GetUserProjectsByUserId = db.query.xUsersTeams
+export const P_GetUserProjectsByUserId = db.query.teamUsers
 	.findMany({
 		columns: {},
 		where: (table, { eq, and, or, not }) => {

@@ -1,4 +1,4 @@
-import type { SelectUserSchema } from '@/lib/db/tables/lucia/users.table';
+import type { SelectUserSchema } from '@/lib/db/tables/users.table';
 
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { Lucia } from 'lucia';

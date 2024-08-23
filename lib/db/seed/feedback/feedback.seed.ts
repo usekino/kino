@@ -24,13 +24,13 @@ export const seedFeedback = async () => {
 						max: maxTeamsCount,
 					})
 					.toString(),
-				userOwner: faker.number
+				creatorUserId: faker.number
 					.int({
 						min: 1,
 						max: maxUsersCount,
 					})
 					.toString(),
-				userAssigned: faker.datatype.boolean()
+				assignedUserId: faker.datatype.boolean()
 					? faker.number
 							.int({
 								min: 1,
@@ -38,18 +38,6 @@ export const seedFeedback = async () => {
 							})
 							.toString()
 					: null,
-				// teamId: faker.number
-				// 	.int({
-				// 		min: 1,
-				// 		max: maxTeamsCount,
-				// 	})
-				// 	.toString(),
-				// projectId: faker.number
-				// 	.int({
-				// 		min: 1,
-				// 		max: maxProjectsCount,
-				// 	})
-				// 	.toString(),
 				boardId: faker.number
 					.int({
 						min: 1,

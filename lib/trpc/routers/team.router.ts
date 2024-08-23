@@ -1,6 +1,6 @@
 import { getTeamData } from '@/lib/db/prepared';
-import { xUsersTeams } from '@/lib/db/tables';
-import { teams } from '@/lib/db/tables/teams.table';
+import { teamUsers } from '@/lib/db/tables';
+import { teams } from '@/lib/db/tables/teams/teams.table';
 import { createTeamSchema, selectTeamSchema } from '@/lib/schema/team.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy, generateId } from '@/lib/utils';
@@ -16,7 +16,7 @@ export const teamRouter = router({
 	findByMembership: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
 
-		const teams = await ctx.db.query.xUsersTeams.findMany({
+		const teams = await ctx.db.query.teamUsers.findMany({
 			where: (userTables, { eq }) => eq(userTables.userId, user.id),
 			columns: {},
 			with: {
@@ -77,7 +77,7 @@ export const teamRouter = router({
 						slug: teams.slug,
 					});
 				// Add to join table
-				await trx.insert(xUsersTeams).values({
+				await trx.insert(teamUsers).values({
 					userId: user.id,
 					teamId: newTeam[0].id,
 					userRole: ['member'],

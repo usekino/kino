@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { mutateUserSchema, selectUserSchema } from '@/lib/db/tables/lucia/users.table';
+import { mutateUserSchema, selectUserSchema } from '@/lib/db/tables/users.table';
 
 export const updateUserSchema = z.object({
 	username: mutateUserSchema.shape.username,

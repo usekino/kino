@@ -3,8 +3,8 @@ import type { Refine } from 'drizzle-zod';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { mutateFeedbackCommentsSchema } from '@/lib/db/tables/feedback/feedback-comments.table';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
+import { mutateFeedbackCommentsSchema } from '@/lib/schema/feedback/comments/feedback-comments.schema';
 
 const refineSchema = {
 	title: ({ title }) => title.min(3).max(120),
@@ -35,8 +35,8 @@ export const selectFeedbackSchema = select.pick({
 	// teamId: true,
 	// projectId: true,
 	boardId: true,
-	userAssigned: true,
-	userOwner: true,
+	assignedUserId: true,
+	creatorUserId: true,
 });
 
 export type SelectFeedbackSchema = z.infer<typeof selectFeedbackSchema>;
