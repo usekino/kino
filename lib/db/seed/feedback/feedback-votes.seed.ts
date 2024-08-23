@@ -8,7 +8,7 @@ export const seedFeedbackVotes = async (count: number = 1000) => {
 
 	for (let i = 0; i < count; i++) {
 		feedbackVotesValues.push({
-			userId: faker.number
+			voterId: faker.number
 				.int({
 					min: 1,
 					max: 10,

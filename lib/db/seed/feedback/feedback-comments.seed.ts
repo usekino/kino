@@ -25,7 +25,6 @@ export const seedFeedbackComments = async () => {
 						max: 10,
 					})
 					.toString(),
-				content: faker.lorem.sentence(),
 				status: ['open'],
 			});
 		}

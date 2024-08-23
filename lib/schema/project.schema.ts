@@ -8,7 +8,7 @@ export const createProjectSchema = mutateProjectSchema.pick({
 	slug: true,
 	description: true,
 	teamId: true,
-	githubUrl: true,
+	websiteUrl: true,
 });
 export type CreateProjectSchema = z.infer<typeof createProjectSchema>;
 
@@ -18,7 +18,7 @@ export const readProjectSchema = selectProjectSchema.pick({
 	slug: true,
 	description: true,
 	teamId: true,
-	githubUrl: true,
+	websiteUrl: true,
 });
 export type ReadProjectSchema = z.infer<typeof readProjectSchema>;
 

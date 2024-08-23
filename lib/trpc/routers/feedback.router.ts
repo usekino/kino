@@ -57,61 +57,78 @@ export const feedbackRouter = router({
 							}
 						},
 						with: {
-							feedback: {
-								columns: createTruthy(selectFeedbackSchema.shape),
+							boardFeedback: {
 								with: {
-									assignedUser: {
-										columns: createTruthy(selectUserSchema.shape),
-									},
-									votes: {
-										columns: {
-											id: true,
+									feedback: {
+										columns: createTruthy(selectFeedbackSchema.shape),
+										with: {
+											assignedUser: {
+												columns: createTruthy(selectUserSchema.shape),
+											},
+											votes: {
+												columns: {
+													id: true,
+												},
+											},
 										},
 									},
 								},
 							},
+							// feedback: {
+							// 	columns: createTruthy(selectFeedbackSchema.shape),
+							// 	with: {
+							// 		assignedUser: {
+							// 			columns: createTruthy(selectUserSchema.shape),
+							// 		},
+							// 		votes: {
+							// 			columns: {
+							// 				id: true,
+							// 			},
+							// 		},
+							// 	},
+							// },
 						},
 					},
 				},
 			});
 
-			const test = data
-				? data.boards
-						.map((board) => {
-							return board.feedback.map((feedback) => {
-								const voteCount = feedback.votes.length;
+			// const test = data
+			// 	? data.boards
+			// 			.map((board) => {
+			// 				return board.feedback.map((feedback) => {
+			// 					const voteCount = feedback.votes.length;
 
-								// Remove the votes, since we just want to count them
-								const { votes, ...f } = feedback;
+			// 					// Remove the votes, since we just want to count them
+			// 					const { votes, ...f } = feedback;
 
-								const parsed = selectFeedbackSchema
-									.merge(
-										z.object({
-											userAssigned: selectUserSchema.nullable(),
-											votes: z.number(),
-										})
-									)
-									.safeParse({
-										...f,
-										votes: voteCount,
-									});
+			// 					const parsed = selectFeedbackSchema
+			// 						.merge(
+			// 							z.object({
+			// 								userAssigned: selectUserSchema.nullable(),
+			// 								votes: z.number(),
+			// 							})
+			// 						)
+			// 						.safeParse({
+			// 							...f,
+			// 							votes: voteCount,
+			// 						});
 
-								// If there's an error, log it and throw an error
-								if (parsed.error) {
-									if (process.env.NODE_ENV === 'development') {
-										console.log(parsed.error);
-										throw new Error('Error parsing feedback: ', parsed.error);
-									}
-									throw new Error('Error parsing feedback');
-								}
+			// 					// If there's an error, log it and throw an error
+			// 					if (parsed.error) {
+			// 						if (process.env.NODE_ENV === 'development') {
+			// 							console.log(parsed.error);
+			// 							throw new Error('Error parsing feedback: ', parsed.error);
+			// 						}
+			// 						throw new Error('Error parsing feedback');
+			// 					}
 
-								// Return the parsed feedback
-								return parsed.data;
-							});
-						})
-						.flat()
-				: null;
+			// 					// Return the parsed feedback
+			// 					return parsed.data;
+			// 				});
+			// 			})
+			// 			.flat()
+			// 	: null;
 
-			return test;
+			return null;
 		}),
 });

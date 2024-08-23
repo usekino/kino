@@ -1,5 +1,7 @@
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
-import { z } from 'zod';
+import type { Refine } from 'drizzle-zod';
+import type { z } from 'zod';
+
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { feedbackVotes } from '@/lib/db/tables/feedback/feedback-votes.table';
 
@@ -12,7 +14,7 @@ const mutate = createInsertSchema(feedbackVotes, refineSchema);
 const seed = createInsertSchema(feedbackVotes, refineSchema);
 
 export const createFeedbackVotesSchema = mutate.pick({
-	userId: true,
+	voterId: true,
 	feedbackId: true,
 	vote: true,
 });
@@ -20,7 +22,7 @@ export const createFeedbackVotesSchema = mutate.pick({
 export const selectFeedbackVotesSchema = select.pick({
 	id: true,
 	feedbackId: true,
-	userId: true,
+	voterId: true,
 	vote: true,
 });
 

@@ -6,7 +6,6 @@ import { z } from 'zod';
 import { feedbackComments } from '@/lib/db/tables/feedback/comments/feedback-comments.table';
 
 const refineSchema = {
-	content: ({ content }) => content.max(1500),
 	status: () => z.array(z.enum(['open', 'planned', 'closed'])),
 } satisfies Refine<typeof feedbackComments, 'select'>;
 

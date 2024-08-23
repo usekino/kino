@@ -59,7 +59,7 @@ export function CreateProjectForm({ teams: initialTeams }: CreateProjectProps) {
 			teamId: teams[0].id,
 			name: '',
 			slug: '',
-			githubUrl: null,
+			websiteUrl: null,
 		},
 		resolver: zodResolver(createProjectSchema),
 	});
@@ -173,7 +173,7 @@ export function CreateProjectForm({ teams: initialTeams }: CreateProjectProps) {
 					/>
 					<FormField
 						control={form.control}
-						name='githubUrl'
+						name='websiteUrl'
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Github (optional)</FormLabel>

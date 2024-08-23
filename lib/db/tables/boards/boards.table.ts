@@ -25,7 +25,7 @@ export const boardsRelations = relations(boards, ({ one, many }) => ({
 		references: [projects.id],
 		relationName: 'boards_projects',
 	}),
-	feedback: many(boardsFeedback, {
+	boardFeedback: many(boardsFeedback, {
 		relationName: 'boards_feedback',
 	}),
 }));
