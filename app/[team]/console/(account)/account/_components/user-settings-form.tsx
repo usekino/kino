@@ -1,6 +1,6 @@
 'use client';
 
-import type { UpdateUserSchema } from '@/lib/schema/user.schema';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 import type { User } from 'lucia';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { updateUserSchema } from '@/lib/schema/user.schema';
+import { usersSchema } from '@/lib/schema/users.schema';
 import { api } from '@/lib/trpc/clients/client';
 
 export const UserSettingsForm = ({ user }: { user: User }) => {
@@ -27,12 +27,12 @@ export const UserSettingsForm = ({ user }: { user: User }) => {
 		},
 	});
 
-	const { control, handleSubmit, formState } = useForm<UpdateUserSchema>({
-		defaultValues: updateUserSchema.parse(user),
-		resolver: zodResolver(updateUserSchema),
+	const { control, handleSubmit, formState } = useForm<UsersSchema['Update']>({
+		defaultValues: usersSchema.update.parse(user),
+		resolver: zodResolver(usersSchema.update),
 	});
 
-	const onSubmit = (data: UpdateUserSchema) => {
+	const onSubmit = (data: UsersSchema['Update']) => {
 		updateUser(data);
 	};
 

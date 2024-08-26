@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { db } from '.';
 import { readProjectSchema } from '../schema/project.schema';
-import { selectTeamSchema } from '../schema/team.schema';
+import { selectTeamSchema } from '../schema/teams/teams.schema';
 import { createTruthy } from '../utils';
 
 const P_GetTeamData = db.query.teams

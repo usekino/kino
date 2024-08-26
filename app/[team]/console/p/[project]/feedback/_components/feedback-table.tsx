@@ -1,6 +1,6 @@
 'use client';
 
-import type { SelectUserSchema } from '@/lib/db/tables/users.table';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 import type { API } from '@/lib/trpc/routers/_app';
 import type { ArraySingle } from '@/lib/types';
 import type {
@@ -193,7 +193,7 @@ export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 			},
 			header: 'Assigned To',
 			cell: ({ row }) => {
-				const userAssigned = row.getValue('userAssigned') as SelectUserSchema | null;
+				const userAssigned = row.getValue('userAssigned') as UsersSchema['Read'] | null;
 
 				if (!userAssigned) {
 					return <p className='line-clamp-3 text-muted-foreground/50'>None</p>;

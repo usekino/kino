@@ -26,7 +26,7 @@ export const dropTables = async () => {
 	const result = await httpDb.execute(query);
 	const tables = result.rows;
 
-	for (let table of tables) {
+	for (const table of tables) {
 		const query = sql.raw(`DROP TABLE ${table.table_name} CASCADE;`);
 		await httpDb.execute(query);
 	}

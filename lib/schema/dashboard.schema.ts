@@ -1,10 +1,11 @@
 import { z } from 'zod';
 
-import { selectProjectSchema, selectUserSchema } from '../db/tables';
-import { selectTeamSchema } from './team.schema';
+import { selectProjectSchema } from '../db/tables';
+import { selectTeamSchema } from './teams/teams.schema';
+import { usersSchema } from './users.schema';
 
 export const teamSelectSchema = z.object({
-	userId: selectUserSchema.shape.id,
+	userId: usersSchema.read.shape.id,
 	team: z.object({
 		slug: selectTeamSchema.shape.slug,
 		id: selectTeamSchema.shape.id,
@@ -13,7 +14,7 @@ export const teamSelectSchema = z.object({
 export type TeamSelect = z.infer<typeof teamSelectSchema>;
 
 export const teamProjectSelectSchema = z.object({
-	userId: selectUserSchema.shape.id,
+	userId: usersSchema.read.shape.id,
 	id: selectProjectSchema.shape.id,
 	slug: selectProjectSchema.shape.slug,
 });

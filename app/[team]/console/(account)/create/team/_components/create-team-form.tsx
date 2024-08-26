@@ -1,6 +1,6 @@
 'use client';
 
-import type { CreateTeamSchema } from '@/lib/schema/team.schema';
+import type { CreateTeamSchema } from '@/lib/schema/teams/teams.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, User } from 'lucide-react';
@@ -23,7 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 // import { env } from '@/lib/env/client';
-import { createTeamSchema } from '@/lib/schema/team.schema';
+import { createTeamSchema } from '@/lib/schema/teams/teams.schema';
 import { api } from '@/lib/trpc/clients/client';
 import { cn, slugify } from '@/lib/utils';
 

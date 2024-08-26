@@ -6,7 +6,7 @@ import { httpDb } from '@/lib/db';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 
 import { maxProjectsCount } from '../projects.seed';
-import { maxTeamsCount } from '../teams.seed';
+import { maxTeamsCount } from '../teams/teams.seed';
 import { maxUsersCount } from '../users.seed';
 
 export const maxFeedbackCount = 500;

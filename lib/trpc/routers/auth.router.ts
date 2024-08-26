@@ -6,9 +6,10 @@ import { Argon2id } from 'oslo/password';
 // import { generateEmailVerificationCode } from '@/lib/auth/codes/email-verification';
 import { lucia } from '@/lib/auth/lucia';
 import { authentications, mutateAuthSchema } from '@/lib/db/tables/authentications.table';
-import { mutateUserSchema, users } from '@/lib/db/tables/users.table';
+import { users } from '@/lib/db/tables/users.table';
 import { env } from '@/lib/env/server';
 import { signInEmailSchema, signUpEmailSchema } from '@/lib/schema/auth.schema';
+import { usersSchema } from '@/lib/schema/users.schema';
 // import { sendAccountVerification } from '@/lib/email/template/sendAccountVerification';
 import { procedure, router } from '@/lib/trpc/trpc';
 
@@ -21,7 +22,7 @@ export const authRouter = router({
 			const hashedPassword = await new Argon2id().hash(input.password);
 			const email = input.email.toLowerCase().trim();
 
-			const newUser = mutateUserSchema.parse({
+			const newUser = usersSchema.create.parse({
 				id: userId,
 				email,
 				username: input.username,

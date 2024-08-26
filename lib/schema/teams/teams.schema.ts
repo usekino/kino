@@ -4,7 +4,7 @@ import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { teams } from '../db/tables/teams/teams.table';
+import { teams } from '../../db/tables/teams/teams.table';
 
 const refineSchema = {
 	name: ({ name }) => name.min(3).max(50),

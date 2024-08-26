@@ -1,4 +1,4 @@
-import type { SelectUserSchema } from '@/lib/db/tables/users.table';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { Lucia } from 'lucia';
@@ -9,7 +9,7 @@ import { sessions, users } from '@/lib/db/tables';
 declare module 'lucia' {
 	interface Register {
 		Lucia: typeof lucia;
-		DatabaseUserAttributes: SelectUserSchema;
+		DatabaseUserAttributes: UsersSchema['Read'];
 	}
 }
 

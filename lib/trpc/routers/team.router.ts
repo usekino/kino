@@ -1,7 +1,7 @@
 import { getTeamData } from '@/lib/db/prepared';
 import { teamUsers } from '@/lib/db/tables';
 import { teams } from '@/lib/db/tables/teams/teams.table';
-import { createTeamSchema, selectTeamSchema } from '@/lib/schema/team.schema';
+import { createTeamSchema, selectTeamSchema } from '@/lib/schema/teams/teams.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy, generateId } from '@/lib/utils';
 

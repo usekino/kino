@@ -1,4 +1,4 @@
-import type { SeedTeamSchema } from '@/lib/schema/team.schema';
+import type { SeedTeamSchema } from '@/lib/schema/teams/teams.schema';
 
 import { faker } from '@faker-js/faker';
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { mutateProjectSchema, selectProjectSchema } from '../db/tables/projects/projects.table';
-import { selectTeamSchema } from './team.schema';
+import { selectTeamSchema } from './teams/teams.schema';
 
 export const createProjectSchema = mutateProjectSchema.pick({
 	name: true,

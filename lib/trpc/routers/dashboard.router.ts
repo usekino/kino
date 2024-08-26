@@ -3,7 +3,7 @@ import { arrayContains } from 'drizzle-orm';
 
 import { getUserProjectsByUserId } from '@/lib/db/prepared';
 import { teamProjectSelectSchema } from '@/lib/schema/dashboard.schema';
-import { selectTeamSchema } from '@/lib/schema/team.schema';
+import { selectTeamSchema } from '@/lib/schema/teams/teams.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy } from '@/lib/utils';
 
