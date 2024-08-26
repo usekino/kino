@@ -11,7 +11,13 @@ export const defaultColumns = () => {
 		autoId: serial('auto_id').notNull().primaryKey(),
 		id: varchar('id', { length: 255 }).unique().default(defaults.randomId).notNull(),
 		createdAt: timestamp('created_at').default(defaults.currentTimestamp).notNull(),
-		updatedAt: timestamp('updated_at').default(defaults.currentTimestamp).notNull(),
+		updatedAt: timestamp('updated_at')
+			.default(defaults.currentTimestamp)
+			.notNull()
+			.$onUpdate(() => {
+				console.log('updatedAt??');
+				return sql`CURRENT_TIMESTAMP`;
+			}),
 		deletedAt: timestamp('deleted_at'),
 		updates: integer('updates').default(0).notNull(),
 	};

@@ -29,7 +29,7 @@ export const feedbackUpdatesRelations = relations(feedbackUpdates, ({ one }) => 
 	feedback: one(feedback, {
 		fields: [feedbackUpdates.feedbackId],
 		references: [feedback.id],
-		relationName: 'feedback_updates',
+		relationName: 'feedback_feedbackUpdates',
 	}),
 	updaterUser: one(feedbackUsers, {
 		fields: [feedbackUpdates.updaterUserId],

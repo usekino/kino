@@ -19,18 +19,19 @@ export const feedbackUsers = pgTable('feedback_users', {
 	userRoles: jsonb('user_roles').$type<string[]>().default(['member']).notNull(),
 });
 
-export const xUsersFeedbackRelations = relations(feedbackUsers, ({ one, many }) => ({
+export const feedbackUsersRelations = relations(feedbackUsers, ({ one, many }) => ({
 	user: one(users, {
 		fields: [feedbackUsers.userId],
 		references: [users.id],
-		relationName: 'feedback_feedbackUsers',
+		relationName: 'users_feedbackUsers',
 	}),
 	feedback: one(feedback, {
 		fields: [feedbackUsers.feedbackId],
 		references: [feedback.id],
+		relationName: 'feedback_feedbackUsers',
 	}),
 	feedbackReactions: many(feedbackCommentsReactions, {
-		relationName: 'feedbackComments_feedbackCommentsReactions',
+		relationName: 'feedbackUsers_feedbackCommentsReactions',
 	}),
 	feedbackVotes: many(feedbackVotes, {
 		relationName: 'feedbackVotes_feedbackUsers',

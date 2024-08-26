@@ -5,6 +5,7 @@ import { defaultColumns } from '@/lib/db/tables/_shared';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 
 import { feedbackUsers } from '../feedback-users.table';
+import { feedbackCommentsAttachments } from './feedback-comments-attachments.table';
 import { feedbackCommentsHistory } from './feedback-comments-history.table';
 import { feedbackCommentsReactions } from './feedback-comments-reactions.table';
 
@@ -38,5 +39,8 @@ export const feedbackCommentsRelations = relations(feedbackComments, ({ one, man
 	}),
 	reactions: many(feedbackCommentsReactions, {
 		relationName: 'feedbackComments_feedbackCommentsReactions',
+	}),
+	attachments: many(feedbackCommentsAttachments, {
+		relationName: 'feedbackComments_feedbackCommentsAttachments',
 	}),
 }));

@@ -25,7 +25,7 @@ export const feedbackCommentsReactionsRelations = relations(
 		user: one(feedbackUsers, {
 			fields: [feedbackCommentsReactions.reactorUserId],
 			references: [feedbackUsers.userId],
-			relationName: 'feedbackComments_feedbackCommentsReactions',
+			relationName: 'feedbackUsers_feedbackCommentsReactions',
 		}),
 		feedbackComment: one(feedbackComments, {
 			fields: [feedbackCommentsReactions.feedbackCommentId],

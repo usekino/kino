@@ -55,4 +55,7 @@ export const feedbackRelations = relations(feedback, ({ one, many }) => ({
 	updates: many(feedbackUpdates, {
 		relationName: 'feedback_feedbackUpdates',
 	}),
+	users: many(feedbackUsers, {
+		relationName: 'feedback_feedbackUsers',
+	}),
 }));

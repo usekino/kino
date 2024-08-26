@@ -14,6 +14,7 @@ export * from './boards/boards-feedback.table';
 export * from './feedback/feedback.table';
 export * from './feedback/feedback-users.table';
 export * from './feedback/feedback-votes.table';
+export * from './feedback/feedback-updates.table';
 export * from './feedback/comments/feedback-comments.table';
 export * from './feedback/comments/feedback-comments-reactions.table';
 export * from './feedback/comments/feedback-comments-attachments.table';

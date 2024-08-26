@@ -1,9 +1,5 @@
-import type { Refine } from 'drizzle-zod';
-
 import { relations, sql } from 'drizzle-orm';
 import { index, integer, json, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
 
 import { defaults } from './_shared';
 import { authentications } from './authentications.table';
@@ -67,23 +63,3 @@ export const userRelations = relations(users, ({ many, one }) => ({
 		relationName: 'users_feedbackUsers',
 	}),
 }));
-
-const refineSchema = {
-	username: ({ username }) => username.min(3).max(100),
-	email: ({ email }) => email.email(),
-	name: ({ name }) => name.max(255),
-	role: () => z.array(z.enum(['member', 'admin', 'beta'])),
-	bio: ({ bio }) => bio.max(450),
-	updates: ({ updates }) => updates.min(0),
-	avatar: ({ avatar }) => avatar.url(),
-} satisfies Refine<typeof users, 'select'>;
-
-export const selectUserSchema = createSelectSchema(users, refineSchema);
-export const mutateUserSchema = createInsertSchema(users, refineSchema).omit({
-	createdAt: true,
-});
-export const seedUserSchema = createInsertSchema(users, refineSchema);
-
-export type SelectUserSchema = z.infer<typeof selectUserSchema>;
-export type MutateUserSchema = z.infer<typeof mutateUserSchema>;
-export type SeedUserSchema = z.infer<typeof seedUserSchema>;

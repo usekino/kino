@@ -9,9 +9,7 @@ import { defaultColumns } from './_shared';
 import { users } from './users.table';
 
 export const authentications = pgTable('authentications', {
-	// Defaults
 	...defaultColumns(),
-	//
 	userId: varchar('user_id', {
 		length: 255,
 	}).notNull(),
