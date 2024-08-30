@@ -5,7 +5,7 @@ import { relations } from 'drizzle-orm';
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { defaultColumns } from './_shared';
+import { defaultColumns } from '../_shared';
 import { users } from './users.table';
 
 export const authentications = pgTable('authentications', {

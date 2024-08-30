@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm';
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
-import { boardsFeedback } from '../boards/boards-feedback.table';
+import { feedback } from '../feedback/feedback.table';
 import { projects } from '../projects/projects.table';
 
 export const boards = pgTable('boards', {
@@ -25,7 +25,7 @@ export const boardsRelations = relations(boards, ({ one, many }) => ({
 		references: [projects.id],
 		relationName: 'boards_projects',
 	}),
-	boardFeedback: many(boardsFeedback, {
-		relationName: 'boards_boardsFeedback',
+	feedback: many(feedback, {
+		relationName: 'boards_feedback',
 	}),
 }));

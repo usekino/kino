@@ -1,6 +1,6 @@
 'use client';
 
-import type { CreateProjectSchema } from '@/lib/schema/project.schema';
+import type { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SiGithub } from '@icons-pack/react-simple-icons';
@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { env } from '@/lib/env/client';
-import { createProjectSchema } from '@/lib/schema/project.schema';
+import { projectsSchema } from '@/lib/schema/projects/projects.schema';
 import { api } from '@/lib/trpc/clients/client';
 import { API } from '@/lib/trpc/routers/_app';
 import { slugify } from '@/lib/utils';
@@ -54,17 +54,17 @@ export function CreateProjectForm({ teams: initialTeams }: CreateProjectProps) {
 		},
 	});
 
-	const form = useForm<CreateProjectSchema>({
+	const form = useForm<ProjectsSchema['Create']>({
 		defaultValues: {
 			teamId: teams[0].id,
 			name: '',
 			slug: '',
 			websiteUrl: null,
 		},
-		resolver: zodResolver(createProjectSchema),
+		resolver: zodResolver(projectsSchema.create),
 	});
 
-	const onSubmit = async (data: CreateProjectSchema) => {
+	const onSubmit = async (data: ProjectsSchema['Create']) => {
 		createProject(data);
 	};
 

@@ -1,6 +1,6 @@
 'use client';
 
-import type { CreateTeamSchema } from '@/lib/schema/teams/teams.schema';
+import type { TeamsSchema } from '@/lib/schema/teams/teams.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, User } from 'lucide-react';
@@ -23,7 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 // import { env } from '@/lib/env/client';
-import { createTeamSchema } from '@/lib/schema/teams/teams.schema';
+import { teamsSchema } from '@/lib/schema/teams/teams.schema';
 import { api } from '@/lib/trpc/clients/client';
 import { cn, slugify } from '@/lib/utils';
 
@@ -39,15 +39,15 @@ export function CreateTeamForm() {
 		},
 	});
 
-	const form = useForm<CreateTeamSchema>({
+	const form = useForm<TeamsSchema['Create']>({
 		defaultValues: {
 			name: '',
 			slug: '',
 		},
-		resolver: zodResolver(createTeamSchema),
+		resolver: zodResolver(teamsSchema.create),
 	});
 
-	const onSubmit = async (data: CreateTeamSchema) => createTeam(data);
+	const onSubmit = async (data: TeamsSchema['Create']) => createTeam(data);
 
 	return (
 		<div className='flex flex-col-reverse items-stretch md:flex-row'>

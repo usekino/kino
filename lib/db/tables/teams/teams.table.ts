@@ -3,7 +3,7 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
 import { projects } from '../projects/projects.table';
-import { teamUsers } from './teams-users.table';
+import { teamMembers } from './team-members.table';
 
 export const teams = pgTable('teams', {
 	...defaultColumns(),
@@ -16,8 +16,8 @@ export const teams = pgTable('teams', {
 });
 
 export const teamRelations = relations(teams, ({ many }) => ({
-	users: many(teamUsers, {
-		relationName: 'teams_teamUsers',
+	users: many(teamMembers, {
+		relationName: 'teams_teamMembers',
 	}),
 	projects: many(projects, {
 		relationName: 'teams_projects',

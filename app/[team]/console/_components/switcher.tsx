@@ -1,7 +1,7 @@
 'use client';
 
-import type { TeamProjectSelect } from '@/lib/schema/dashboard.schema';
-import type { ReadProjectSchema } from '@/lib/schema/project.schema';
+import type { DashboardSchema } from '@/lib/schema/dashboard.schema';
+// import type { ProjectSchema } from '@/lib/schema/project.schema';
 import type { API } from '@/lib/trpc/routers/_app';
 
 import { useContext, useEffect, useState } from 'react';
@@ -21,6 +21,7 @@ import {
 	CommandSeparator,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
 import { api } from '@/lib/trpc/clients/client';
 import { cn } from '@/lib/utils';
 
@@ -32,7 +33,7 @@ type _Projects = API['output']['dashboard']['userProjects']['projects'];
 interface ProjectSwitcherProps extends PopoverTriggerProps {
 	user: User;
 	projectsByTeam: _Projects;
-	selected: TeamProjectSelect | null;
+	selected: DashboardSchema['TeamProjectSelect'] | null;
 }
 
 export default function Switcher({
@@ -76,7 +77,7 @@ export default function Switcher({
 		}
 	}, [params.project, selected]);
 
-	const handleSelect = (project: ReadProjectSchema) => {
+	const handleSelect = (project: ProjectsSchema['Read']) => {
 		setOpen(false);
 
 		if (!project) {

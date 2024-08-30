@@ -1,44 +1,53 @@
-import type { SeedTeamSchema } from '@/lib/schema/teams/teams.schema';
+import type { TeamsSchema } from '@/lib/schema/teams/teams.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { teams } from '@/lib/db/tables/teams/teams.table';
+import { UsersSchema } from '@/lib/schema/users.schema';
 
-export const maxTeamsCount = 10;
+const generate = (
+	{
+		users,
+	}: {
+		users: UsersSchema['Seed'][];
+	},
+	count: number
+) => {
+	const teams: TeamsSchema['Seed'][] = [
+		{
+			id: '1',
+			ownerId: '1',
+			name: 'Nate Dunn',
+			slug: 'natedunn',
+			description: 'This is Nate&apos;s personal team',
+		},
+		{
+			id: '2',
+			ownerId: '2',
+			name: 'Fake Kino',
+			slug: 'kino',
+			description: 'Fake Kino is a project to test other project',
+		},
+	];
 
-export const seedTeams = async () => {
+	for (let i = 0; i < count - 2; i++) {
+		teams.push({
+			id: (3 + i).toString(),
+			ownerId: users[i].id,
+			name: faker.company.name(),
+			slug: faker.helpers.slugify(faker.company.name()).toLowerCase(),
+			description: faker.lorem.sentence(),
+		});
+	}
+	return teams;
+};
+
+export const seedTeams = async (...args: Parameters<typeof generate>) => {
+	const values = generate(...args);
 	try {
-		const generateTeams = (count: number) => {
-			const teams: SeedTeamSchema[] = [
-				{
-					id: '1',
-					ownerId: '1',
-					name: 'Nate Dunn',
-					slug: 'natedunn',
-					description: 'This is Nate&apos;s personal team',
-				},
-				{
-					id: '2',
-					ownerId: '2',
-					name: 'Fake Kino',
-					slug: 'kino',
-					description: 'Fake Kino is a project to test other project',
-				},
-			];
-
-			for (let i = 0; i < count; i++) {
-				teams.push({
-					ownerId: '1',
-					name: faker.company.name(),
-					slug: faker.helpers.slugify(faker.company.name()),
-					description: faker.lorem.sentence(),
-				});
-			}
-			return teams;
-		};
-
-		await httpDb.insert(teams).values(generateTeams(maxTeamsCount));
+		await httpDb.insert(teams).values(values);
+		return values;
 	} catch (error) {
 		console.error(error);
 		throw new Error('Seed error with TEAMS...');

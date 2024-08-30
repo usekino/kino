@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm';
 import { integer, pgTable, unique, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
-import { feedbackUsers } from './feedback-users.table';
+import { users } from '../auth/users.table';
 import { feedback } from './feedback.table';
 
 export const feedbackVotes = pgTable(
@@ -28,9 +28,9 @@ export const feedbackVotesRelations = relations(feedbackVotes, ({ one }) => ({
 		references: [feedback.id],
 		relationName: 'feedback_feedbackVotes',
 	}),
-	voterUser: one(feedbackUsers, {
+	voterUser: one(users, {
 		fields: [feedbackVotes.voterId],
-		references: [feedbackUsers.id],
+		references: [users.id],
 		relationName: 'feedbackVotes_feedbackUsers',
 	}),
 }));

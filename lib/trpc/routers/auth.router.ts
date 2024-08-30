@@ -5,10 +5,10 @@ import { Argon2id } from 'oslo/password';
 
 // import { generateEmailVerificationCode } from '@/lib/auth/codes/email-verification';
 import { lucia } from '@/lib/auth/lucia';
-import { authentications, mutateAuthSchema } from '@/lib/db/tables/authentications.table';
-import { users } from '@/lib/db/tables/users.table';
+import { authentications, mutateAuthSchema } from '@/lib/db/tables/auth/authentications.table';
+import { users } from '@/lib/db/tables/auth/users.table';
 import { env } from '@/lib/env/server';
-import { signInEmailSchema, signUpEmailSchema } from '@/lib/schema/auth.schema';
+import { authSchema } from '@/lib/schema/auth.schema';
 import { usersSchema } from '@/lib/schema/users.schema';
 // import { sendAccountVerification } from '@/lib/email/template/sendAccountVerification';
 import { procedure, router } from '@/lib/trpc/trpc';
@@ -16,7 +16,7 @@ import { procedure, router } from '@/lib/trpc/trpc';
 import { isAuthed } from '../middleware/is-authed';
 
 export const authRouter = router({
-	signUpByEmail: procedure.input(signUpEmailSchema).mutation(async ({ ctx, input }) => {
+	signUpByEmail: procedure.input(authSchema.signUpEmail).mutation(async ({ ctx, input }) => {
 		return ctx.db.transaction(async (trx) => {
 			const userId = generateRandomString(15, alphabet('a-z', 'A-Z', '0-9'));
 			const hashedPassword = await new Argon2id().hash(input.password);
@@ -66,7 +66,7 @@ export const authRouter = router({
 			};
 		});
 	}),
-	signInByEmail: procedure.input(signInEmailSchema).mutation(async ({ ctx, input }) => {
+	signInByEmail: procedure.input(authSchema.signInEmail).mutation(async ({ ctx, input }) => {
 		// TODO: implement transaction here
 		const existingUser = await ctx.db.query.users.findFirst({
 			where: (user, { eq }) => eq(user.email, input.email),

@@ -1,6 +1,6 @@
 'use client';
 
-import type { SignInEmailSchema } from '@/lib/schema/auth.schema';
+import type { AuthSchema } from '@/lib/schema/auth.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signInEmailSchema } from '@/lib/schema/auth.schema';
+import { authSchema } from '@/lib/schema/auth.schema';
 import { api } from '@/lib/trpc/clients/client';
 
 export const SignInForm = () => {
@@ -27,15 +27,15 @@ export const SignInForm = () => {
 		},
 	});
 
-	const { control, handleSubmit, formState } = useForm<SignInEmailSchema>({
+	const { control, handleSubmit, formState } = useForm<AuthSchema['SignInEmail']>({
 		defaultValues: {
 			email: '',
 			password: '',
 		},
-		resolver: zodResolver(signInEmailSchema),
+		resolver: zodResolver(authSchema.signInEmail),
 	});
 
-	const onSubmit = (data: SignInEmailSchema) => {
+	const onSubmit = (data: AuthSchema['SignInEmail']) => {
 		signInByEmail(data);
 	};
 

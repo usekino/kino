@@ -1,29 +1,37 @@
+import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { selectAuthSchema } from '@/lib/db/tables/authentications.table';
+import { authentications } from '@/lib/db/tables/auth/authentications.table';
 import { usersSchema } from '@/lib/schema/users.schema';
 
-export const signInEmailSchema = z.object({
-	email: usersSchema.read.shape.email,
-	password: selectAuthSchema.shape.hashedPassword.unwrap(),
-});
-export type SignInEmailSchema = z.infer<typeof signInEmailSchema>;
+import { immutableColumns, SchemaObject } from './_shared';
 
-export const signUpEmailSchema = z
-	.object({
+const refineSchema = {
+	hashedPassword: ({ hashedPassword }) => hashedPassword.min(8).max(100),
+} satisfies Refine<typeof authentications, 'select'>;
+
+const crudSchema = {
+	create: createInsertSchema(authentications, refineSchema).pick(immutableColumns),
+	read: createSelectSchema(authentications, refineSchema),
+	update: createInsertSchema(authentications, refineSchema).pick(immutableColumns),
+	delete: createInsertSchema(authentications, refineSchema).pick({ id: true }),
+	seed: createInsertSchema(authentications, refineSchema),
+};
+
+export const authSchema = {
+	...crudSchema,
+	signUpEmail: z.object({
 		email: usersSchema.read.shape.email,
 		confirmEmail: usersSchema.read.shape.email,
 		username: usersSchema.read.shape.username,
-		password: selectAuthSchema.shape.hashedPassword.unwrap(),
-		confirmPassword: selectAuthSchema.shape.hashedPassword.unwrap(),
+		password: crudSchema.read.shape.hashedPassword.unwrap(),
+		confirmPassword: crudSchema.read.shape.hashedPassword.unwrap(),
 		inviteCode: z.string().optional(),
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		path: ['confirmPassword'],
-		message: "Password don't match",
-	})
-	.refine((data) => data.email === data.confirmEmail, {
-		path: ['confirmEmail'],
-		message: "Email don't match",
-	});
-export type SignUpEmailSchema = z.infer<typeof signUpEmailSchema>;
+	}),
+	signInEmail: z.object({
+		email: usersSchema.read.shape.email,
+		password: crudSchema.read.shape.hashedPassword.unwrap(),
+	}),
+};
+
+export type AuthSchema = SchemaObject<typeof authSchema>;

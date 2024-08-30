@@ -2,9 +2,10 @@ import badwords from '@heyooo-inc/reserved-subdomains/badwords.json';
 import names from '@heyooo-inc/reserved-subdomains/names.json';
 import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
-import { z } from 'zod';
 
-import { teams } from '../../db/tables/teams/teams.table';
+import { teams } from '@/lib/db/tables/teams/teams.table';
+
+import { SchemaObject } from '../_shared';
 
 const refineSchema = {
 	name: ({ name }) => name.min(3).max(50),
@@ -42,32 +43,23 @@ const refineSchema = {
 				'Team slug is not allowed' //
 			),
 	description: ({ description }) => description.max(300),
-	// members: () => z.array(z.string()).min(1).max(3),
 } satisfies Refine<typeof teams, 'select'>;
 
-const select = createSelectSchema(teams, refineSchema);
-const mutate = createInsertSchema(teams, refineSchema).omit({
-	id: true,
-	createdAt: true,
-});
-const seed = createInsertSchema(teams, refineSchema);
+export const teamsSchema = {
+	create: createInsertSchema(teams, refineSchema).omit({
+		id: true,
+		createdAt: true,
+	}),
+	read: createSelectSchema(teams, refineSchema),
+	update: createInsertSchema(teams, refineSchema).omit({
+		id: true,
+		createdAt: true,
+	}),
+	delete: createInsertSchema(teams, refineSchema).omit({
+		id: true,
+		createdAt: true,
+	}),
+	seed: createInsertSchema(teams, refineSchema),
+};
 
-export type MutateTeamSchema = z.infer<typeof mutate>;
-export type SeedTeamSchema = z.infer<typeof seed>;
-
-export const createTeamSchema = z.object({
-	name: mutate.shape.name,
-	slug: mutate.shape.slug,
-	description: mutate.shape.description,
-	// members: mutateTeamSchema.shape.members,
-});
-export type CreateTeamSchema = z.infer<typeof createTeamSchema>;
-
-export const selectTeamSchema = select.pick({
-	id: true,
-	name: true,
-	slug: true,
-	description: true,
-	ownerId: true,
-});
-export type SelectTeamSchema = z.infer<typeof selectTeamSchema>;
+export type TeamsSchema = SchemaObject<typeof teamsSchema>;

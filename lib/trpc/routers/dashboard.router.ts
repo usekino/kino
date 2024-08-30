@@ -2,8 +2,8 @@ import { TRPCError } from '@trpc/server';
 import { arrayContains } from 'drizzle-orm';
 
 import { getUserProjectsByUserId } from '@/lib/db/prepared';
-import { teamProjectSelectSchema } from '@/lib/schema/dashboard.schema';
-import { selectTeamSchema } from '@/lib/schema/teams/teams.schema';
+import { dashBoardSchema } from '@/lib/schema/dashboard.schema';
+import { teamsSchema } from '@/lib/schema/teams/teams.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy } from '@/lib/utils';
 
@@ -16,10 +16,10 @@ export const dashboardRouter = router({
 	}),
 	updateSelectedProject: procedure
 		.use(isAuthed)
-		.input(teamProjectSelectSchema)
+		.input(dashBoardSchema.teamProjectSelect)
 		.mutation(async ({ ctx, input }) => {
 			// check if user is a part of the team
-			const userTeam = await ctx.db.query.teamUsers.findFirst({
+			const userTeam = await ctx.db.query.teamMembers.findFirst({
 				columns: {
 					id: true,
 				},
@@ -69,7 +69,7 @@ export const dashboardRouter = router({
 	}),
 	userTeams: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
-		return await ctx.db.query.teamUsers.findMany({
+		return await ctx.db.query.teamMembers.findMany({
 			columns: {},
 			where: (table, { eq, and, or, not }) => {
 				return and(
@@ -83,7 +83,7 @@ export const dashboardRouter = router({
 			},
 			with: {
 				team: {
-					columns: createTruthy(selectTeamSchema.shape),
+					columns: createTruthy(teamsSchema.read.shape),
 				},
 			},
 		});

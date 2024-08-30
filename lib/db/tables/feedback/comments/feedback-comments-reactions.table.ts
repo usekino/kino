@@ -3,7 +3,7 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '@/lib/db/tables/_shared';
 
-import { feedbackUsers } from '../feedback-users.table';
+import { users } from '../../auth/users.table';
 import { feedbackComments } from './feedback-comments.table';
 
 export const feedbackCommentsReactions = pgTable('feedback_comments_reactions', {
@@ -22,9 +22,9 @@ export const feedbackCommentsReactions = pgTable('feedback_comments_reactions', 
 export const feedbackCommentsReactionsRelations = relations(
 	feedbackCommentsReactions,
 	({ one }) => ({
-		user: one(feedbackUsers, {
+		user: one(users, {
 			fields: [feedbackCommentsReactions.reactorUserId],
-			references: [feedbackUsers.userId],
+			references: [users.id],
 			relationName: 'feedbackUsers_feedbackCommentsReactions',
 		}),
 		feedbackComment: one(feedbackComments, {

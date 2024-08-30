@@ -1,59 +1,71 @@
-import type { SeedFeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
+import type { BoardsSchema } from '@/lib/schema/boards/boards.schema';
+import type { FeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
-
-import { maxProjectsCount } from '../projects.seed';
-import { maxTeamsCount } from '../teams/teams.seed';
-import { maxUsersCount } from '../users.seed';
+import { TeamsSchema } from '@/lib/schema/teams/teams.schema';
+import { UsersSchema } from '@/lib/schema/users.schema';
 
 export const maxFeedbackCount = 500;
 
-export const seedFeedback = async () => {
-	const generateFeedback = (count: number) => {
-		const feedback: SeedFeedbackSchema[] = [];
+const generate = (
+	{
+		boards,
+		users,
+		teams,
+	}: {
+		boards: BoardsSchema['Seed'][];
+		users: UsersSchema['Seed'][];
+		teams: TeamsSchema['Seed'][];
+	},
+	count: number
+) => {
+	const feedback: FeedbackSchema['Seed'][] = [];
 
-		for (let i = 0; i < count; i++) {
-			feedback.push({
-				id: (1 + i).toString(),
-				teamId: faker.number
-					.int({
-						min: 1,
-						max: maxTeamsCount,
-					})
-					.toString(),
-				creatorUserId: faker.number
-					.int({
-						min: 1,
-						max: maxUsersCount,
-					})
-					.toString(),
-				assignedUserId: faker.datatype.boolean()
-					? faker.number
-							.int({
-								min: 1,
-								max: maxUsersCount,
-							})
-							.toString()
-					: null,
-				boardId: faker.number
-					.int({
-						min: 1,
-						max: maxProjectsCount,
-					})
-					.toString(),
-				title: faker.lorem.sentence(),
-				description: faker.lorem.sentence(),
-				status: [faker.helpers.arrayElement(['open', 'planned', 'closed'])],
-			});
-		}
-		return feedback;
-	};
+	for (let i = 0; i < count; i++) {
+		feedback.push({
+			id: (1 + i).toString(),
+			teamId: faker.number
+				.int({
+					min: 1,
+					max: teams.length,
+				})
+				.toString(),
+			creatorUserId: faker.number
+				.int({
+					min: 1,
+					max: users.length,
+				})
+				.toString(),
+			assignedUserId: faker.datatype.boolean()
+				? faker.number
+						.int({
+							min: 1,
+							max: users.length,
+						})
+						.toString()
+				: null,
+			boardId: faker.number
+				.int({
+					min: 1,
+					max: boards.length,
+				})
+				.toString(),
+			title: faker.lorem.sentence(),
+			description: faker.lorem.sentence(),
+			status: [faker.helpers.arrayElement(['open', 'planned', 'closed'])],
+		});
+	}
 
+	return feedback;
+};
+export const seedFeedback = async (...args: Parameters<typeof generate>) => {
+	const values = generate(...args);
 	try {
-		await httpDb.insert(feedback).values(generateFeedback(maxFeedbackCount));
+		await httpDb.insert(feedback).values(values);
+		return values;
 	} catch (error) {
 		console.error(error);
 		throw new Error('Seed error with FEEDBACK...');

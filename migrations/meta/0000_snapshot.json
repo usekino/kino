@@ -1,5 +1,5 @@
 {
-  "id": "7c7a0d95-5ff4-42be-b3f3-48f01de9c90b",
+  "id": "6c14a1d1-99af-452d-be7f-d54ca88fb4f6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -474,8 +474,8 @@
         }
       }
     },
-    "public.team_users": {
-      "name": "team_users",
+    "public.team_members": {
+      "name": "team_members",
       "schema": "",
       "columns": {
         "auto_id": {
@@ -542,8 +542,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "team_users_id_unique": {
-          "name": "team_users_id_unique",
+        "team_members_id_unique": {
+          "name": "team_members_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "id"
@@ -646,8 +646,8 @@
         }
       }
     },
-    "public.project_users": {
-      "name": "project_users",
+    "public.project_members": {
+      "name": "project_members",
       "schema": "",
       "columns": {
         "auto_id": {
@@ -713,8 +713,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "project_users_id_unique": {
-          "name": "project_users_id_unique",
+        "project_members_id_unique": {
+          "name": "project_members_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "id"
@@ -797,76 +797,6 @@
       "uniqueConstraints": {
         "boards_id_unique": {
           "name": "boards_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        }
-      }
-    },
-    "public.feedback_boards": {
-      "name": "feedback_boards",
-      "schema": "",
-      "columns": {
-        "auto_id": {
-          "name": "auto_id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "LPAD(LEFT(REPLACE(REPLACE(REPLACE(encode(convert_to(md5(random()::text), 'utf-8'), 'base64'), '/', ''), '+', ''), '=', ''), 15), 15, '0')"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updates": {
-          "name": "updates",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "board_id": {
-          "name": "board_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "feedback_id": {
-          "name": "feedback_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "feedback_boards_id_unique": {
-          "name": "feedback_boards_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "id"
@@ -975,8 +905,8 @@
         }
       }
     },
-    "public.feedback_users": {
-      "name": "feedback_users",
+    "public.feedback_assignments": {
+      "name": "feedback_assignments",
       "schema": "",
       "columns": {
         "auto_id": {
@@ -1019,32 +949,25 @@
           "notNull": true,
           "default": 0
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "feedback_id": {
           "name": "feedback_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "user_roles": {
-          "name": "user_roles",
-          "type": "jsonb",
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'[\"member\"]'::jsonb"
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "feedback_users_id_unique": {
-          "name": "feedback_users_id_unique",
+        "feedback_assignments_id_unique": {
+          "name": "feedback_assignments_id_unique",
           "nullsNotDistinct": false,
           "columns": [
             "id"

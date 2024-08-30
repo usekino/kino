@@ -1,21 +1,24 @@
+import type { SchemaObject } from './_shared';
+
 import { z } from 'zod';
 
-import { selectProjectSchema } from '../db/tables';
-import { selectTeamSchema } from './teams/teams.schema';
+import { projectsSchema } from '../schema/projects/projects.schema';
+import { teamsSchema } from './teams/teams.schema';
 import { usersSchema } from './users.schema';
 
-export const teamSelectSchema = z.object({
-	userId: usersSchema.read.shape.id,
-	team: z.object({
-		slug: selectTeamSchema.shape.slug,
-		id: selectTeamSchema.shape.id,
+export const dashBoardSchema = {
+	teamProjectSelect: z.object({
+		userId: usersSchema.read.shape.id,
+		id: projectsSchema.read.shape.id,
+		slug: projectsSchema.read.shape.slug,
 	}),
-});
-export type TeamSelect = z.infer<typeof teamSelectSchema>;
+	teamSelect: z.object({
+		userId: usersSchema.read.shape.id,
+		team: z.object({
+			slug: teamsSchema.read.shape.slug,
+			id: teamsSchema.read.shape.id,
+		}),
+	}),
+};
 
-export const teamProjectSelectSchema = z.object({
-	userId: usersSchema.read.shape.id,
-	id: selectProjectSchema.shape.id,
-	slug: selectProjectSchema.shape.slug,
-});
-export type TeamProjectSelect = z.infer<typeof teamProjectSelectSchema>;
+export type DashboardSchema = SchemaObject<typeof dashBoardSchema>;

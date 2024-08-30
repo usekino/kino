@@ -3,9 +3,7 @@ import type { UsersSchema } from '@/lib/schema/users.schema';
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
-import { users } from '@/lib/db/tables/users.table';
-
-export const maxUsersCount = 10;
+import { users } from '@/lib/db/tables/auth/users.table';
 
 const generate = (count: number) => {
 	const users: UsersSchema['Seed'][] = [
@@ -23,7 +21,7 @@ const generate = (count: number) => {
 		},
 	];
 
-	for (let i = 0; i < count; i++) {
+	for (let i = 0; i < count - 2; i++) {
 		users.push({
 			// `3` accounts for the two existing users to increment the id at the
 			// correct position
@@ -36,9 +34,11 @@ const generate = (count: number) => {
 	return users;
 };
 
-export const seedUsers = async () => {
+export const seedUsers = async (count: number) => {
+	const values = generate(count);
 	try {
-		await httpDb.insert(users).values(generate(maxUsersCount));
+		await httpDb.insert(users).values(values);
+		return values;
 	} catch (error) {
 		console.error(error);
 		throw new Error('Seed error with USERS...');

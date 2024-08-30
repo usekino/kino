@@ -1,6 +1,6 @@
 'use client';
 
-import type { SignUpEmailSchema } from '@/lib/schema/auth.schema';
+import type { AuthSchema } from '@/lib/schema/auth.schema';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { signUpEmailSchema } from '@/lib/schema/auth.schema';
+import { authSchema } from '@/lib/schema/auth.schema';
 import { api } from '@/lib/trpc/clients/client';
 
 export const SignUpForm = () => {
@@ -26,7 +26,7 @@ export const SignUpForm = () => {
 		},
 	});
 
-	const { control, handleSubmit, formState } = useForm<SignUpEmailSchema>({
+	const { control, handleSubmit, formState } = useForm<AuthSchema['SignUpEmail']>({
 		defaultValues: {
 			email: '',
 			confirmEmail: '',
@@ -35,10 +35,10 @@ export const SignUpForm = () => {
 			confirmPassword: '',
 			inviteCode: '',
 		},
-		resolver: zodResolver(signUpEmailSchema),
+		resolver: zodResolver(authSchema.signUpEmail),
 	});
 
-	const onSubmit = (data: SignUpEmailSchema) => {
+	const onSubmit = (data: AuthSchema['SignUpEmail']) => {
 		signUpByEmail(data);
 	};
 	return (

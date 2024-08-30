@@ -1,14 +1,15 @@
 import { relations, sql } from 'drizzle-orm';
 import { index, integer, json, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { defaults } from './_shared';
+import { defaults } from '../_shared';
+import { feedbackAssignments } from '../feedback/feedback-assignments.table';
+import { feedback } from '../feedback/feedback.table';
+import { projectMembers } from '../projects/project-members.table';
+import { teamMembers } from '../teams/team-members.table';
 import { authentications } from './authentications.table';
-import { feedbackUsers } from './feedback/feedback-users.table';
-import { projectUsers } from './projects/project-users.table';
 import { sessions } from './sessions.table';
-import { teamUsers } from './teams/teams-users.table';
 
-// ⚠️ Note: this table differs from the rest of the non-auth tables
+// ⚠️ Note: this table differs from the rest of th1e non-auth tables
 // because it's managed by Lucia, and it has specific requirements, on how
 // the database it structured.
 export const users = pgTable(
@@ -53,13 +54,16 @@ export const userRelations = relations(users, ({ many, one }) => ({
 	sessions: many(sessions, {
 		relationName: 'users_sessions',
 	}),
-	teams: many(teamUsers, {
-		relationName: 'users_teamUsers',
+	teams: many(teamMembers, {
+		relationName: 'users_teamMembers',
 	}),
-	projects: many(projectUsers, {
-		relationName: 'users_projectUsers',
+	projects: many(projectMembers, {
+		relationName: 'users_projectMembers',
 	}),
-	feedback: many(feedbackUsers, {
-		relationName: 'users_feedbackUsers',
+	createdFeedback: many(feedback, {
+		relationName: 'users_feedback_created',
+	}),
+	assignedFeedback: many(feedbackAssignments, {
+		relationName: 'users_feedbackAssignments',
 	}),
 }));

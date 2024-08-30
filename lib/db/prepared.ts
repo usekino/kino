@@ -3,17 +3,17 @@ import { arrayContains, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { db } from '.';
-import { readProjectSchema } from '../schema/project.schema';
-import { selectTeamSchema } from '../schema/teams/teams.schema';
+import { projectsSchema } from '../schema/projects/projects.schema';
+import { teamsSchema } from '../schema/teams/teams.schema';
 import { createTruthy } from '../utils';
 
 const P_GetTeamData = db.query.teams
 	.findFirst({
-		columns: createTruthy(selectTeamSchema.shape),
+		columns: createTruthy(teamsSchema.read.shape),
 		where: (team, { eq }) => eq(team.slug, sql.placeholder('slug')),
 		with: {
 			projects: {
-				columns: createTruthy(readProjectSchema.shape),
+				columns: createTruthy(projectsSchema.read.shape),
 			},
 		},
 	})
@@ -22,17 +22,17 @@ const P_GetTeamData = db.query.teams
 export const getTeamData = cache(async (slug: string) => {
 	const team = await P_GetTeamData.execute({ slug });
 	return team
-		? selectTeamSchema.merge(z.object({ projects: z.array(readProjectSchema) })).parseAsync(team)
+		? teamsSchema.read.merge(z.object({ projects: z.array(projectsSchema.read) })).parseAsync(team)
 		: null;
 });
 
 const P_GetProjectData = db.query.projects
 	.findFirst({
-		columns: createTruthy(readProjectSchema.shape),
+		columns: createTruthy(projectsSchema.read.shape),
 		where: (project, { eq }) => eq(project.slug, sql.placeholder('slug')),
 		with: {
 			team: {
-				columns: createTruthy(selectTeamSchema.shape),
+				columns: createTruthy(teamsSchema.read.shape),
 			},
 		},
 	})
@@ -42,10 +42,10 @@ export const getProjectData = cache(async (slug: string) => {
 	const project = await P_GetProjectData.execute({ slug });
 
 	const validatedProject = project
-		? readProjectSchema
+		? projectsSchema.read
 				.merge(
 					z.object({
-						team: selectTeamSchema,
+						team: teamsSchema.read,
 					})
 				)
 				.parse(project)
@@ -54,7 +54,7 @@ export const getProjectData = cache(async (slug: string) => {
 	return validatedProject;
 });
 
-export const P_GetUserProjectsByUserId = db.query.teamUsers
+export const P_GetUserProjectsByUserId = db.query.teamMembers
 	.findMany({
 		columns: {},
 		where: (table, { eq, and, or, not }) => {
@@ -69,10 +69,10 @@ export const P_GetUserProjectsByUserId = db.query.teamUsers
 		},
 		with: {
 			team: {
-				columns: createTruthy(selectTeamSchema.shape),
+				columns: createTruthy(teamsSchema.read.shape),
 				with: {
 					projects: {
-						columns: createTruthy(readProjectSchema.shape),
+						columns: createTruthy(projectsSchema.read.shape),
 					},
 				},
 			},

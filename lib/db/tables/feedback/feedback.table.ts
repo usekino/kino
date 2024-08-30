@@ -2,10 +2,11 @@ import { relations, sql } from 'drizzle-orm';
 import { json, pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
-import { boardsFeedback } from '../boards/boards-feedback.table';
+import { users } from '../auth/users.table';
+import { boards } from '../boards/boards.table';
 import { feedbackComments } from './comments/feedback-comments.table';
+import { feedbackAssignments } from './feedback-assignments.table';
 import { feedbackUpdates } from './feedback-updates.table';
-import { feedbackUsers } from './feedback-users.table';
 import { feedbackVotes } from './feedback-votes.table';
 
 export const feedback = pgTable('feedback', {
@@ -35,16 +36,18 @@ export const feedback = pgTable('feedback', {
 });
 
 export const feedbackRelations = relations(feedback, ({ one, many }) => ({
-	board: many(boardsFeedback, {
-		relationName: 'boardsFeedback_feedback',
+	board: one(boards, {
+		fields: [feedback.boardId],
+		references: [boards.id],
+		relationName: 'boards_feedback',
 	}),
-	creatorUser: one(feedbackUsers, {
+	creatorUser: one(users, {
 		fields: [feedback.creatorUserId],
-		references: [feedbackUsers.userId],
+		references: [users.id],
+		relationName: 'users_feedback_created',
 	}),
-	assignedUser: one(feedbackUsers, {
-		fields: [feedback.assignedUserId],
-		references: [feedbackUsers.userId],
+	assignedUser: many(feedbackAssignments, {
+		relationName: 'feedback_feedbackAssignments',
 	}),
 	votes: many(feedbackVotes, {
 		relationName: 'feedback_feedbackVotes',
@@ -54,8 +57,5 @@ export const feedbackRelations = relations(feedback, ({ one, many }) => ({
 	}),
 	updates: many(feedbackUpdates, {
 		relationName: 'feedback_feedbackUpdates',
-	}),
-	users: many(feedbackUsers, {
-		relationName: 'feedback_feedbackUsers',
 	}),
 }));

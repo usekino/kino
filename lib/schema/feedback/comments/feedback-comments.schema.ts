@@ -1,3 +1,4 @@
+import type { SchemaObject } from '@/lib/schema/_shared';
 import type { Refine } from 'drizzle-zod';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -9,10 +10,14 @@ const refineSchema = {
 	status: () => z.array(z.enum(['open', 'planned', 'closed'])),
 } satisfies Refine<typeof feedbackComments, 'select'>;
 
-export const selectFeedbackCommentsSchema = createSelectSchema(feedbackComments, refineSchema);
-export const mutateFeedbackCommentsSchema = createInsertSchema(feedbackComments, refineSchema);
-export const seedFeedbackCommentsSchema = createInsertSchema(feedbackComments, refineSchema);
+export const feedbackCommentsSchema = {
+	create: createInsertSchema(feedbackComments, refineSchema),
+	read: createSelectSchema(feedbackComments, refineSchema),
+	update: createInsertSchema(feedbackComments, refineSchema),
+	delete: createInsertSchema(feedbackComments, refineSchema).pick({
+		id: true,
+	}),
+	seed: createInsertSchema(feedbackComments, refineSchema),
+};
 
-export type SelectFeedbackCommentsSchema = z.infer<typeof selectFeedbackCommentsSchema>;
-export type MutateFeedbackCommentsSchema = z.infer<typeof mutateFeedbackCommentsSchema>;
-export type SeedFeedbackCommentsSchema = z.infer<typeof seedFeedbackCommentsSchema>;
+export type FeedbackCommentsSchema = SchemaObject<typeof feedbackCommentsSchema>;

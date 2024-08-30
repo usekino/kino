@@ -4,7 +4,7 @@ import { json, pgTable, varchar } from 'drizzle-orm/pg-core';
 import { defaultColumns } from '@/lib/db/tables/_shared';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 
-import { feedbackUsers } from '../feedback-users.table';
+import { users } from '../../auth/users.table';
 import { feedbackCommentsAttachments } from './feedback-comments-attachments.table';
 import { feedbackCommentsHistory } from './feedback-comments-history.table';
 import { feedbackCommentsReactions } from './feedback-comments-reactions.table';
@@ -29,9 +29,9 @@ export const feedbackCommentsRelations = relations(feedbackComments, ({ one, man
 		references: [feedback.id],
 		relationName: 'feedback_feedbackComments',
 	}),
-	user: one(feedbackUsers, {
+	user: one(users, {
 		fields: [feedbackComments.userId],
-		references: [feedbackUsers.id],
+		references: [users.id],
 		relationName: 'feedbackComments_feedbackUsers',
 	}),
 	commentHistory: many(feedbackCommentsHistory, {

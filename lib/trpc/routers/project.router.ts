@@ -1,8 +1,7 @@
 import { TRPCError } from '@trpc/server';
 
 import { getProjectData } from '@/lib/db/prepared';
-import { selectProjectSchema } from '@/lib/db/tables/projects/projects.table';
-import { createProjectSchema } from '@/lib/schema/project.schema';
+import { projectsSchema } from '@/lib/schema/projects/projects.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 
 import { isAuthed } from '../middleware/is-authed';
@@ -10,13 +9,13 @@ import { isAuthed } from '../middleware/is-authed';
 export const projectRouter = router({
 	create: procedure
 		.use(isAuthed)
-		.input(createProjectSchema)
+		.input(projectsSchema.create)
 		.mutation(async ({ ctx, input }) => {
 			const { user } = ctx.auth;
 
 			return ctx.db.transaction(async (trx) => {
 				// Check if the user is a member of the team
-				const userTeam = await trx.query.teamUsers.findFirst({
+				const userTeam = await trx.query.teamMembers.findFirst({
 					columns: {
 						id: true,
 						teamId: true,
@@ -69,7 +68,7 @@ export const projectRouter = router({
 				return { projectSlug: input.slug, teamSlug: userTeam.team.slug };
 			});
 		}),
-	findBySlug: procedure.input(selectProjectSchema.pick({ slug: true })).query(async ({ input }) => {
+	findBySlug: procedure.input(projectsSchema.read.pick({ slug: true })).query(async ({ input }) => {
 		return await getProjectData(input.slug);
 	}),
 	findByOwnership: procedure.use(isAuthed).query(async () => {

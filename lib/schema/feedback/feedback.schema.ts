@@ -1,9 +1,12 @@
 import type { Refine } from 'drizzle-zod';
+import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
+
+import { immutableColumns } from '../_shared';
 
 const refineSchema = {
 	title: ({ title }) => title.min(3).max(120),
@@ -12,30 +15,12 @@ const refineSchema = {
 	// boardId: () => z.string().min(3),
 } satisfies Refine<typeof feedback, 'select'>;
 
-const select = createSelectSchema(feedback, refineSchema);
-const mutate = createInsertSchema(feedback, refineSchema);
-const seed = createInsertSchema(feedback, refineSchema);
+export const feedbackSchema = {
+	create: createInsertSchema(feedback, refineSchema).omit(immutableColumns),
+	read: createSelectSchema(feedback, refineSchema),
+	update: createInsertSchema(feedback, refineSchema).omit(immutableColumns),
+	delete: createInsertSchema(feedback, refineSchema).pick({ id: true }),
+	seed: createInsertSchema(feedback, refineSchema),
+};
 
-export const createFeedbackSchema = mutate.pick({
-	title: true,
-	description: true,
-	boardId: true,
-	// teamId: true,
-	// projectId: true,
-});
-
-export const selectFeedbackSchema = select.pick({
-	id: true,
-	title: true,
-	description: true,
-	status: true,
-	// teamId: true,
-	// projectId: true,
-	boardId: true,
-	assignedUserId: true,
-	creatorUserId: true,
-});
-
-export type SelectFeedbackSchema = z.infer<typeof selectFeedbackSchema>;
-export type MutateFeedbackSchema = z.infer<typeof mutate>;
-export type SeedFeedbackSchema = z.infer<typeof seed>;
+export type FeedbackSchema = SchemaObject<typeof feedbackSchema>;

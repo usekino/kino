@@ -2,10 +2,10 @@ import { relations } from 'drizzle-orm';
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
-import { users } from '../users.table';
+import { users } from '../auth/users.table';
 import { projects } from './projects.table';
 
-export const projectUsers = pgTable('project_users', {
+export const projectMembers = pgTable('project_members', {
 	// Defaults
 	...defaultColumns(),
 	projectId: varchar('project_id', {
@@ -19,15 +19,15 @@ export const projectUsers = pgTable('project_users', {
 	}).notNull(),
 });
 
-export const projectUsersRelations = relations(projectUsers, ({ one }) => ({
+export const projectMembersRelations = relations(projectMembers, ({ one }) => ({
 	user: one(users, {
-		fields: [projectUsers.userId],
+		fields: [projectMembers.userId],
 		references: [users.id],
-		relationName: 'users_projectUsers',
+		relationName: 'users_projectMembers',
 	}),
 	project: one(projects, {
-		fields: [projectUsers.projectId],
+		fields: [projectMembers.projectId],
 		references: [projects.id],
-		relationName: 'projectUsers_project',
+		relationName: 'projectMembers_project',
 	}),
 }));
