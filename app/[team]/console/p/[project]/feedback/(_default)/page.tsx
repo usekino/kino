@@ -1,7 +1,7 @@
 import { deconstructTeamSlug } from '@/app/[team]/_lib/get-team';
 import { api } from '@/lib/trpc/clients/server-invoker';
 
-import { FeedbackTable } from '../_components/feedback-table';
+// import { FeedbackTable } from '../_components/feedback-table';
 import { PageProps } from '../../_types';
 
 export default async function FeedbackPage({ params }: PageProps) {
@@ -14,9 +14,12 @@ export default async function FeedbackPage({ params }: PageProps) {
 
 	return (
 		<div className='h-full p-2 sm:p-4 md:p-6'>
-			<div className='h-full overflow-scroll rounded-lg border bg-muted'>
+			<code>
+				<pre>{JSON.stringify(feedback, null, 2)}</pre>
+			</code>
+			{/* <div className='h-full overflow-scroll rounded-lg border bg-muted'>
 				{feedback ? <FeedbackTable feedback={feedback} /> : <div>No feedback found</div>}
-			</div>
+			</div> */}
 		</div>
 	);
 }
