@@ -80,7 +80,7 @@ export const teamRouter = router({
 				await trx.insert(teamMembers).values({
 					userId: user.id,
 					teamId: newTeam[0].id,
-					userRole: ['member'],
+					userRole: 'member',
 				});
 
 				// Return data

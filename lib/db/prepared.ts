@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { arrayContains, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { db } from '.';
@@ -61,10 +61,10 @@ export const P_GetUserProjectsByUserId = db.query.teamMembers
 			return and(
 				eq(table.userId, sql.placeholder('userId')),
 				or(
-					arrayContains(table.userRole, ['admin']),
-					arrayContains(table.userRole, ['member']) //
+					eq(table.userRole, 'admin'),
+					eq(table.userRole, 'member') //
 				),
-				not(arrayContains(table.userRole, ['blocked']))
+				not(eq(table.userRole, 'blocked'))
 			);
 		},
 		with: {

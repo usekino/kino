@@ -1,10 +1,13 @@
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
+import type { Refine } from 'drizzle-zod';
+import type { SchemaObject } from './_shared';
+
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { authentications } from '@/lib/db/tables/auth/authentications.table';
 import { usersSchema } from '@/lib/schema/users.schema';
 
-import { immutableColumns, SchemaObject } from './_shared';
+import { immutableColumns } from './_shared';
 
 const refineSchema = {
 	hashedPassword: ({ hashedPassword }) => hashedPassword.min(8).max(100),

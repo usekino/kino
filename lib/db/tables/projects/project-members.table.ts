@@ -10,13 +10,23 @@ export const projectMembers = pgTable('project_members', {
 	...defaultColumns(),
 	projectId: varchar('project_id', {
 		length: 255,
-	}).notNull(),
+	})
+		.notNull()
+		.references(() => projects.id, {
+			onDelete: 'cascade',
+		}),
 	userId: varchar('user_id', {
 		length: 255,
-	}).notNull(),
+	})
+		.notNull()
+		.references(() => users.id, {
+			onDelete: 'cascade',
+		}),
 	userRole: varchar('user_role', {
 		length: 255,
-	}).notNull(),
+	})
+		.default('member')
+		.notNull(),
 });
 
 export const projectMembersRelations = relations(projectMembers, ({ one }) => ({

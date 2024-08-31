@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { arrayContains } from 'drizzle-orm';
 
 import { getUserProjectsByUserId } from '@/lib/db/prepared';
 import { dashBoardSchema } from '@/lib/schema/dashboard.schema';
@@ -27,10 +26,10 @@ export const dashboardRouter = router({
 					return and(
 						eq(table.userId, ctx.auth.user.id),
 						or(
-							arrayContains(table.userRole, ['admin']),
-							arrayContains(table.userRole, ['member']) //
+							eq(table.userRole, 'admin'),
+							eq(table.userRole, 'member') //
 						),
-						not(arrayContains(table.userRole, ['blocked']))
+						not(eq(table.userRole, 'blocked'))
 					);
 				},
 			});
@@ -38,7 +37,7 @@ export const dashboardRouter = router({
 			if (!userTeam) {
 				throw new TRPCError({
 					code: 'FORBIDDEN',
-					message: `User is not authorized member of project's team.`,
+					message: 'User is not authorized member of project&apos;s team.',
 				});
 			}
 
@@ -75,10 +74,10 @@ export const dashboardRouter = router({
 				return and(
 					eq(table.userId, user.id),
 					or(
-						arrayContains(table.userRole, ['admin']),
-						arrayContains(table.userRole, ['member']) //
+						eq(table.userRole, 'admin'),
+						eq(table.userRole, 'member') //
 					),
-					not(arrayContains(table.userRole, ['blocked']))
+					not(eq(table.userRole, 'blocked'))
 				);
 			},
 			with: {
