@@ -22,95 +22,13 @@ export const feedbackRouter = router({
 			})
 		)
 		.query(async ({ ctx, input }) => {
-			// const projects = await ctx.db.query.projects.findFirst({
-			// 	where(projects, { eq, and, inArray }) {
-			// 		return and(
-			// 			// 1. Check that project exits
-			// 			eq(projects.slug, input.project),
-			// 			// 2. Check that user is a member of the project's team
-			// 			inArray(
-			// 				projects.teamId,
-			// 				ctx.db
-			// 					.select({
-			// 						teamId: projectMembers.projectId,
-			// 					})
-			// 					.from(projectMembers)
-			// 					.where(
-			// 						and(
-			// 							eq(projectMembers.userId, ctx.auth.user.id),
-			// 							eq(projectMembers.projectId, projects.id) // TODO: check that this is correctly querying the correct teamMembers row(s)
-			// 						)
-			// 					)
-			// 			)
-			// 		);
-			// 	},
-			// 	with: {
-			// 		boards: {
-			// 			where(table, { eq }) {
-			// 				if (input.board) {
-			// 					return eq(table.slug, input.board);
-			// 				}
-			// 			},
-			// 			with: {
-			// 				feedback: {
-			// 					columns: createTruthy(feedbackSchema.read.shape),
-			// 					with: {
-			// 						assignedUser: {
-			// 							columns: createTruthy(usersSchema.read.shape),
-			// 						},
-			// 						votes: {
-			// 							columns: {
-			// 								id: true,
-			// 							},
-			// 						},
-			// 					},
-			// 				},
-			// 			},
-			// 		},
-			// 	},
-			// });
-
-			// const data = await db
-			// 	.select()
-			// 	.from(projects)
-			// 	.innerJoin(teams, eq(teams.id, projects.teamId))
-			// 	.where(
-			// 		and(
-			// 			eq(projects.slug, input.project),
-			// 			or(
-			// 				exists(
-			// 					db
-			// 						.select()
-			// 						.from(teamMembers)
-			// 						.where(
-			// 							and(
-			// 								eq(teamMembers.userId, ctx.auth.user.id),
-			// 								eq(teamMembers.teamId, teams.id),
-			// 								eq(teamMembers.userRole, 'admin')
-			// 							)
-			// 						)
-			// 				),
-			// 				exists(
-			// 					db
-			// 						.select()
-			// 						.from(projectMembers)
-			// 						.where(
-			// 							and(
-			// 								eq(projectMembers.userId, ctx.auth.user.id),
-			// 								eq(projectMembers.projectId, projects.id)
-			// 							)
-			// 						)
-			// 				)
-			// 			)
-			// 		)
-			// 	)
-			// 	.limit(1);
-
 			const data = await db.query.projects.findFirst({
 				where: () =>
 					and(
+						// Check that project exists
 						eq(projects.slug, input.project),
 						or(
+							// Either be an admin of the team...
 							exists(
 								db
 									.select()
@@ -124,6 +42,7 @@ export const feedbackRouter = router({
 										)
 									)
 							),
+							// ...or a member of the project
 							exists(
 								db
 									.select()
