@@ -3,10 +3,10 @@ import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/auth/utils';
 import { env } from '@/lib/env/server';
 
-import { deconstructTeamSlug } from '../_lib/get-team';
+import { LayoutProps } from '../_types';
+import { deconstructTeamSlug } from '../../_lib/get-team';
 import { ConsoleNav } from './_components/console-nav';
 import { SidebarWithContent } from './_components/sidebar-with-content';
-import { LayoutProps } from './_types';
 
 export default async function ConsoleLayout({ children, params }: LayoutProps) {
 	const user = await getUser();

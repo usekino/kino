@@ -8,17 +8,17 @@ import { UserButton } from './user-button';
 
 export const ConsoleNav = async () => {
 	const user = await getUser();
-	const teams = await api.team.findByMembership();
-	const { projects, selected, containsProject } = await api.dashboard.userProjects();
+	const teams = await api.team.getUserTeams();
+	const projects = await api.project.getUserProjects({ groupByTeam: true });
 
-	if (!containsProject || !teams || !user) {
-		return <div>There was an error.</div>;
+	if (!projects || !user || !teams) {
+		return <div title='There was an error loading the switcher'>❌</div>;
 	}
 
 	return (
 		<div className='flex h-full flex-col items-start gap-3 border-r'>
 			<div className='w-full p-3'>
-				<Switcher projectsByTeam={projects} selected={selected} user={user} />
+				<Switcher projects={projects} />
 			</div>
 			<div className='w-full px-3 py-1'>
 				<ConsoleLinks />
