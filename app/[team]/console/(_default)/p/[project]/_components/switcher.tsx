@@ -72,22 +72,28 @@ export default function Switcher({ projects, className }: ProjectSwitcherProps) 
 						aria-expanded={open}
 						aria-label='Select a team'
 						size='sm'
-						className={cn('w-full justify-between', className)}
+						className={cn(
+							'group relative w-full justify-between overflow-hidden text-xs',
+							className
+						)}
 					>
+						{/* TODO: Replace team name with avatar */}
 						{activeProject ? (
 							sidebarOpen ? (
-								`@${activeProject.team.name}/${activeProject.name}`
+								`${activeProject.team.name} / ${activeProject.name}`
 							) : (
 								activeProject.name.slice(0, 1).toUpperCase()
 							)
 						) : (
 							<UsersRound size={12} className='text-muted-foreground' />
 						)}
-						<ChevronsUpDown
-							className={cn('ml-auto h-4 w-4 shrink-0 opacity-50', {
-								hidden: !sidebarOpen,
-							})}
-						/>
+						<div className='absolute bottom-0 right-0 top-0 z-10 flex items-center bg-gradient-to-l from-native to-transparent pl-6 text-sm text-muted-foreground transition-colors group-hocus:from-accent group-hocus:to-transparent'>
+							<ChevronsUpDown
+								className={cn('ml-auto h-4 w-8 shrink-0 text-foreground', {
+									hidden: !sidebarOpen,
+								})}
+							/>
+						</div>
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent align='start' className='w-[200px] p-0' asChild>
