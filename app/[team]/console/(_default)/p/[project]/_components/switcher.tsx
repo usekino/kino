@@ -50,14 +50,15 @@ export default function Switcher({ projects, className }: ProjectSwitcherProps) 
 	}) => {
 		setOpen(false);
 
-		if (params.team !== team.slug) {
-			router.push(`https://${team.slug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}/console/p/${project.slug}`);
-		} else {
-			const existingPath =
-				pathname.split(`/console/p/${params.project}`)[1].replace(/^\/|\/$/g, '') ?? '';
-			const url = `/console/p/${project.slug}/${existingPath}`;
+		const existingPath =
+			pathname.split(`/console/p/${params.project}`)[1].replace(/^\/|\/$/g, '') ?? '';
 
-			router.push(url);
+		if (params.team !== team.slug) {
+			router.push(
+				`https://${team.slug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}/console/p/${project.slug}/${existingPath}`
+			);
+		} else {
+			router.push(`/console/p/${project.slug}/${existingPath}`);
 		}
 	};
 
