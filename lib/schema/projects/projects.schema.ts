@@ -6,6 +6,7 @@ import names from '@heyooo-inc/reserved-subdomains/names.json';
 import web from '@heyooo-inc/reserved-subdomains/web.json';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
+import { immutableColumns, inaccessibleColumns } from '../_shared';
 import { projects } from '../../db/tables/projects/projects.table';
 
 const refineSchema = {
@@ -51,9 +52,9 @@ const refineSchema = {
 } satisfies Refine<typeof projects, 'select'>;
 
 export const projectsSchema = {
-	create: createInsertSchema(projects, refineSchema),
-	read: createSelectSchema(projects, refineSchema),
-	update: createInsertSchema(projects, refineSchema).pick({
+	create: createInsertSchema(projects, refineSchema).omit(immutableColumns),
+	read: createSelectSchema(projects, refineSchema).omit(inaccessibleColumns),
+	update: createInsertSchema(projects, refineSchema).omit(immutableColumns).pick({
 		id: true,
 		name: true,
 		slug: true,

@@ -51,5 +51,5 @@ export const getSession = async () => {
 
 export const checkAuth = async () => {
 	const session = await getSession();
-	if (session === null) redirect('/api/auth/login');
+	if (session === null) redirect('/sign-in');
 };

@@ -24,7 +24,7 @@ export const projectRelations = relations(projects, ({ one, many }) => ({
 	boards: many(boards, {
 		relationName: 'boards_projects',
 	}),
-	users: many(projectMembers, {
+	members: many(projectMembers, {
 		relationName: 'projectMembers_project',
 	}),
 }));

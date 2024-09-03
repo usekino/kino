@@ -13,7 +13,7 @@ export const teamRouter = router({
 		const team = await getTeamData(input.slug);
 		return team;
 	}),
-	findByMembership: procedure.use(isAuthed).query(async ({ ctx }) => {
+	getUserTeams: procedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
 
 		const teams = await ctx.db.query.teamMembers.findMany({

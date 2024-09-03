@@ -1,6 +1,10 @@
+import type { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
+
 import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 
 import { getProjectData } from '@/lib/db/prepared';
+import { getUserProjects as _getUserProjects } from '@/lib/db/prepared/projects.prepared';
 import { projectsSchema } from '@/lib/schema/projects/projects.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 
@@ -88,4 +92,20 @@ export const projectRouter = router({
 		// 	selected,
 		// };
 	}),
+	getUserProjects: procedure
+		.use(isAuthed)
+		.input(
+			z
+				.object({
+					groupByTeam: z.boolean(),
+				})
+				.optional()
+				.default({ groupByTeam: false })
+		)
+		.query(async ({ ctx, input }) => {
+			// Rename to avoid tRPC conflict
+			return await _getUserProjects({
+				user: ctx.auth.user,
+			});
+		}),
 });
