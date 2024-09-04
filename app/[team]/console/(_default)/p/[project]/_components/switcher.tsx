@@ -73,7 +73,11 @@ export default function Switcher({ projects, className }: ProjectSwitcherProps) 
 						aria-label='Select a team'
 						size='sm'
 						className={cn(
-							'group relative w-full justify-between overflow-hidden text-xs',
+							'group relative w-full overflow-hidden text-xs',
+							{
+								'justify-between': sidebarOpen,
+								'justify-center': !sidebarOpen,
+							},
 							className
 						)}
 					>
