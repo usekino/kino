@@ -41,7 +41,7 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-type Feedback = NonNullable<ArraySingle<API['output']['feedback']['byProject']>>;
+type Feedback = NonNullable<ArraySingle<API['output']['feedback']['getByProject']>>;
 
 export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 	return [
@@ -84,7 +84,8 @@ export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 				);
 			},
 			cell: ({ row }) => {
-				const status = row.getValue('status') as NonNullable<Feedback>['status'];
+				// TODO change this back to NonNullable<Feedback>['status']
+				const status = row.getValue('status') as string;
 
 				const getStatusClass = (status: string) => {
 					switch (status) {

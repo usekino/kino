@@ -6,7 +6,6 @@ import { procedure, router } from '@/lib/trpc/trpc';
 import { createTruthy, generateId } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
-import { getTeamProjectSelect } from './lib/selectedTeamProject';
 
 export const teamRouter = router({
 	findBySlug: procedure.input(teamsSchema.read.pick({ slug: true })).query(async ({ input }) => {
@@ -26,34 +25,21 @@ export const teamRouter = router({
 			},
 		});
 
-		const selected = await getTeamProjectSelect(user.id);
-
-		if (!teams || teams.length <= 0) {
-			return {
-				teams: null,
-				selected,
-			};
-		}
-
 		return {
 			teams: teams.map(({ team }) => teamsSchema.read.parse(team)),
-			selected,
 		};
 	}),
-	findByOwnership: procedure.use(isAuthed).query(async ({ ctx }) => {
-		const { user } = ctx.auth;
-		const teams = await ctx.db.query.teams.findMany({
-			where: (table, { eq }) => eq(table.ownerId, user.id),
-			columns: createTruthy(teamsSchema.read.shape),
-		});
+	// findByOwnership: procedure.use(isAuthed).query(async ({ ctx }) => {
+	// 	const { user } = ctx.auth;
+	// 	const teams = await ctx.db.query.teams.findMany({
+	// 		where: (table, { eq }) => eq(table.ownerId, user.id),
+	// 		columns: createTruthy(teamsSchema.read.shape),
+	// 	});
 
-		const selected = await getTeamProjectSelect(user.id);
-
-		return {
-			teams: teams.map((team) => teamsSchema.read.parse(team)),
-			selected,
-		};
-	}),
+	// 	return {
+	// 		teams: teams.map((team) => teamsSchema.read.parse(team)),
+	// 	};
+	// }),
 	create: procedure
 		.use(isAuthed)
 		.input(teamsSchema.create)

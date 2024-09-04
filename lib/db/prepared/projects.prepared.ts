@@ -3,9 +3,8 @@ import type { User } from 'lucia';
 import { and, eq, not, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { ProjectsSchema, projectsSchema } from '@/lib/schema/projects/projects.schema';
-import { TeamsSchema, teamsSchema } from '@/lib/schema/teams/teams.schema';
-// import { teamsSchema } from '@/lib/schema/teams/teams.schema';
+import { projectsSchema } from '@/lib/schema/projects/projects.schema';
+import { teamsSchema } from '@/lib/schema/teams/teams.schema';
 import { createTruthy } from '@/lib/utils';
 import { MappedByProject } from '@/lib/utils/project.utils';
 
@@ -85,21 +84,12 @@ export const getUserProjects = async ({ user }: { user: User }) => {
 
 	if (!data) return null;
 
-	// Merge the projects from both teams and (directly) from projects
-	// type MappedProject = [string, NonNullable<ProjectsSchema['Read']>];
-
-	data.projectMember.map(({ project }) => project.team);
-
 	const flatProjects = new Map([
 		...data.projectMember.map(({ project }): [string, MappedByProject] => [project.id, project]),
 		...data.teamMember.flatMap(({ team }) =>
 			team.projects.map((project): [string, MappedByProject] => [project.id, project])
 		),
 	]);
-
-	// if (groupByTeam) {
-	// 	return groupProjectsByTeam(Array.from(flatProjects.values()));
-	// }
 
 	return projectsSchema.read
 		.merge(
@@ -113,6 +103,4 @@ export const getUserProjects = async ({ user }: { user: User }) => {
 		)
 		.array()
 		.parse(Array.from(flatProjects.values()));
-
-	// return Array.from(flatProjects.values());
 };

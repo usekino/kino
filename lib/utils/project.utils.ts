@@ -20,7 +20,7 @@ export type MappedByTeam = {
 
 export const groupProjectsByTeam = (
 	projects: API['output']['project']['getUserProjects']
-): MappedByTeam[] => {
+): MappedByTeam[] | null => {
 	const teamMap = new Map<string, MappedByTeam>();
 
 	if (!projects) return null;

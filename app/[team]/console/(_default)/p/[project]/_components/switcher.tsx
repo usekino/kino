@@ -104,7 +104,7 @@ export default function Switcher({ projects, className }: ProjectSwitcherProps) 
 					<Command>
 						<CommandList>
 							<CommandEmpty>No team found.</CommandEmpty>
-							{projectsByTeam.map((team) => (
+							{projectsByTeam?.map((team) => (
 								<div key={team.id}>
 									<CommandGroup heading={team.name}>
 										{team.projects.map((project) => (

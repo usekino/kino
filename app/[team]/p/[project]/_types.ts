@@ -1,8 +1,7 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import type { PageProps as ParentPageProps } from '../../_types';
 
-import { PageProps } from '@/app/[team]/_types';
-
-export type PageProps = PageProps & {
+export type PageProps = ParentPageProps & {
 	params: {
 		project: string;
 	};

@@ -13,7 +13,7 @@ import { createTruthy } from '@/lib/utils';
 import { isAuthed } from '../middleware/is-authed';
 
 export const feedbackRouter = router({
-	byProject: procedure
+	getByProject: procedure
 		.use(isAuthed)
 		.input(
 			z.object({
@@ -83,6 +83,6 @@ export const feedbackRouter = router({
 				},
 			});
 
-			return data ?? 'No project found';
+			return data ?? null;
 		}),
 });

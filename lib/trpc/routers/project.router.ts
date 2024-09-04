@@ -1,5 +1,3 @@
-import type { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
-
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -48,7 +46,6 @@ export const projectRouter = router({
 				}
 
 				// ⚠️ ADD THIS BACK IN!!
-
 				// Create the project
 				// const newProject = await trx
 				// 	.insert(projects)
@@ -75,23 +72,23 @@ export const projectRouter = router({
 	findBySlug: procedure.input(projectsSchema.read.pick({ slug: true })).query(async ({ input }) => {
 		return await getProjectData(input.slug);
 	}),
-	findByOwnership: procedure.use(isAuthed).query(async () => {
-		// ⚠️ ADD THIS BACK IN (???)
-		// const { user } = ctx.auth;
-		// const projects = await ctx.db.query.xUsersProjects.findMany({
-		// 	where: (userProject, { eq }) => eq(userProject.userId, user.id),
-		// 	with: {
-		// 		project: {
-		// 			columns: createTruthy(readProjectSchema.shape),
-		// 		},
-		// 	},
-		// });
-		// const selected = await getTeamProjectSelect(user.id);
-		// return {
-		// 	projects: projects.map((project) => readProjectSchema.parse(project)),
-		// 	selected,
-		// };
-	}),
+	// findByOwnership: procedure.use(isAuthed).query(async () => {
+	// 	// ⚠️ ADD THIS BACK IN (???)
+	// 	const { user } = ctx.auth;
+	// 	const projects = await ctx.db.query.xUsersProjects.findMany({
+	// 		where: (userProject, { eq }) => eq(userProject.userId, user.id),
+	// 		with: {
+	// 			project: {
+	// 				columns: createTruthy(readProjectSchema.shape),
+	// 			},
+	// 		},
+	// 	});
+	// 	const selected = await getTeamProjectSelect(user.id);
+	// 	return {
+	// 		projects: projects.map((project) => readProjectSchema.parse(project)),
+	// 		selected,
+	// 	};
+	// }),
 	getUserProjects: procedure
 		.use(isAuthed)
 		.input(
@@ -102,7 +99,7 @@ export const projectRouter = router({
 				.optional()
 				.default({ groupByTeam: false })
 		)
-		.query(async ({ ctx, input }) => {
+		.query(async ({ ctx }) => {
 			// Rename to avoid tRPC conflict
 			return await _getUserProjects({
 				user: ctx.auth.user,

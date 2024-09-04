@@ -9,7 +9,7 @@ import { api } from '@/lib/trpc/clients/server-invoker';
 import { groupProjectsByTeam } from '@/lib/utils/project.utils';
 
 import { deconstructTeamSlug } from '../_lib/get-team';
-import { PageProps } from './_types';
+import { PageProps } from './../_types';
 
 export default async function ConsolePage({ params }: PageProps) {
 	await checkAuth();
