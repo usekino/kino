@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { json, pgTable, varchar } from 'drizzle-orm/pg-core';
+import { json, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
 import { users } from '../auth/users.table';
@@ -29,9 +29,10 @@ export const feedback = pgTable('feedback', {
 	description: varchar('description', {
 		length: 3072,
 	}).notNull(),
+	eta: timestamp('created_at'),
 	status: json('status')
 		.$type<string[]>()
-		.default(sql`'["planned"]'`)
+		.default(sql`'["review"]'`)
 		.notNull(),
 });
 
