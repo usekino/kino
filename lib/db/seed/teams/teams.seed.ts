@@ -25,8 +25,8 @@ const generate = (
 		{
 			id: '2',
 			ownerId: '2',
-			name: 'Fake Kino',
-			slug: 'kino',
+			name: 'ACME Inc.',
+			slug: 'acme',
 			description: 'Fake Kino is a project to test other project',
 		},
 	];

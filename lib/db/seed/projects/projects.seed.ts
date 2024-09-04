@@ -15,14 +15,20 @@ const generate = (teams: TeamsSchema['Seed'][], count: number) => {
 			teamId: teams[0]?.id ?? '1',
 		},
 		{
-			id: '2',
-			name: 'Fake Project',
-			slug: 'fake_project',
+			id: '1',
+			name: 'Kino',
+			slug: 'kino',
+			teamId: teams[0]?.id ?? '2',
+		},
+		{
+			id: '3',
+			name: 'Big Project',
+			slug: 'big-project',
 			teamId: teams[1]?.id ?? '2',
 		},
 	];
 
-	for (let i = 0; i < count - 2; i++) {
+	for (let i = 0; i < count - 3; i++) {
 		projects.push({
 			id: (3 + i).toString(),
 			name: faker.company.name(),
