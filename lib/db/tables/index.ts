@@ -19,3 +19,5 @@ export * from './feedback/comments/feedback-comments.table';
 export * from './feedback/comments/feedback-comments-reactions.table';
 export * from './feedback/comments/feedback-comments-attachments.table';
 export * from './feedback/comments/feedback-comments-history.table';
+
+export * from './roadmaps/roadmaps.table';

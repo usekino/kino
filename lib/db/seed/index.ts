@@ -10,6 +10,7 @@ import { seedFeedbackVotes } from './feedback/feedback-votes.seed';
 import { seedFeedback } from './feedback/feedback.seed';
 import { seedProjectMembers } from './projects/project-members.seed';
 import { seedProjects } from './projects/projects.seed';
+import { seedRoadmaps } from './roadmaps/roadmaps.seed';
 import { seedTeamMembers } from './teams/team-members.seed';
 import { seedTeams } from './teams/teams.seed';
 
@@ -41,6 +42,9 @@ export const seeder = async () => {
 		const feedbackCommentsHistory = await seedFeedbackCommentsHistory({ feedbackComments }, 10);
 		const feedbackCommentsReaction = await seedFeedbackCommentsReaction({ feedbackComments }, 10);
 
+		// 5. Roadmaps
+		const roadmaps = await seedRoadmaps(5);
+
 		console.log('✅ Seeded: ', {
 			users: users.length,
 			teams: teams.length,
@@ -56,6 +60,7 @@ export const seeder = async () => {
 					Reaction: feedbackCommentsReaction.length,
 				},
 			},
+			roadmaps: roadmaps.length,
 		});
 	} catch (error) {
 		console.error(error);
