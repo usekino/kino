@@ -21,6 +21,9 @@ export const feedbackComments = pgTable('feedback_comments', {
 		.$type<string[]>()
 		.default(sql`'["open"]'`)
 		.notNull(),
+	// content: varchar('content', {
+	// 	length: 3072,
+	// }).notNull(),
 });
 
 export const feedbackCommentsRelations = relations(feedbackComments, ({ one, many }) => ({
