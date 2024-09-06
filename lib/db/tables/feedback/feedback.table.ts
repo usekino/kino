@@ -29,7 +29,7 @@ export const feedback = pgTable('feedback', {
 	description: varchar('description', {
 		length: 3072,
 	}).notNull(),
-	eta: timestamp('created_at'),
+	eta: timestamp('eta'),
 	status: json('status')
 		.$type<string[]>()
 		.default(sql`'["review"]'`)
