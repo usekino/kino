@@ -80,7 +80,7 @@ module.exports = {
 			},
 			backgroundImage: {
 				diagonal:
-					'repeating-linear-gradient(45deg,hsl(var(--border)) 0,hsl(var(--border)) 1px,transparent 0,transparent 50%)',
+					'repeating-linear-gradient(45deg,hsl(var(--border) / 0.5) 0,hsl(var(--border) / 0.5) 1px,transparent 0,transparent 50%)',
 			},
 			background: {
 				gradient: 'var(--gradient)',
