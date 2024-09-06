@@ -9,7 +9,7 @@ import { projectMembers } from '@/lib/db/tables/projects/project-members.table';
 import { immutableColumns } from '../_shared';
 
 const refineSchema = {
-	userRole: () => z.enum(['member', 'admin', 'blocked']),
+	userRole: () => z.enum(['member', 'blocked']),
 } satisfies Refine<typeof projectMembers, 'select'>;
 
 export const projectMembersSchema = {
