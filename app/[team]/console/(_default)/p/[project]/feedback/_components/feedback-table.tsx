@@ -41,9 +41,11 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-type Feedback = NonNullable<ArraySingle<API['output']['feedback']['getByProject']>>;
+// type Feedback = ArraySingle<NonNullable<API['output']['feedback']['getByProject']>>;
 
-export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
+export const columns = (
+	baseUrl: string
+): ColumnDef<ArraySingle<NonNullable<API['output']['feedback']['getByProject']>>>[] => {
 	return [
 		// TODO: Uncomment this when we have a use for selections
 		//
@@ -209,7 +211,11 @@ export const columns = (baseUrl: string): ColumnDef<Feedback>[] => {
 	];
 };
 
-export function FeedbackTable({ feedback }: { feedback: Feedback[] }) {
+export function FeedbackTable({
+	feedback,
+}: {
+	feedback: NonNullable<API['output']['feedback']['getByProject']>;
+}) {
 	const params = useParams();
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
