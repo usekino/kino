@@ -25,7 +25,7 @@ export const truncate = async () => {
 	const result = await httpDb.execute(query);
 	const tables = result.rows;
 
-	for (let table of tables) {
+	for (const table of tables) {
 		const query = sql.raw(`TRUNCATE TABLE ${table.table_name} CASCADE;`);
 		await httpDb.execute(query);
 	}
