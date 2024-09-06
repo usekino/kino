@@ -8,18 +8,18 @@ import { projects } from './projects.table';
 export const projectMembers = pgTable('project_members', {
 	// Defaults
 	...defaultColumns(),
-	projectId: varchar('project_id', {
-		length: 255,
-	})
-		.notNull()
-		.references(() => projects.id, {
-			onDelete: 'cascade',
-		}),
 	userId: varchar('user_id', {
 		length: 255,
 	})
 		.notNull()
 		.references(() => users.id, {
+			onDelete: 'cascade',
+		}),
+	projectId: varchar('project_id', {
+		length: 255,
+	})
+		.notNull()
+		.references(() => projects.id, {
 			onDelete: 'cascade',
 		}),
 	userRole: varchar('user_role', {
