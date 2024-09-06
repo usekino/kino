@@ -33,7 +33,7 @@ const generate = (
 					max: teams.length,
 				})
 				.toString(),
-			creatorUserId: faker.number
+			authorId: faker.number
 				.int({
 					min: 1,
 					max: users.length,

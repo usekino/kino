@@ -17,7 +17,7 @@ export const feedback = pgTable('feedback', {
 	teamId: varchar('team_id', {
 		length: 255,
 	}).notNull(),
-	creatorUserId: varchar('creator_user_id', {
+	authorId: varchar('author_user_id', {
 		length: 255,
 	}).notNull(),
 	assignedUserId: varchar('assigned_user_id', {
@@ -42,8 +42,8 @@ export const feedbackRelations = relations(feedback, ({ one, many }) => ({
 		references: [boards.id],
 		relationName: 'boards_feedback',
 	}),
-	creatorUser: one(users, {
-		fields: [feedback.creatorUserId],
+	authorUser: one(users, {
+		fields: [feedback.authorId],
 		references: [users.id],
 		relationName: 'users_feedback_created',
 	}),
