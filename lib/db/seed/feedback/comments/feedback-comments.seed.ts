@@ -23,6 +23,7 @@ const generate = (
 
 	for (let i = 0; i < count; i++) {
 		feedbackComments.push({
+			id: (1 + i).toString(),
 			userId: faker.number
 				.int({
 					min: 1,
