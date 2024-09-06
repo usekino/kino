@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { index, integer, json, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { index, integer, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { defaults } from '../_shared';
 import { feedbackAssignments } from '../feedback/feedback-assignments.table';
@@ -30,9 +30,6 @@ export const users = pgTable(
 		avatar: varchar('avatar', { length: 255 }),
 		bio: varchar('bio', { length: 3072 }),
 		name: varchar('name', { length: 255 }),
-		role: json('role')
-			.default(sql`'["member"]'`)
-			.notNull(),
 		latestAgreement: timestamp('latest_terms')
 			.default(sql`CURRENT_TIMESTAMP`)
 			.notNull(),

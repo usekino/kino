@@ -2,7 +2,6 @@ import type { Refine } from 'drizzle-zod';
 import type { SchemaObject } from './_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
 
 import { users } from '@/lib/db/tables/auth/users.table';
 
@@ -12,7 +11,6 @@ const refineSchema = {
 	username: ({ username }) => username.min(3).max(100),
 	email: ({ email }) => email.email(),
 	name: ({ name }) => name.max(255),
-	role: () => z.array(z.enum(['member', 'admin', 'beta'])),
 	bio: ({ bio }) => bio.max(450),
 	updates: ({ updates }) => updates.min(0),
 	avatar: ({ avatar }) => avatar.url(),
@@ -32,7 +30,6 @@ export const usersSchema = {
 		username: true,
 		email: true,
 		name: true,
-		role: true,
 		emailVerifiedAt: true,
 	}),
 	delete: createSelectSchema(users, refineSchema).pick({ id: true }),
