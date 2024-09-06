@@ -1,5 +1,5 @@
-import { relations } from 'drizzle-orm';
-import { pgTable, varchar } from 'drizzle-orm/pg-core';
+import { relations, sql } from 'drizzle-orm';
+import { json, pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '../_shared';
 import { users } from '../auth/users.table';
@@ -21,10 +21,8 @@ export const teamMembers = pgTable('team_members', {
 		.references(() => teams.id, {
 			onDelete: 'cascade',
 		}),
-	userRole: varchar('user_role', {
-		length: 255,
-	})
-		.default('member')
+	userRole: json('user_role')
+		.default(sql`['member']`)
 		.notNull(),
 });
 

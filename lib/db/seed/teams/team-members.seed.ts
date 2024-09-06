@@ -18,12 +18,12 @@ const generate = ({
 		{
 			userId: '1',
 			teamId: '1',
-			userRole: 'admin',
+			userRole: ['owner', 'member'],
 		},
 		{
 			userId: '2',
 			teamId: '1',
-			userRole: 'member',
+			userRole: ['owner', 'member'],
 		},
 	];
 
@@ -36,7 +36,7 @@ const generate = ({
 					max: teams.length,
 				})
 				.toString(),
-			userRole: 'member',
+			// userRole: 'member',
 		});
 	}
 	return data;

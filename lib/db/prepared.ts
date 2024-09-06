@@ -57,14 +57,14 @@ export const getProjectData = cache(async (slug: string) => {
 export const P_GetUserProjectsByUserId = db.query.teamMembers
 	.findMany({
 		columns: {},
-		where: (table, { eq, and, or, not }) => {
+		where: (table, { eq, and, or, not, inArray }) => {
 			return and(
 				eq(table.userId, sql.placeholder('userId')),
 				or(
-					eq(table.userRole, 'admin'),
-					eq(table.userRole, 'member') //
+					inArray(table.userRole, ['owner']),
+					inArray(table.userRole, ['member']) //
 				),
-				not(eq(table.userRole, 'blocked'))
+				not(inArray(table.userRole, ['blocked']))
 			);
 		},
 		with: {
