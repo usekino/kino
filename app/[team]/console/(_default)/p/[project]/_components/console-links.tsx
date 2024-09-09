@@ -33,8 +33,8 @@ const ConsoleLink = ({
 					<Link
 						href={href}
 						className={cn(
-							'group flex w-full items-center justify-between gap-2 rounded-md px-2.5 text-sm transition-colors',
-							'hocus:bg-accent/50',
+							'group flex w-full items-center justify-between gap-2 rounded-md px-2.5 transition-colors',
+							'text-sm hocus:bg-accent/50',
 							active ? 'bg-accent text-accent-foreground hocus:bg-accent' : '',
 							sidebarOpen ? 'py-2' : 'py-2.5',
 							className
