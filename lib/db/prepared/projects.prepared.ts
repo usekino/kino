@@ -10,6 +10,9 @@ import { MappedByProject } from '@/lib/utils/project.utils';
 
 import { db } from '..';
 
+// teamMembers -> access to backend, team invite only
+// projectMembers -> access to frontend, providing feedback, users of the project
+
 const P_GetUserProjects = db.query.users
 	.findFirst({
 		columns: {},
@@ -50,10 +53,10 @@ const P_GetUserProjects = db.query.users
 					return and(
 						eq(table.userId, sql.placeholder('userId')),
 						or(
-							eq(table.userRole, 'admin'),
-							eq(table.userRole, 'member') //
+							sql`${table.userRole} @> ${'"owner"'}`,
+							sql`${table.userRole} @> ${'"member"'}` //
 						),
-						not(eq(table.userRole, 'blocked'))
+						not(sql`${table.userRole} @> ${'"blocked"'}`)
 					);
 				},
 				with: {
@@ -85,7 +88,7 @@ export const getUserProjects = async ({ user }: { user: User }) => {
 	if (!data) return null;
 
 	const flatProjects = new Map([
-		...data.projectMember.map(({ project }): [string, MappedByProject] => [project.id, project]),
+		// ...data.projectMember.map(({ project }): [string, MappedByProject] => [project.id, project]),
 		...data.teamMember.flatMap(({ team }) =>
 			team.projects.map((project): [string, MappedByProject] => [project.id, project])
 		),
