@@ -1,5 +1,5 @@
 {
-  "id": "6c14a1d1-99af-452d-be7f-d54ca88fb4f6",
+  "id": "4cf2ea2f-80c7-4bd5-8ce2-04bc22b3cbd5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -83,13 +83,6 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
-        },
-        "role": {
-          "name": "role",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[\"member\"]'"
         },
         "latest_terms": {
           "name": "latest_terms",
@@ -535,11 +528,38 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": true,
-          "default": "'[\"member\"]'::jsonb"
+          "default": "'[\"member\"]'"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "team_members_user_id_users_id_fk": {
+          "name": "team_members_user_id_users_id_fk",
+          "tableFrom": "team_members",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "team_members_team_id_teams_id_fk": {
+          "name": "team_members_team_id_teams_id_fk",
+          "tableFrom": "team_members",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "team_members_id_unique": {
@@ -690,14 +710,14 @@
           "notNull": true,
           "default": 0
         },
-        "project_id": {
-          "name": "project_id",
+        "user_id": {
+          "name": "user_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
+        "project_id": {
+          "name": "project_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -706,11 +726,39 @@
           "name": "user_role",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'member'"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "project_members_user_id_users_id_fk": {
+          "name": "project_members_user_id_users_id_fk",
+          "tableFrom": "project_members",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "project_members_project_id_projects_id_fk": {
+          "name": "project_members_project_id_projects_id_fk",
+          "tableFrom": "project_members",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "project_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "project_members_id_unique": {
@@ -860,8 +908,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "creator_user_id": {
-          "name": "creator_user_id",
+        "author_user_id": {
+          "name": "author_user_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -884,12 +932,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "eta": {
+          "name": "eta",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
         "status": {
           "name": "status",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true,
-          "default": "'[\"planned\"]'"
+          "default": "'[\"review\"]'"
         }
       },
       "indexes": {},
@@ -1205,7 +1259,7 @@
         },
         "status": {
           "name": "status",
-          "type": "json",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true,
           "default": "'[\"open\"]'"

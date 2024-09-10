@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"avatar" varchar(255),
 	"bio" varchar(3072),
 	"name" varchar(255),
-	"role" json DEFAULT '["member"]' NOT NULL,
 	"latest_terms" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	CONSTRAINT "users_id_unique" UNIQUE("id"),
 	CONSTRAINT "users_username_unique" UNIQUE("username"),
@@ -81,7 +80,7 @@ CREATE TABLE IF NOT EXISTS "team_members" (
 	"updates" integer DEFAULT 0 NOT NULL,
 	"user_id" varchar(255) NOT NULL,
 	"team_id" varchar(255) NOT NULL,
-	"user_role" jsonb DEFAULT '["member"]'::jsonb NOT NULL,
+	"user_role" jsonb DEFAULT '["member"]' NOT NULL,
 	CONSTRAINT "team_members_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -108,9 +107,9 @@ CREATE TABLE IF NOT EXISTS "project_members" (
 	"updated_at" timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"deleted_at" timestamp,
 	"updates" integer DEFAULT 0 NOT NULL,
-	"project_id" varchar(255) NOT NULL,
 	"user_id" varchar(255) NOT NULL,
-	"user_role" varchar(255) NOT NULL,
+	"project_id" varchar(255) NOT NULL,
+	"user_role" varchar(255) DEFAULT 'member' NOT NULL,
 	CONSTRAINT "project_members_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -137,11 +136,12 @@ CREATE TABLE IF NOT EXISTS "feedback" (
 	"updates" integer DEFAULT 0 NOT NULL,
 	"board_id" varchar(255) NOT NULL,
 	"team_id" varchar(255) NOT NULL,
-	"creator_user_id" varchar(255) NOT NULL,
+	"author_user_id" varchar(255) NOT NULL,
 	"assigned_user_id" varchar(255),
 	"title" varchar(255) NOT NULL,
 	"description" varchar(3072) NOT NULL,
-	"status" json DEFAULT '["planned"]' NOT NULL,
+	"eta" timestamp,
+	"status" jsonb DEFAULT '["review"]' NOT NULL,
 	CONSTRAINT "feedback_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS "feedback_comments" (
 	"updates" integer DEFAULT 0 NOT NULL,
 	"feedback_id" varchar(255) NOT NULL,
 	"user_id" varchar(255) NOT NULL,
-	"status" json DEFAULT '["open"]' NOT NULL,
+	"status" jsonb DEFAULT '["open"]' NOT NULL,
 	CONSTRAINT "feedback_comments_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
@@ -235,6 +235,30 @@ CREATE TABLE IF NOT EXISTS "feedback_comments_history" (
 	"content" varchar(3072) NOT NULL,
 	CONSTRAINT "feedback_comments_history_id_unique" UNIQUE("id")
 );
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "team_members" ADD CONSTRAINT "team_members_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "team_members" ADD CONSTRAINT "team_members_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "project_members" ADD CONSTRAINT "project_members_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "project_members" ADD CONSTRAINT "project_members_project_id_projects_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "user_id_idx" ON "users" USING btree ("id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "user_username_idx" ON "users" USING btree ("username");
