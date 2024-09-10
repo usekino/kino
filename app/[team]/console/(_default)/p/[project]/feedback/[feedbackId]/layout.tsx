@@ -9,7 +9,7 @@ export default async function FeedbackIdLayoutPage({ children }: LayoutProps) {
 		<div>
 			<header>
 				<div className='border-b bg-muted'>
-					<div className='flex items-start gap-4 px-8 pb-4 pt-12'>
+					<div className='container flex items-start gap-4 px-8 pb-4 pt-12'>
 						<div className='mt-1'>
 							<CircleDot size={28} />
 						</div>

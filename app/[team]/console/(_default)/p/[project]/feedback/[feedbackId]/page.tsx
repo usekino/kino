@@ -40,7 +40,7 @@ export default async function FeedbackIdPage({ params }: PageProps) {
 	};
 
 	return (
-		<div className='container !mx-0 flex flex-col gap-4 p-2 sm:p-4 md:p-6'>
+		<div className='container flex flex-col gap-4 p-2 sm:p-4 md:p-6'>
 			<div className='grid gap-4 md:grid-cols-12'>
 				<div className='order-first md:order-last md:col-span-4'>
 					<div className='sticky top-4 flex flex-col gap-4'>

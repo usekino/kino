@@ -20,7 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 export function ProjectSettings() {
 	return (
-		<div className='grid gap-6 divide-y py-6'>
+		<div className='grid gap-6 divide-y'>
 			<div>
 				<CardHeader>
 					<CardTitle>General</CardTitle>

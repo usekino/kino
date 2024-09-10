@@ -2,15 +2,16 @@ import type { PageProps } from '../_types';
 
 import { Heading } from '@/components/heading';
 
-import { DashboardHeader } from './_components/dashboard-header';
+import { ConsoleHeader } from '../_components/console-header';
+import { dashboardHeaderProps } from './_lib/dashboard-header-props';
 
-export default async function ProjectPage({ params }: PageProps) {
+export default async function ProjectPage({}: PageProps) {
 	return (
-		<div>
-			<DashboardHeader />
-			<div className='p-2 sm:p-4 md:p-6'>
-				<Heading tag='h1'>Dashboard for {params.project}</Heading>
+		<>
+			<ConsoleHeader {...dashboardHeaderProps} />
+			<div className='container pt-4'>
+				<Heading tag='h1'>Dashboard</Heading>
 			</div>
-		</div>
+		</>
 	);
 }

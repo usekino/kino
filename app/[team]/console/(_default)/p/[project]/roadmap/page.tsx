@@ -1,11 +1,15 @@
 import { Heading } from '@/components/heading';
 
-export default async function RoadmapPage() {
-	await new Promise((resolve) => setTimeout(resolve, 6000));
+import { ConsoleHeader } from '../_components/console-header';
+import { roadmapHeaderProps } from './_lib/roadmap-header-props';
 
+export default async function RoadmapPage() {
 	return (
-		<div className='p-2 sm:p-4 md:p-6'>
-			<Heading tag='h1'>Coming soon...</Heading>
+		<div>
+			<ConsoleHeader {...roadmapHeaderProps} />
+			<div className='container pt-4'>
+				<Heading tag='h1'>Roadmaps coming soon...</Heading>
+			</div>
 		</div>
 	);
 }

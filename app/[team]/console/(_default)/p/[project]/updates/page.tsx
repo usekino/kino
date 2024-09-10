@@ -1,9 +1,15 @@
 import { Heading } from '@/components/heading';
 
+import { ConsoleHeader } from '../_components/console-header';
+import { updatesHeaderProps } from './_lib/updates-header-props';
+
 export default async function UpdatesPage() {
 	return (
-		<div className='p-2 sm:p-4 md:p-6'>
-			<Heading tag='h1'>Updates</Heading>
+		<div>
+			<ConsoleHeader {...updatesHeaderProps} />
+			<div className='container pt-4'>
+				<Heading tag='h1'>Updates coming soon...</Heading>
+			</div>
 		</div>
 	);
 }
