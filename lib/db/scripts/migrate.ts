@@ -9,6 +9,7 @@ const runMigrate = async () => {
 	const answer = await confirm({
 		message: 'Are you sure you want to run migrations?',
 	});
+
 	if (!answer) {
 		console.log('❌ Migrations cancelled');
 		process.exit(0);

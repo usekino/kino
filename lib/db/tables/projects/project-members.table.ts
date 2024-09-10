@@ -27,6 +27,9 @@ export const projectMembers = pgTable('project_members', {
 	})
 		.default('member')
 		.notNull(),
+	// ssoLink: varchar('sso_link', {
+	// 	length: 255,
+	// }),
 });
 
 export const projectMembersRelations = relations(projectMembers, ({ one }) => ({

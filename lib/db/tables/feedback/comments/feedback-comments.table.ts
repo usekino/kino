@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { json, pgTable, varchar } from 'drizzle-orm/pg-core';
+import { jsonb, pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { defaultColumns } from '@/lib/db/tables/_shared';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
@@ -17,7 +17,7 @@ export const feedbackComments = pgTable('feedback_comments', {
 	userId: varchar('user_id', {
 		length: 255,
 	}).notNull(),
-	status: json('status')
+	status: jsonb('status')
 		.$type<string[]>()
 		.default(sql`'["open"]'`)
 		.notNull(),

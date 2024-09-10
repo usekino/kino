@@ -13,6 +13,7 @@ export const projects = pgTable('projects', {
 	description: varchar('description', { length: 3072 }),
 	teamId: varchar('team_id').notNull(),
 	websiteUrl: varchar('website_url', { length: 255 }),
+	// ssoUrl: varchar('sso_url', { length: 255 }),
 });
 
 export const projectRelations = relations(projects, ({ one, many }) => ({
