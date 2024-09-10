@@ -19,7 +19,7 @@ const refineSchema = {
 			.min(3, 'Slug must contain at least 3 characters')
 			.max(25, 'Slug must contain at most 25 characters')
 			.regex(
-				/^[a-zA-Z0-9_]+$/,
+				/^(?!-)(?!.*--)([A-Za-z0-9_]+-?[A-Za-z0-9_]+)*(_|-)?(?<!-)$/,
 				'Disallowed characters' //
 			)
 			.refine(
@@ -49,6 +49,7 @@ const refineSchema = {
 			),
 	description: ({ description }) => description.max(300),
 	websiteUrl: ({ websiteUrl }) => websiteUrl.url(),
+	// ssoUrl: ({ ssoUrl }) => ssoUrl.url(),
 } satisfies Refine<typeof projects, 'select'>;
 
 export const projectsSchema = {

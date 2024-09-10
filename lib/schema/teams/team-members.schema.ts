@@ -2,12 +2,13 @@ import type { Refine } from 'drizzle-zod';
 import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+
+// import { z } from 'zod';
 
 import { teamMembers } from '@/lib/db/tables/teams/team-members.table';
 
 const refineSchema = {
-	userRole: () => z.array(z.enum(['owner', 'member', 'blocked'])),
+	// userRole: () => z.array(z.enum(['owner', 'member', 'blocked'])),
 } satisfies Refine<typeof teamMembers, 'select'>;
 
 export const teamMembersSchema = {
