@@ -1,5 +1,5 @@
 import { deconstructTeamSlug } from '@/app/[team]/_lib/get-team';
-import { api } from '@/lib/trpc/clients/server-invoker';
+import { api } from '@/lib/trpc/clients/server-http';
 
 import { FeedbackTable } from '../_components/feedback-table';
 import { feedbackHeaderProps } from '../_lib/feedback-header-props';
@@ -9,7 +9,7 @@ import { PageProps } from '../../_types';
 export default async function FeedbackPage({ params }: PageProps) {
 	const { subdomain: teamSlug } = deconstructTeamSlug(params.team);
 	const { project: projectSlug } = params;
-	const feedback = await api.feedback.getByProject({ teamSlug, projectSlug });
+	const feedback = await api.feedback.projectTable.query({ teamSlug, projectSlug });
 	return (
 		<div>
 			<ConsoleHeader {...feedbackHeaderProps} breadcrumbs={['Viewer']} />

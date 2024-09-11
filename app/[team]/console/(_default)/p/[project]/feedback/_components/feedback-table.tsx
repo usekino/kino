@@ -39,13 +39,14 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
+import { api } from '@/lib/trpc/clients/client';
 import { cn } from '@/lib/utils';
 
 // type Feedback = ArraySingle<NonNullable<API['output']['feedback']['getByProject']>>;
 
 export const columns = (
 	baseUrl: string
-): ColumnDef<ArraySingle<NonNullable<API['output']['feedback']['getByProject']>>>[] => {
+): ColumnDef<ArraySingle<NonNullable<API['output']['feedback']['projectTable']>>>[] => {
 	return [
 		// TODO: Uncomment this when we have a use for selections
 		//
@@ -210,8 +211,13 @@ export const columns = (
 export function FeedbackTable({
 	feedback,
 }: {
-	feedback: NonNullable<API['output']['feedback']['getByProject']>;
+	feedback: NonNullable<API['output']['feedback']['projectTable']>;
 }) {
+	// const test = api.feed
+	// 	projectSlug: 'kiback.projectTable.useSuspenseInfiniteQuery({
+	// 	teamSlug: 'kino',no',
+	// });
+
 	const params = useParams();
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
