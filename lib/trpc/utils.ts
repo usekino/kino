@@ -1,12 +1,11 @@
 import type { LoggerLinkOptions, Operation } from '@trpc/client';
+import type { AppRouter } from './routers/_app';
 
 import { loggerLink } from '@trpc/client';
 
 import { env } from '@/lib/env/client';
 
 // import { getBaseUrl } from '@/lib/util/get-base-url';
-
-import type { AppRouter } from './routers/_app';
 
 // export function getTRPCUrl() {
 // 	return getBaseUrl() + '/api/trpc';

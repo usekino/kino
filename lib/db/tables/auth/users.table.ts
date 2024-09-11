@@ -29,6 +29,7 @@ export const users = pgTable(
 			.$type<Date | null>(),
 		avatar: varchar('avatar', { length: 255 }),
 		bio: varchar('bio', { length: 3072 }),
+		// TODO: Make required/notNull
 		name: varchar('name', { length: 255 }),
 		latestAgreement: timestamp('latest_terms')
 			.default(sql`CURRENT_TIMESTAMP`)
