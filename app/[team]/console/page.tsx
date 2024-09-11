@@ -8,7 +8,7 @@ import { env } from '@/lib/env/server';
 import { api } from '@/lib/trpc/clients/server-invoker';
 import { groupProjectsByTeam } from '@/lib/utils/project.utils';
 
-import { deconstructTeamSlug } from '../_lib/get-team';
+import { deconstructTeamParam } from '../_lib/get-team';
 import { PageProps } from './../_types';
 
 export default async function ConsolePage({ params }: PageProps) {
@@ -17,7 +17,7 @@ export default async function ConsolePage({ params }: PageProps) {
 	const projects = await api.project.getUserProjects({ groupByTeam: true });
 	const teamProjects = groupProjectsByTeam(projects);
 
-	const { subdomain: teamSlug } = deconstructTeamSlug(params.team);
+	const { subdomain: teamSlug } = deconstructTeamParam(params.team);
 
 	return (
 		<div className='p-2 sm:p-4 md:p-6'>

@@ -11,7 +11,7 @@ export type TeamPageParams = {
 	};
 };
 
-export const deconstructTeamSlug = (teamParam: Team) => {
+export const deconstructTeamParam = (teamParam: Team) => {
 	let subdomain: string | null = null;
 	let domain: string | null = null;
 
@@ -29,7 +29,7 @@ export const deconstructTeamSlug = (teamParam: Team) => {
 export const getTeam = async ({ teamParam }: { teamParam: Team }) => {
 	const user = await getUser();
 
-	const { subdomain, domain } = deconstructTeamSlug(teamParam);
+	const { subdomain, domain } = deconstructTeamParam(teamParam);
 	const team = await getTeamData(subdomain);
 
 	return {

@@ -2,7 +2,7 @@ import type { LayoutProps } from './_types';
 
 import { LockKeyhole } from 'lucide-react';
 
-import { deconstructTeamSlug } from '@/app/[team]/_lib/get-team';
+import { deconstructTeamParam } from '@/app/[team]/_lib/get-team';
 import { Heading } from '@/components/heading';
 import { api } from '@/lib/trpc/clients/server-invoker';
 
@@ -10,7 +10,7 @@ export default async function ProjectPageLayout({ params, children }: LayoutProp
 	const project = await api.project.findBySlug({
 		slug: params.project,
 	});
-	const { subdomain: teamSlug } = deconstructTeamSlug(params.team);
+	const { subdomain: teamSlug } = deconstructTeamParam(params.team);
 
 	// Make sure project exits and is owned by the team
 	if (!project || project.team.slug !== teamSlug) {
