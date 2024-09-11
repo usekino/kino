@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 
-import { immutableColumns } from '../_shared';
+import { immutableColumns, inaccessibleColumns } from '../_shared';
 
 const refineSchema = {
 	title: ({ title }) => title.min(3).max(120),
@@ -17,7 +17,7 @@ const refineSchema = {
 
 export const feedbackSchema = {
 	create: createInsertSchema(feedback, refineSchema).omit(immutableColumns),
-	read: createSelectSchema(feedback, refineSchema),
+	read: createSelectSchema(feedback, refineSchema).omit(inaccessibleColumns),
 	update: createInsertSchema(feedback, refineSchema).omit(immutableColumns),
 	delete: createInsertSchema(feedback, refineSchema).pick({ id: true }),
 	seed: createInsertSchema(feedback, refineSchema),
