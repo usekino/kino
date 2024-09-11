@@ -7,26 +7,23 @@ import { ConsoleHeader } from '../../_components/console-header';
 import { PageProps } from '../../_types';
 
 export default async function FeedbackPage({ params }: PageProps) {
-	const { subdomain } = deconstructTeamSlug(params.team);
-	subdomain;
-	const { project: slug } = params;
-	const feedback = await api.feedback.getByProject({ projectSlug: slug });
+	const { subdomain: teamSlug } = deconstructTeamSlug(params.team);
+	const { project: projectSlug } = params;
+	const feedback = await api.feedback.getByProject({ teamSlug, projectSlug });
 	return (
-		<>
+		<div>
 			<ConsoleHeader {...feedbackHeaderProps} breadcrumbs={['Viewer']} />
-			<div className='container py-4'>
+			<div className='container pt-6'>
 				<div className='w-full'>
 					<div className='h-full overflow-scroll rounded-lg border bg-muted'>
 						{feedback ? (
-							<>
-								<FeedbackTable feedback={feedback} />
-							</>
+							<FeedbackTable feedback={feedback} />
 						) : (
-							<div>No feedback found</div>
+							<div className='p-4 text-center'>No feedback found</div>
 						)}
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
