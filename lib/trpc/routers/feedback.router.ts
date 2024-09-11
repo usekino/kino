@@ -1,19 +1,24 @@
-import { TRPCError } from '@trpc/server';
-import { aliasedTable, and, eq, not, or, sql } from 'drizzle-orm';
+import { aliasedTable, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { boards, feedback, teamMembers, teams, users } from '@/lib/db/tables';
-import { projectMembers } from '@/lib/db/tables/projects/project-members.table';
+import { boards, feedback, feedbackVotes, users } from '@/lib/db/tables';
 import { projects } from '@/lib/db/tables/projects/projects.table';
+import { boardsSchema } from '@/lib/schema/boards/boards.schema';
+import { feedbackSchema } from '@/lib/schema/feedback/feedback.schema';
+import { projectsSchema } from '@/lib/schema/projects/projects.schema';
+import { usersSchema } from '@/lib/schema/users.schema';
 import { procedure, router } from '@/lib/trpc/trpc';
 
-import { isAuthed } from '../middleware/is-authed';
+import { consoleAuthPlugin } from '../plugins/console-auth-plugin';
+
+const { isTeamMember } = consoleAuthPlugin();
 
 const userAssigned = aliasedTable(users, 'userAssigned');
+const userAuthor = aliasedTable(users, 'userAuthor');
 
 export const feedbackRouter = router({
 	getByProject: procedure
-		.use(isAuthed)
+		.unstable_concat(isTeamMember)
 		.input(
 			z.object({
 				projectSlug: z.string(),
@@ -21,98 +26,65 @@ export const feedbackRouter = router({
 			})
 		)
 		.query(async ({ ctx, input }) => {
-			// ✅ TODO: Add checks for front-end users (projectMembers)
 			const data = await ctx.db
 				.select({
-					id: feedback.id,
-					title: feedback.title,
-					creatorId: feedback.authorId,
-					assignedUserId: feedback.assignedUserId,
-					status: feedback.status,
-					project: {
-						id: projects.id,
-						name: projects.name,
-						slug: projects.slug,
-					},
-					board: {
-						id: boards.id,
-						name: boards.name,
-						slug: boards.slug,
-					},
-					role: sql<string>`
-						CASE
-							WHEN ${teamMembers.userRole} @> ${'"owner"'}
-							THEN 'owner'
-							ELSE 'member'
-						END
-					`.as('access'),
-					userAssigned: userAssigned,
+					...Object.fromEntries(Object.entries(feedback)),
+					project: projects,
+					board: boards,
+					userAuthor,
+					userAssigned,
+					votes: sql<number>`COUNT(${feedbackVotes.id})::int`,
 				})
 				.from(feedback)
-				.leftJoin(userAssigned, eq(feedback.assignedUserId, userAssigned.id))
-				.innerJoin(boards, eq(feedback.boardId, boards.id))
-				.innerJoin(projects, eq(boards.projectId, projects.id))
-				.leftJoin(teams, eq(projects.teamId, teams.id))
-				.leftJoin(
-					teamMembers,
-					and(
-						eq(teamMembers.teamId, teams.id),
-						eq(teamMembers.userId, ctx.auth.user.id) //
-					)
-				)
-				.where(
-					and(
-						eq(projects.slug, input.projectSlug),
-						or(
-							sql`${teamMembers.userRole} @> ${'"owner"'}`,
-							sql`${teamMembers.userRole} @> ${'"member"'}` //
-						),
-						not(sql`${teamMembers.userRole} @> ${'"blocked"'}`)
-					)
+				.innerJoin(boards, eq(boards.id, feedback.boardId))
+				.innerJoin(projects, eq(projects.id, boards.projectId))
+				.innerJoin(userAuthor, eq(userAuthor.id, feedback.authorId))
+				.leftJoin(userAssigned, eq(userAssigned.id, feedback.assignedUserId))
+				.leftJoin(feedbackVotes, eq(feedbackVotes.feedbackId, feedback.id))
+				.where(eq(projects.slug, input.projectSlug))
+				.groupBy(
+					...Object.values(feedback),
+					...Object.values(projects),
+					...Object.values(boards),
+					...Object.values(userAssigned),
+					...Object.values(userAuthor)
 				);
 
-			if (!data || data.length <= 0) {
-				const userBlockedInTeam = await ctx.db
-					.select()
-					.from(teamMembers)
-					.innerJoin(teams, eq(teams.id, teamMembers.teamId))
-					.where(
-						and(
-							eq(teamMembers.userId, ctx.auth.user.id),
-							eq(teamMembers.teamId, teams.id),
-							sql`${teamMembers.userRole} @> ${'"blocked"'}`
-						)
-					)
-					.then((res) => res.length > 0);
-
-				if (userBlockedInTeam) {
-					throw new TRPCError({
-						code: 'FORBIDDEN',
-						message: 'User is not authorized member of team',
-					});
-				}
-
-				const userBlockedInProject = await ctx.db
-					.select()
-					.from(projectMembers)
-					.innerJoin(projects, eq(projects.id, projectMembers.projectId))
-					.where(
-						and(
-							eq(projectMembers.userId, ctx.auth.user.id),
-							eq(projectMembers.projectId, projects.id),
-							sql`${projectMembers.userRole} @> ${'"blocked"'}`
-						)
-					)
-					.then((res) => res.length > 0);
-
-				if (userBlockedInProject) {
-					throw new TRPCError({
-						code: 'FORBIDDEN',
-						message: 'User is not authorized member of project',
-					});
-				}
-			}
-
-			return data;
+			return feedbackSchema.read
+				.pick({
+					id: true,
+					title: true,
+					description: true,
+					status: true,
+				})
+				.merge(
+					z.object({
+						project: projectsSchema.read.pick({
+							id: true,
+							name: true,
+							slug: true,
+						}),
+						board: boardsSchema.read.pick({
+							id: true,
+							name: true,
+							slug: true,
+						}),
+						userAuthor: usersSchema.read.pick({
+							id: true,
+							username: true,
+							name: true,
+						}),
+						userAssigned: usersSchema.read
+							.pick({
+								id: true,
+								username: true,
+								name: true,
+							})
+							.nullable(),
+						votes: z.number(),
+					})
+				)
+				.array()
+				.parse(data);
 		}),
 });
