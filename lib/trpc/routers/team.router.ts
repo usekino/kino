@@ -2,17 +2,20 @@ import { getTeamData } from '@/lib/db/prepared';
 import { teamMembers } from '@/lib/db/tables';
 import { teams } from '@/lib/db/tables/teams/teams.table';
 import { teamsSchema } from '@/lib/schema/teams/teams.schema';
-import { procedure, router } from '@/lib/trpc/trpc';
+import { noAuthProcedure } from '@/lib/trpc/procedures';
+import { router } from '@/lib/trpc/trpc';
 import { createTruthy, generateId } from '@/lib/utils';
 
 import { isAuthed } from '../middleware/is-authed';
 
 export const teamRouter = router({
-	findBySlug: procedure.input(teamsSchema.read.pick({ slug: true })).query(async ({ input }) => {
-		const team = await getTeamData(input.slug);
-		return team;
-	}),
-	getUserTeams: procedure.use(isAuthed).query(async ({ ctx }) => {
+	findBySlug: noAuthProcedure
+		.input(teamsSchema.read.pick({ slug: true }))
+		.query(async ({ input }) => {
+			const team = await getTeamData(input.slug);
+			return team;
+		}),
+	getUserTeams: noAuthProcedure.use(isAuthed).query(async ({ ctx }) => {
 		const { user } = ctx.auth;
 
 		const teams = await ctx.db.query.teamMembers.findMany({
@@ -40,7 +43,7 @@ export const teamRouter = router({
 	// 		teams: teams.map((team) => teamsSchema.read.parse(team)),
 	// 	};
 	// }),
-	create: procedure
+	create: noAuthProcedure
 		.use(isAuthed)
 		.input(teamsSchema.create)
 		.mutation(async ({ ctx, input }) => {

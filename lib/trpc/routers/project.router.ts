@@ -4,74 +4,74 @@ import { z } from 'zod';
 import { getProjectData } from '@/lib/db/prepared';
 import { getUserProjects as _getUserProjects } from '@/lib/db/prepared/projects.prepared';
 import { projectsSchema } from '@/lib/schema/projects/projects.schema';
-import { procedure, router } from '@/lib/trpc/trpc';
+import { authProcedure, noAuthProcedure } from '@/lib/trpc/procedures';
+import { router } from '@/lib/trpc/trpc';
 
 import { isAuthed } from '../middleware/is-authed';
 
 export const projectRouter = router({
-	create: procedure
-		.use(isAuthed)
-		.input(projectsSchema.create)
-		.mutation(async ({ ctx, input }) => {
-			const { user } = ctx.auth;
+	create: authProcedure.input(projectsSchema.create).mutation(async ({ ctx, input }) => {
+		const { user } = ctx.auth;
 
-			return ctx.db.transaction(async (trx) => {
-				// Check if the user is a member of the team
-				const userTeam = await trx.query.teamMembers.findFirst({
-					columns: {
-						id: true,
-						teamId: true,
-					},
-					where: (table, { eq, and }) =>
-						and(
-							eq(table.userId, user.id),
-							eq(table.teamId, input.teamId)
-							// arrayContains(table.userRole, ['admin'])
-						),
-					with: {
-						team: {
-							columns: {
-								slug: true,
-							},
+		return ctx.db.transaction(async (trx) => {
+			// Check if the user is a member of the team
+			const userTeam = await trx.query.teamMembers.findFirst({
+				columns: {
+					id: true,
+					teamId: true,
+				},
+				where: (table, { eq, and }) =>
+					and(
+						eq(table.userId, user.id),
+						eq(table.teamId, input.teamId)
+						// arrayContains(table.userRole, ['admin'])
+					),
+				with: {
+					team: {
+						columns: {
+							slug: true,
 						},
 					},
-				});
-
-				// ...throw if not.
-				if (!userTeam || !userTeam.id || !userTeam.team.slug) {
-					throw new TRPCError({
-						code: 'FORBIDDEN',
-						message: `User is not authorized member of project's team.`,
-					});
-				}
-
-				// ⚠️ ADD THIS BACK IN!!
-				// Create the project
-				// const newProject = await trx
-				// 	.insert(projects)
-				// 	.values({
-				// 		...input,
-				// 		teamId: userTeam.teamId,
-				// 	})
-				// 	.returning({
-				// 		id: projects.id,
-				// 		slug: projects.slug,
-				// 	});
-
-				// Add to join table
-				// await trx.insert(xUsersProjects).values({
-				// 	userId: user.id,
-				// 	projectId: newProject[0].id,
-				// 	userRole: ['member', 'admin'],
-				// });
-
-				// Return data
-				return { projectSlug: input.slug, teamSlug: userTeam.team.slug };
+				},
 			});
-		}),
-	findBySlug: procedure.input(projectsSchema.read.pick({ slug: true })).query(async ({ input }) => {
-		return await getProjectData(input.slug);
+
+			// ...throw if not.
+			if (!userTeam || !userTeam.id || !userTeam.team.slug) {
+				throw new TRPCError({
+					code: 'FORBIDDEN',
+					message: `User is not authorized member of project's team.`,
+				});
+			}
+
+			// ⚠️ ADD THIS BACK IN!!
+			// Create the project
+			// const newProject = await trx
+			// 	.insert(projects)
+			// 	.values({
+			// 		...input,
+			// 		teamId: userTeam.teamId,
+			// 	})
+			// 	.returning({
+			// 		id: projects.id,
+			// 		slug: projects.slug,
+			// 	});
+
+			// Add to join table
+			// await trx.insert(xUsersProjects).values({
+			// 	userId: user.id,
+			// 	projectId: newProject[0].id,
+			// 	userRole: ['member', 'admin'],
+			// });
+
+			// Return data
+			return { projectSlug: input.slug, teamSlug: userTeam.team.slug };
+		});
 	}),
+	findBySlug: noAuthProcedure
+		.input(projectsSchema.read.pick({ slug: true }))
+		.query(async ({ input }) => {
+			return await getProjectData(input.slug);
+		}),
 	// findByOwnership: procedure.use(isAuthed).query(async () => {
 	// 	// ⚠️ ADD THIS BACK IN (???)
 	// 	const { user } = ctx.auth;
@@ -89,7 +89,7 @@ export const projectRouter = router({
 	// 		selected,
 	// 	};
 	// }),
-	getUserProjects: procedure
+	getUserProjects: noAuthProcedure
 		.use(isAuthed)
 		.input(
 			z

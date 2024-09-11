@@ -4,7 +4,7 @@ import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 import { router } from '@/lib/trpc/trpc';
 
 import { authRouter } from './auth.router';
-import { dashboardRouter } from './dashboard.router';
+import { consoleRouter } from './console';
 import { feedbackRouter } from './feedback.router';
 import { projectRouter } from './project.router';
 import { teamRouter } from './team.router';
@@ -15,8 +15,8 @@ export const appRouter = router({
 	user: userRouter,
 	team: teamRouter,
 	project: projectRouter,
-	dashboard: dashboardRouter,
 	feedback: feedbackRouter,
+	console: consoleRouter,
 });
 
 export type AppRouter = typeof appRouter;

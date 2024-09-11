@@ -10,13 +10,14 @@ import { users } from '@/lib/db/tables/auth/users.table';
 import { env } from '@/lib/env/server';
 import { authSchema } from '@/lib/schema/auth.schema';
 import { usersSchema } from '@/lib/schema/users.schema';
+import { noAuthProcedure } from '@/lib/trpc/procedures';
 // import { sendAccountVerification } from '@/lib/email/template/sendAccountVerification';
-import { procedure, router } from '@/lib/trpc/trpc';
+import { router } from '@/lib/trpc/trpc';
 
 import { isAuthed } from '../middleware/is-authed';
 
 export const authRouter = router({
-	signUpByEmail: procedure.input(authSchema.signUpEmail).mutation(async ({ ctx, input }) => {
+	signUpByEmail: noAuthProcedure.input(authSchema.signUpEmail).mutation(async ({ ctx, input }) => {
 		return ctx.db.transaction(async (trx) => {
 			const userId = generateRandomString(15, alphabet('a-z', 'A-Z', '0-9'));
 			const hashedPassword = await new Argon2id().hash(input.password);
@@ -66,7 +67,7 @@ export const authRouter = router({
 			};
 		});
 	}),
-	signInByEmail: procedure.input(authSchema.signInEmail).mutation(async ({ ctx, input }) => {
+	signInByEmail: noAuthProcedure.input(authSchema.signInEmail).mutation(async ({ ctx, input }) => {
 		// TODO: implement transaction here
 		const existingUser = await ctx.db.query.users.findFirst({
 			where: (user, { eq }) => eq(user.email, input.email),
@@ -116,7 +117,7 @@ export const authRouter = router({
 			user: existingUser,
 		};
 	}),
-	signOut: procedure.use(isAuthed).mutation(async ({ ctx }) => {
+	signOut: noAuthProcedure.use(isAuthed).mutation(async ({ ctx }) => {
 		await lucia.invalidateSession(ctx.auth.session.id);
 
 		const sessionCookie = lucia.createBlankSessionCookie();

@@ -2,12 +2,13 @@ import { eq, sql } from 'drizzle-orm';
 
 import { users } from '@/lib/db/tables/auth/users.table';
 import { usersSchema } from '@/lib/schema/users.schema';
-import { procedure, router } from '@/lib/trpc/trpc';
+import { noAuthProcedure } from '@/lib/trpc/procedures';
+import { router } from '@/lib/trpc/trpc';
 
 import { isAuthed } from '../middleware/is-authed';
 
 export const userRouter = router({
-	update: procedure
+	update: noAuthProcedure
 		.use(isAuthed)
 		.input(usersSchema.update)
 		.mutation(async ({ ctx, input }) => {

@@ -19,11 +19,7 @@ export const consoleAuthPlugin = () => {
 			.use(async ({ ctx, next, input }) => {
 				const data = await ctx.db
 					.select({
-						team: {
-							id: teams.id,
-							slug: teams.slug,
-							name: teams.name,
-						},
+						id: teams.id,
 					})
 					.from(teamMembers)
 					.innerJoin(users, eq(users.id, teamMembers.userId))
@@ -44,7 +40,7 @@ export const consoleAuthPlugin = () => {
 
 				return next({
 					ctx: {
-						team: data[0].team,
+						team: data[0].id,
 					},
 				});
 			}),
