@@ -4,7 +4,7 @@ import type { ConsoleHeaderNavProps } from './console-header-nav';
 import { ChevronRight, LucideIcon } from 'lucide-react';
 
 import { Heading } from '@/components/heading';
-import { cn } from '@/lib/utils';
+import { cn, slugify } from '@/lib/utils';
 
 import { ConsoleHeaderNav } from './console-header-nav';
 
@@ -33,10 +33,10 @@ export const ConsoleHeader = async ({
 						{hasBreadcrumbs
 							? breadcrumbs.map((crumb) => {
 									return (
-										<>
+										<span key={slugify(crumb)} className='inline-flex items-center gap-2'>
 											<ChevronRight size={16} />
 											<span>{crumb}</span>
-										</>
+										</span>
 									);
 								})
 							: null}
