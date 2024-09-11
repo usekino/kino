@@ -46,7 +46,7 @@ import { cn } from '@/lib/utils';
 
 export const columns = (
 	baseUrl: string
-): ColumnDef<ArraySingle<NonNullable<API['output']['feedback']['projectTable']>>>[] => {
+): ColumnDef<ArraySingle<NonNullable<API['output']['console']['feedback']['table']>>>[] => {
 	return [
 		// TODO: Uncomment this when we have a use for selections
 		//
@@ -211,7 +211,7 @@ export const columns = (
 export function FeedbackTable({
 	feedback,
 }: {
-	feedback: NonNullable<API['output']['feedback']['projectTable']>;
+	feedback: NonNullable<API['output']['console']['feedback']['table']>;
 }) {
 	// const test = api.feed
 	// 	projectSlug: 'kiback.projectTable.useSuspenseInfiniteQuery({
