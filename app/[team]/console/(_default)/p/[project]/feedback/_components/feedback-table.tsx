@@ -175,18 +175,14 @@ export const columns = (
 			},
 		},
 		{
-			accessorKey: 'boardId',
+			accessorKey: 'board.id',
 			meta: {
 				title: 'Board',
 			},
 			header: 'Board',
-			cell: ({ row }) => {
-				if (!row.getValue('boardId')) return null;
-				return (
-					<div className='inline-flex size-8 items-center justify-center rounded-lg bg-native p-1 text-xs text-muted-foreground'>
-						{row.getValue('boardId')}
-					</div>
-				);
+			cell: (cell) => {
+				if (!cell.row.original.board.name) return null;
+				return <div>{cell.row.original.board.name}</div>;
 			},
 		},
 		{
