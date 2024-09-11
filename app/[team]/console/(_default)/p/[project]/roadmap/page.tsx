@@ -7,7 +7,7 @@ export default async function RoadmapPage() {
 	return (
 		<div>
 			<ConsoleHeader {...roadmapHeaderProps} />
-			<div className='container pt-4'>
+			<div className='container pt-6'>
 				<Heading tag='h1'>Roadmaps coming soon...</Heading>
 			</div>
 		</div>

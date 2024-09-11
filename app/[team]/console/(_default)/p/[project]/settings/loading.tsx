@@ -6,7 +6,7 @@ const Loading = () => {
 	return (
 		<>
 			<ConsoleHeader {...settingsHeaderProps} />
-			<div className='container pt-4'>
+			<div className='container pt-6'>
 				<ProjectPageLoading />
 			</div>
 		</>

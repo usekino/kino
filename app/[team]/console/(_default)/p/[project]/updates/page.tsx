@@ -7,7 +7,7 @@ export default async function UpdatesPage() {
 	return (
 		<div>
 			<ConsoleHeader {...updatesHeaderProps} />
-			<div className='container pt-4'>
+			<div className='container pt-6'>
 				<Heading tag='h1'>Updates coming soon...</Heading>
 			</div>
 		</div>
