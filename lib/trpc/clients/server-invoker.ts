@@ -25,4 +25,9 @@ const createContext = cache(async () => {
 });
 
 const createCaller = t.createCallerFactory(appRouter);
-export const api = createCaller(createContext);
+export const api = createCaller(createContext, {
+	onError: ({ error }) => {
+		console.log('Error in tRPC server invoker');
+		console.error(error);
+	},
+});
