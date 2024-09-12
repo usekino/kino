@@ -21,6 +21,7 @@ export const feedbackSchema = {
 	update: createInsertSchema(feedback, refineSchema).omit(immutableColumns),
 	delete: createInsertSchema(feedback, refineSchema).pick({ id: true }),
 	seed: createInsertSchema(feedback, refineSchema),
+	_all: createInsertSchema(feedback, refineSchema),
 };
 
 export type FeedbackSchema = SchemaObject<typeof feedbackSchema>;

@@ -1,4 +1,5 @@
-import { aliasedTable, asc, desc, eq, sql } from 'drizzle-orm';
+import { aliasedTable, count, eq, sql } from 'drizzle-orm';
+import { withCursorPagination as cursorPagination } from 'drizzle-pagination';
 import { z } from 'zod';
 
 import { boards, feedback, feedbackVotes, users } from '@/lib/db/tables';
@@ -17,13 +18,25 @@ export const consoleFeedbackRouter = router({
 			z.object({
 				projectSlug: z.string(),
 				boardSlug: z.string().optional(),
-				// NOTE: testing this for pagination
-				limit: z.number().min(1).max(100).nullish(),
-				cursor: z.number().nullish(),
-				direction: z.enum(['forward', 'backward']).default('forward'),
+				limit: z.number().min(1).max(100).optional().default(2),
+				cursor: z.number().optional(),
 			})
 		)
 		.query(async ({ ctx, input }) => {
+			const { limit: _limit, cursor } = input;
+
+			const { orderBy, limit, where } = cursorPagination({
+				where: eq(projects.slug, input.projectSlug),
+				limit: _limit,
+				cursors: [
+					[
+						feedback.autoId, // Column to use for cursor
+						'desc', // Sort order ('asc' or 'desc')
+						cursor ? cursor : undefined, // Cursor value
+					],
+				],
+			});
+
 			const data = await ctx.db
 				.select({
 					...Object.fromEntries(Object.entries(feedback)),
@@ -36,15 +49,27 @@ export const consoleFeedbackRouter = router({
 				.innerJoin(projects, eq(projects.id, boards.projectId))
 				.leftJoin(userAssigned, eq(userAssigned.id, feedback.assignedUserId))
 				.leftJoin(feedbackVotes, eq(feedbackVotes.feedbackId, feedback.id))
-				.where(eq(projects.slug, input.projectSlug))
 				.groupBy(
 					...Object.values(feedback),
 					...Object.values(boards),
 					...Object.values(userAssigned)
-				);
+				)
+				.where(where)
+				.orderBy(...orderBy)
+				.limit(limit);
 
-			return feedbackSchema.read
+			const total = await ctx.db
+				.select({
+					count: count(),
+				})
+				.from(feedback)
+				.innerJoin(boards, eq(boards.id, feedback.boardId))
+				.innerJoin(projects, eq(projects.id, boards.projectId))
+				.where(eq(projects.slug, input.projectSlug));
+
+			const items = feedbackSchema._all
 				.pick({
+					autoId: true,
 					id: true,
 					title: true,
 					description: true,
@@ -65,5 +90,14 @@ export const consoleFeedbackRouter = router({
 				)
 				.array()
 				.parse(data);
+
+			const test = {
+				items,
+				count: total[0].count,
+				nextCursor: items.length > 0 ? items[items.length - 1].autoId : null,
+				prevCursor: items.length > 0 ? items[0].autoId : null,
+			};
+
+			return test;
 		}),
 });

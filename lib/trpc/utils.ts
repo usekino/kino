@@ -34,7 +34,7 @@ export function getTRPCUrl() {
 }
 
 export const skipStream = (op: Operation) => {
-	const nonStreamPaths = ['user.', 'auth.'];
+	const nonStreamPaths = ['user.', 'auth.', 'console.'];
 	const skipStreamLink =
 		nonStreamPaths.some((path) => op.path.includes(path)) || !!op.context.skipStream;
 	return skipStreamLink;

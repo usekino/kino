@@ -2,7 +2,7 @@ import type { LayoutProps } from './_types';
 
 import { LockKeyhole } from 'lucide-react';
 
-import { deconstructTeamParam } from '@/app/[team]/_lib/get-team';
+import { deconstructTeamParam } from '@/app/[team]/_lib/deconstruct-team-param';
 import { Heading } from '@/components/heading';
 import { api } from '@/lib/trpc/clients/server-invoker';
 

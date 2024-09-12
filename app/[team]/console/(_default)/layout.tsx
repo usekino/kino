@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { getUser } from '@/lib/auth/utils';
 import { env } from '@/lib/env/server';
 
-import { deconstructTeamParam } from '../../_lib/get-team';
+import { deconstructTeamParam } from '../../_lib/deconstruct-team-param';
 import { LayoutProps } from '../../_types';
 import { ConsoleNav } from './p/[project]/_components/console-nav';
 import { SidebarWithContent } from './p/[project]/_components/sidebar-with-content';

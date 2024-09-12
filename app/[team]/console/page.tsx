@@ -8,7 +8,7 @@ import { env } from '@/lib/env/server';
 import { api } from '@/lib/trpc/clients/server-invoker';
 import { groupProjectsByTeam } from '@/lib/utils/project.utils';
 
-import { deconstructTeamParam } from '../_lib/get-team';
+import { deconstructTeamParam } from '../_lib/deconstruct-team-param';
 import { PageProps } from './../_types';
 
 export default async function ConsolePage({ params }: PageProps) {

@@ -2,31 +2,11 @@
 
 import { getUser } from '@/lib/auth/utils';
 import { getTeamData } from '@/lib/db/prepared';
-import { env } from '@/lib/env/server';
 
-export type Team = string;
-export type TeamPageParams = {
-	params: {
-		team: Team;
-	};
-};
+import { PageProps } from '../_types';
+import { deconstructTeamParam } from './deconstruct-team-param';
 
-export const deconstructTeamParam = (teamParam: Team) => {
-	let subdomain: string | null = null;
-	let domain: string | null = null;
-
-	// If a domain is provided...
-	if (teamParam.includes('.')) {
-		domain = decodeURIComponent(teamParam);
-		subdomain = domain.includes(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) ? domain.split('.')[0] : '';
-	} else {
-		subdomain = teamParam;
-	}
-
-	return { subdomain, domain };
-};
-
-export const getTeam = async ({ teamParam }: { teamParam: Team }) => {
+export const getTeam = async ({ teamParam }: { teamParam: PageProps['params']['team'] }) => {
 	const user = await getUser();
 
 	const { subdomain, domain } = deconstructTeamParam(teamParam);

@@ -6,12 +6,12 @@ import type { ArraySingle } from '@/lib/types';
 import type {
 	ColumnDef,
 	ColumnFiltersState,
-	PaginationState,
 	SortingState,
 	VisibilityState,
 } from '@tanstack/react-table';
 
 import * as React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
 	flexRender,
 	getCoreRowModel,
@@ -23,6 +23,7 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
+import { deconstructTeamParam } from '@/app/[team]/_lib/deconstruct-team-param';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -42,35 +43,12 @@ import {
 import { api } from '@/lib/trpc/clients/client';
 import { cn } from '@/lib/utils';
 
-// type Feedback = ArraySingle<NonNullable<API['output']['feedback']['getByProject']>>;
+import { PageProps } from '../../_types';
 
-export const columns = (
-	baseUrl: string
-): ColumnDef<ArraySingle<NonNullable<API['output']['console']['feedback']['table']>>>[] => {
+type Test = ArraySingle<NonNullable<API['output']['console']['feedback']['table']['items']>>;
+
+export const columns = (baseUrl: string): ColumnDef<Test>[] => {
 	return [
-		// TODO: Uncomment this when we have a use for selections
-		//
-		// {
-		// 	id: 'select',
-		// 	header: ({ table }) => (
-		// 		<Checkbox
-		// 			checked={
-		// 				table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
-		// 			}
-		// 			onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-		// 			aria-label='Select all'
-		// 		/>
-		// 	),
-		// 	cell: ({ row }) => (
-		// 		<Checkbox
-		// 			checked={row.getIsSelected()}
-		// 			onCheckedChange={(value) => row.toggleSelected(!!value)}
-		// 			aria-label='Select row'
-		// 		/>
-		// 	),
-		// 	enableSorting: false,
-		// 	// enableHiding: false,
-		// },
 		{
 			accessorKey: 'status',
 			meta: {
@@ -208,34 +186,49 @@ export const columns = (
 	];
 };
 
-export function FeedbackTable({
-	feedback,
-}: {
-	feedback: NonNullable<API['output']['console']['feedback']['table']>;
-}) {
-	// const test = api.feed
-	// 	projectSlug: 'kiback.projectTable.useSuspenseInfiniteQuery({
-	// 	teamSlug: 'kino',no',
-	// });
+export function FeedbackTable() {
+	const router = useRouter();
+	const params = useParams() as PageProps['params'];
 
-	const params = useParams();
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalPages, setTotalPages] = useState<number | null>(null);
+	const [limit] = useState(4);
+
+	const [data, { fetchNextPage, hasNextPage }] =
+		api.console.feedback.table.useSuspenseInfiniteQuery(
+			{
+				limit,
+				teamSlug: deconstructTeamParam(params.team).subdomain,
+				projectSlug: params.project,
+			},
+			{
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+			}
+		);
+
+	useEffect(() => {
+		setTotalPages(Math.ceil(data.pages[0].count / limit));
+	}, [data.pages[0].count]);
+
+	console.log('data >>> ', totalPages, currentPage);
+
+	// const flatData = useMemo(() => data.pages.flatMap((page) => page.items), [data]);
+
+	const items = useMemo(() => {
+		return data.pages.map((page) => page.items)[currentPage] ?? [];
+	}, [data, currentPage]);
+
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
 		select: false,
 	});
-	const [pagination, setPagination] = React.useState<PaginationState>({
-		pageIndex: 0,
-		pageSize: 10,
-	});
-	const [rowSelection, setRowSelection] = React.useState({});
-	const router = useRouter();
 
 	const baseUrl = `/console/p/${params.project}/feedback`;
 
 	const table = useReactTable({
 		columns: columns(baseUrl),
-		data: feedback,
+		data: items,
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
@@ -243,8 +236,6 @@ export function FeedbackTable({
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
-		onRowSelectionChange: setRowSelection,
-		onPaginationChange: setPagination,
 		defaultColumn: {
 			size: 0,
 			minSize: 20,
@@ -254,12 +245,13 @@ export function FeedbackTable({
 			sorting,
 			columnFilters,
 			columnVisibility,
-			rowSelection,
-			pagination,
 		},
+		manualPagination: true,
+		rowCount: items.length,
+		pageCount: totalPages ?? 1,
 	});
 
-	if (!feedback) {
+	if (!items) {
 		return <div>No feedback found</div>;
 	}
 
@@ -357,21 +349,36 @@ export function FeedbackTable({
 				</div>
 				<div className='flex items-center gap-2'>
 					<div className='text-sm text-muted-foreground'>
-						Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+						Page {currentPage + 1} of {totalPages ?? 1}
 					</div>
 					<Button
 						variant='outline'
 						size='sm'
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}
+						onClick={() => {
+							setCurrentPage((prev) => {
+								if (prev === 0) return 0;
+								return prev - 1;
+							});
+						}}
+						disabled={currentPage === 0}
 					>
 						Previous
 					</Button>
 					<Button
 						variant='outline'
 						size='sm'
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}
+						onClick={() => {
+							if (hasNextPage) {
+								fetchNextPage();
+							}
+							setCurrentPage((prev) => {
+								if (!!totalPages && prev === totalPages - 1) {
+									return totalPages - 1;
+								}
+								return prev + 1;
+							});
+						}}
+						disabled={!!totalPages && totalPages - 1 === currentPage}
 					>
 						Next
 					</Button>
