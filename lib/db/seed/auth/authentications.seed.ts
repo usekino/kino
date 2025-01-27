@@ -12,11 +12,13 @@ const generate = async ({ users }: { users: UsersSchema['Seed'][] }) => {
 	const auth: SeedAuthSchema[] = [];
 
 	for (let i = 0; i < users.length; i++) {
+		if (!process.env.SEED_USER_PASSWORD) {
+			throw new Error('SEED_USER_PASSWORD is not set');
+		}
+
 		auth.push({
 			userId: users[i].id,
-			// Note: this is just a test password, but it should probably be read from
-			// an environment variable in the future
-			hashedPassword: await new Argon2id().hash('password'),
+			hashedPassword: await new Argon2id().hash(process.env.SEED_USER_PASSWORD),
 		});
 	}
 	return auth;
