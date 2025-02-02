@@ -1,10 +1,10 @@
 import type { FeedbackCommentsReactionSchema } from '@/lib/schema/feedback/comments/feedback-comments-reaction.schema';
+import type { FeedbackCommentsSchema } from '@/lib/schema/feedback/comments/feedback-comments.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { feedbackCommentsReactions } from '@/lib/db/tables/feedback/comments/feedback-comments-reactions.table';
-import { FeedbackCommentsSchema } from '@/lib/schema/feedback/comments/feedback-comments.schema';
 
 const generate = (
 	{ feedbackComments }: { feedbackComments: FeedbackCommentsSchema['Seed'][] },

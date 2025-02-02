@@ -1,7 +1,6 @@
 import type { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
 import type { TeamsSchema } from '@/lib/schema/teams/teams.schema';
-
-import { API } from '../trpc/routers/_app';
+import type { API } from '../trpc/routers/_app';
 
 export type MappedByProject = ProjectsSchema['Read'] & {
 	team: {

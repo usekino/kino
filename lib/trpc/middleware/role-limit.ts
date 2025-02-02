@@ -8,6 +8,7 @@ import { TRPCError } from '@trpc/server';
 
 import { t } from '@/lib/trpc/trpc';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type RoleLimitArgs = {
 	// allowedRoles: User['role'];
 };

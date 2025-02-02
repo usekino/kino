@@ -1,10 +1,11 @@
+import type { FeedbackAssignmentsSchema } from '@/lib/schema/feedback/feedback-assignments.schema';
+import type { FeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
+import type { UsersSchema } from '@/lib/schema/users.schema';
+
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { feedbackAssignments } from '@/lib/db/tables/feedback/feedback-assignments.table';
-import { FeedbackAssignmentsSchema } from '@/lib/schema/feedback/feedback-assignments.schema';
-import { FeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
-import { UsersSchema } from '@/lib/schema/users.schema';
 
 const generate = (
 	{

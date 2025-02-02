@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 
 import { cache } from 'react';
-import * as headers from 'next/headers';
+import * as H from 'next/headers';
 
 import { validateAuthRequest } from '@/lib/auth/utils';
 import { createInnerTRPCContext } from '@/lib/trpc/context';
@@ -9,7 +9,10 @@ import { appRouter } from '@/lib/trpc/routers/_app';
 import { t } from '@/lib/trpc/trpc';
 
 const createContext = cache(async () => {
-	const heads = new Headers(headers.headers());
+	const headers = await H.headers();
+	const cookies = await H.cookies();
+
+	const heads = new Headers(headers);
 	heads.set('x-trpc-source', 'rsc');
 
 	return {
@@ -18,7 +21,7 @@ const createContext = cache(async () => {
 		}),
 		req: {} as NextRequest,
 		headers: {
-			cookie: headers.cookies().toString(),
+			cookie: cookies.toString(),
 			'x-trpc-source': 'rsc-invoke',
 		},
 	};

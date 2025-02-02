@@ -1,12 +1,13 @@
 'use client';
 
+import type { LucideIcon } from 'lucide-react';
+
 import {
 	Calendar,
 	CirclePlus,
 	CircleX,
 	Copy,
 	EyeOff,
-	LucideIcon,
 	MoreHorizontal,
 	PenLine,
 	Reply,
@@ -127,6 +128,7 @@ const Comment = ({ item }: { item: Item }) => {
 		<li className='update-comment relative flex rounded-lg border bg-muted'>
 			<div className='flex flex-col items-center justify-start rounded-l-lg border-r bg-accent/30 pl-4 pt-3'>
 				<div className='relative z-10 -mr-4 size-8 overflow-hidden rounded-full border bg-gradient-to-tr from-white/50 to-accent shadow-xl shadow-black'>
+					{/* eslint-disable-next-line @next/next/no-img-element */}
 					<img
 						className='mt-0.5 size-8'
 						src={`https://i.pravatar.cc/150?img=${item.user.username}`}
@@ -163,6 +165,7 @@ const Comment = ({ item }: { item: Item }) => {
 										key={attachment}
 										className='flex gap-2 overflow-hidden rounded-lg border bg-native transition-all duration-200 ease-in-out hocus:scale-105'
 									>
+										{/* eslint-disable-next-line @next/next/no-img-element */}
 										<img src={attachment} alt='' className='max-h-20 w-auto' />
 									</button>
 								))}

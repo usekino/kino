@@ -7,12 +7,15 @@ import { emailSchema } from '@/lib/email/utils';
 export async function POST(request: Request) {
 	const body = await request.json();
 	const { name, email } = emailSchema.parse(body);
+
+	// const react = await EmailTemplate({ firstName: name });
+
 	try {
 		const data = await resend.emails.send({
 			from: 'Kirimase <onboarding@resend.dev>',
 			to: [email],
 			subject: 'Hello world!',
-			react: EmailTemplate({ firstName: name }),
+			react: await EmailTemplate({ firstName: name }),
 			text: 'Email powered by Resend.',
 		});
 

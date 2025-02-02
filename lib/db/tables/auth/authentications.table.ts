@@ -1,4 +1,4 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { z } from 'zod';
 
 import { relations } from 'drizzle-orm';
@@ -29,8 +29,8 @@ export const authenticationRelations = relations(authentications, ({ one }) => (
 }));
 
 const refineSchema = {
-	hashedPassword: ({ hashedPassword }) => hashedPassword.min(8).max(100),
-} satisfies Refine<typeof authentications, 'select'>;
+	hashedPassword: (hashedPassword) => hashedPassword.min(8).max(100),
+} satisfies BuildRefine<typeof authentications>;
 
 export const selectAuthSchema = createSelectSchema(authentications, refineSchema);
 export const mutateAuthSchema = createInsertSchema(authentications, refineSchema);

@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server';
-import { cookies } from 'next/headers';
+import * as H from 'next/headers';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { Argon2id } from 'oslo/password';
 
@@ -53,7 +53,9 @@ export const authRouter = router({
 
 			const { sameSite, ...luciaAttr } = sessionCookie.attributes;
 
-			cookies().set({
+			const cookies = await H.cookies();
+
+			cookies.set({
 				...luciaAttr,
 				name: sessionCookie.name,
 				value: sessionCookie.value,
@@ -104,7 +106,9 @@ export const authRouter = router({
 
 		const { sameSite, ...luciaAttr } = sessionCookie.attributes;
 
-		cookies().set({
+		const cookies = await H.cookies();
+
+		cookies.set({
 			...luciaAttr,
 			name: sessionCookie.name,
 			value: sessionCookie.value,
@@ -120,8 +124,10 @@ export const authRouter = router({
 	signOut: noAuthProcedure.use(isAuthed).mutation(async ({ ctx }) => {
 		await lucia.invalidateSession(ctx.auth.session.id);
 
+		const cookies = await H.cookies();
+
 		const sessionCookie = lucia.createBlankSessionCookie();
-		cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+		cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
 		return {};
 	}),

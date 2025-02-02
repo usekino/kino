@@ -1,6 +1,8 @@
 'use client';
 
 import type { API } from '@/lib/trpc/routers/_app';
+import type { MappedByProject } from '@/lib/utils/project.utils';
+import type { PageProps } from '../_types';
 
 import { useContext, useState } from 'react';
 import { CheckIcon, ChevronsUpDown, PlusCircle, UsersRound } from 'lucide-react';
@@ -18,9 +20,8 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { env } from '@/lib/env/client';
 import { cn } from '@/lib/utils';
-import { groupProjectsByTeam, MappedByProject } from '@/lib/utils/project.utils';
+import { groupProjectsByTeam } from '@/lib/utils/project.utils';
 
-import { PageProps } from '../_types';
 import { SidebarContext } from './sidebar-with-content';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
@@ -32,7 +33,7 @@ interface ProjectSwitcherProps extends PopoverTriggerProps {
 
 export default function Switcher({ projects, className }: ProjectSwitcherProps) {
 	const pathname = usePathname();
-	const params = useParams<PageProps['params']>();
+	const params = useParams<Awaited<PageProps['params']>>();
 	const router = useRouter();
 
 	const [open, setOpen] = useState(false);

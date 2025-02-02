@@ -1,11 +1,11 @@
 import type { ProjectMembersSchema } from '@/lib/schema/projects/project-members.schema';
+import type { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { projectMembers } from '@/lib/db/tables/projects/project-members.table';
-import { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
-import { UsersSchema } from '@/lib/schema/users.schema';
 
 const generate = ({
 	projects,

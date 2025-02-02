@@ -1,5 +1,5 @@
 import type { SchemaObject } from '@/lib/schema/_shared';
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
@@ -8,7 +8,7 @@ import { feedbackComments } from '@/lib/db/tables/feedback/comments/feedback-com
 
 const refineSchema = {
 	status: () => z.array(z.enum(['open', 'planned', 'closed'])),
-} satisfies Refine<typeof feedbackComments, 'select'>;
+} satisfies BuildRefine<typeof feedbackComments>;
 
 export const feedbackCommentsSchema = {
 	create: createInsertSchema(feedbackComments, refineSchema),

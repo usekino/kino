@@ -1,12 +1,14 @@
-// This is the THE ONE
+import type { LucideIcon } from 'lucide-react';
 import type { ConsoleHeaderNavProps } from './console-header-nav';
 
-import { ChevronRight, LucideIcon } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 import { Heading } from '@/components/heading';
 import { cn, slugify } from '@/lib/utils';
 
 import { ConsoleHeaderNav } from './console-header-nav';
+
+// This is the THE ONE
 
 type ConsoleHeaderProps = {
 	icon: LucideIcon;

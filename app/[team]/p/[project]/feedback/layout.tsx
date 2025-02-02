@@ -8,7 +8,7 @@ import { ListSidebar } from './_components/sidebar';
 
 export default async function FeedbackPageLayout({ children, params }: LayoutProps) {
 	const project = await api.project.findBySlug({
-		slug: params.project,
+		slug: (await params).project,
 	});
 	if (!project) return notFound();
 

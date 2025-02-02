@@ -1,3 +1,5 @@
+import type { PageProps } from './_types';
+
 import { CircleCheck, CircleDotDashed } from 'lucide-react';
 import Link from 'next/link';
 
@@ -8,7 +10,6 @@ import { cn } from '@/lib/utils';
 
 import { AssignedTo } from './_components/AssignedTo';
 import Updates from './_components/Updates';
-import { PageProps } from './_types';
 
 type Status = 'open' | 'planned' | 'closed';
 
@@ -30,7 +31,7 @@ const Status = ({ status }: { status: Status }) => {
 
 export default async function FeedbackIdPage({ params }: PageProps) {
 	const feedback = {
-		id: params.feedbackId,
+		id: (await params).feedbackId,
 		title: 'This is a feature request',
 		status: 'open',
 		upvotes: 0,
@@ -71,7 +72,7 @@ export default async function FeedbackIdPage({ params }: PageProps) {
 									</span>{' '}
 									<Link
 										className='text-sm hocus:underline'
-										href={`/console/p/${params.project}/u/${feedback.assignedBy}`}
+										href={`/console/p/${(await params).project}/u/${feedback.assignedBy}`}
 									>
 										{feedback.assignedBy}
 									</Link>

@@ -1,11 +1,12 @@
 'use client';
 
+import type { API } from '@/lib/trpc/routers/_app';
+
 import { Home, Map, MessageSquare, Rss } from 'lucide-react';
 import Link from 'next/link';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
-import { API } from '@/lib/trpc/routers/_app';
 import { cn } from '@/lib/utils';
 import { useLinks } from '@/lib/utils/use-links';
 

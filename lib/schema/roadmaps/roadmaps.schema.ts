@@ -1,4 +1,4 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -7,7 +7,7 @@ import { roadmaps } from '@/lib/db/tables/roadmaps/roadmaps.table';
 
 import { immutableColumns, inaccessibleColumns } from '../_shared';
 
-const refineSchema = {} satisfies Refine<typeof roadmaps, 'select'>;
+const refineSchema = {} satisfies BuildRefine<typeof roadmaps>;
 
 export const roadmapsSchema = {
 	create: createInsertSchema(roadmaps, refineSchema).omit(immutableColumns),

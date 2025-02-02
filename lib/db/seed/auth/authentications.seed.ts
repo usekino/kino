@@ -1,10 +1,10 @@
 import type { SeedAuthSchema } from '@/lib/db/tables/auth/authentications.table';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 
 import { Argon2id } from 'oslo/password';
 
 import { httpDb } from '@/lib/db';
 import { authentications } from '@/lib/db/tables/auth/authentications.table';
-import { UsersSchema } from '@/lib/schema/users.schema';
 
 export const maxAuthCount = 10;
 

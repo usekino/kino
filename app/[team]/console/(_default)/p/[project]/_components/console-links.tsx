@@ -1,7 +1,9 @@
 'use client';
 
+import type { LucideIcon } from 'lucide-react';
+
 import { useContext } from 'react';
-import { Home, LucideIcon, Map, MessageSquare, Rss, Settings } from 'lucide-react';
+import { Home, Map, MessageSquare, Rss, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 

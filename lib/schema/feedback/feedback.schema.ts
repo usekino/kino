@@ -1,4 +1,4 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -9,11 +9,10 @@ import { feedback } from '@/lib/db/tables/feedback/feedback.table';
 import { immutableColumns, inaccessibleColumns } from '../_shared';
 
 const refineSchema = {
-	title: ({ title }) => title.min(3).max(120),
-	description: ({ description }) => description.max(1500),
+	title: (title) => title.min(3).max(120),
+	description: (description) => description.max(1500),
 	status: () => z.array(z.string()),
-	// boardId: () => z.string().min(3),
-} satisfies Refine<typeof feedback, 'select'>;
+} satisfies BuildRefine<typeof feedback>;
 
 export const feedbackSchema = {
 	create: createInsertSchema(feedback, refineSchema).omit(immutableColumns),

@@ -1,12 +1,12 @@
 import type { BoardsSchema } from '@/lib/schema/boards/boards.schema';
 import type { FeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
+import type { TeamsSchema } from '@/lib/schema/teams/teams.schema';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { feedback } from '@/lib/db/tables/feedback/feedback.table';
-import { TeamsSchema } from '@/lib/schema/teams/teams.schema';
-import { UsersSchema } from '@/lib/schema/users.schema';
 
 export const maxFeedbackCount = 500;
 

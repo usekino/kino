@@ -403,7 +403,9 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
 							}}
 							onFocus={(event) => {
 								setOpen(true);
-								triggerSearchOnFocus && onSearch?.(debouncedSearchTerm);
+								if (triggerSearchOnFocus) {
+									onSearch?.(debouncedSearchTerm);
+								}
 								inputProps?.onFocus?.(event);
 							}}
 							placeholder={hidePlaceholderWhenSelected && selected.length !== 0 ? '' : placeholder}
@@ -416,7 +418,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
 				</div>
 				<div className='relative mt-2'>
 					{open && (
-						<CommandList className='absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in'>
+						<CommandList className='animate-in absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none'>
 							{isLoading ? (
 								<>{loadingIndicator}</>
 							) : (

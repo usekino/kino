@@ -1,3 +1,4 @@
+import type { MappedByProject } from '@/lib/utils/project.utils';
 import type { User } from 'lucia';
 
 import { and, eq, not, or, sql } from 'drizzle-orm';
@@ -6,7 +7,6 @@ import { z } from 'zod';
 import { projectsSchema } from '@/lib/schema/projects/projects.schema';
 import { teamsSchema } from '@/lib/schema/teams/teams.schema';
 import { createTruthy } from '@/lib/utils';
-import { MappedByProject } from '@/lib/utils/project.utils';
 
 import { db } from '..';
 

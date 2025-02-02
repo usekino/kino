@@ -30,7 +30,7 @@ export const users = pgTable(
 		avatar: varchar('avatar', { length: 255 }),
 		bio: varchar('bio', { length: 3072 }),
 		// TODO: Make required/notNull
-		name: varchar('name', { length: 255 }),
+		name: varchar('name', { length: 255 }).notNull(),
 		latestAgreement: timestamp('latest_terms')
 			.default(sql`CURRENT_TIMESTAMP`)
 			.notNull(),

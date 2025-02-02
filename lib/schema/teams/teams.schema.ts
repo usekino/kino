@@ -1,15 +1,16 @@
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
+import type { SchemaObject } from '../_shared';
+
 import badwords from '@heyooo-inc/reserved-subdomains/badwords.json';
 import names from '@heyooo-inc/reserved-subdomains/names.json';
 import web from '@heyooo-inc/reserved-subdomains/web.json';
-import { createInsertSchema, createSelectSchema, Refine } from 'drizzle-zod';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { teams } from '@/lib/db/tables/teams/teams.table';
 
-import { SchemaObject } from '../_shared';
-
 const refineSchema = {
-	name: ({ name }) => name.min(3).max(50),
-	slug: ({ slug }) =>
+	name: (name) => name.min(3).max(50),
+	slug: (slug) =>
 		slug
 			.min(3)
 			.max(25)
@@ -42,8 +43,8 @@ const refineSchema = {
 				},
 				'Team slug is not allowed' //
 			),
-	description: ({ description }) => description.max(300),
-} satisfies Refine<typeof teams, 'select'>;
+	description: (description) => description.max(300).optional(),
+} satisfies BuildRefine<typeof teams>;
 
 export const teamsSchema = {
 	create: createInsertSchema(teams, refineSchema).omit({

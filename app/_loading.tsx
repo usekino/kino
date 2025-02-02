@@ -2,7 +2,7 @@ export default function Loading() {
 	return (
 		<div className='flex h-screen w-full flex-col items-center justify-center gap-2'>
 			<div className='grid animate-pulse place-items-center p-4 text-muted-foreground'>
-				<div role='status'>
+		<div role='status'>
 					<svg
 						aria-hidden='true'
 						className='h-8 w-8 animate-spin fill-muted text-muted-foreground'

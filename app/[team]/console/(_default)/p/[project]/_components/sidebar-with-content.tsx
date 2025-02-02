@@ -1,6 +1,8 @@
 'use client';
 
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+
+import { createContext, useContext, useState } from 'react';
 import { ArrowLeftFromLine, ArrowRightFromLine } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';

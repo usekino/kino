@@ -1,4 +1,4 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -10,7 +10,7 @@ import { immutableColumns } from '../_shared';
 
 const refineSchema = {
 	userRole: () => z.enum(['member', 'blocked']),
-} satisfies Refine<typeof projectMembers, 'select'>;
+} satisfies BuildRefine<typeof projectMembers>;
 
 export const projectMembersSchema = {
 	create: createInsertSchema(projectMembers, refineSchema).pick(immutableColumns),

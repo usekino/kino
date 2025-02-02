@@ -1,10 +1,10 @@
 import type { BoardsSchema } from '@/lib/schema/boards/boards.schema';
+import type { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { boards } from '@/lib/db/tables/boards/boards.table';
-import { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
 
 const generate = (
 	{

@@ -1,15 +1,22 @@
+import type { NextRequest } from 'next/server';
+
 import { TRPCError } from '@trpc/server';
 import { Ratelimit } from '@upstash/ratelimit';
-import type { NextRequest } from 'next/server';
+import { ipAddress } from '@vercel/functions';
 
 import { redis } from '@/lib/db/upstash';
 import { t } from '@/lib/trpc/trpc';
 
-const getIPAddress = (req: NextRequest) => {
+const getIPAddress = (request: NextRequest) => {
 	if (process.env.NODE_ENV === 'development') {
 		return 'local';
 	}
-	return req.ip || req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for') || 'unknown';
+	return (
+		ipAddress(request) ||
+		request.headers.get('x-real-ip') ||
+		request.headers.get('x-forwarded-for') ||
+		'unknown'
+	);
 };
 
 type RateLimitArgs = {

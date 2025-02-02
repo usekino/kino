@@ -1,15 +1,14 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
+import type { SchemaObject } from '../../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { feedbackCommentsReactions } from '@/lib/db/tables/feedback/comments/feedback-comments-reactions.table';
 
-import { SchemaObject } from '../../_shared';
-
 const refineSchema = {
 	reaction: () => z.enum(['heart', 'wow', 'thumbsUp', 'thumbsDown']),
-} satisfies Refine<typeof feedbackCommentsReactions, 'select'>;
+} satisfies BuildRefine<typeof feedbackCommentsReactions>;
 
 export const feedbackCommentsReactionSchema = {
 	create: createInsertSchema(feedbackCommentsReactions, refineSchema),

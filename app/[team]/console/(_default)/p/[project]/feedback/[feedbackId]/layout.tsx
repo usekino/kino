@@ -1,10 +1,10 @@
+// import type { LayoutProps } from './_types';
+
 import { CircleDot } from 'lucide-react';
 
 import { Heading } from '@/components/heading';
 
-import { LayoutProps } from './_types';
-
-export default async function FeedbackIdLayoutPage({ children }: LayoutProps) {
+export default async function FeedbackIdLayoutPage({ children }: { children: React.ReactNode }) {
 	return (
 		<div>
 			<header>

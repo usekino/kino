@@ -1,7 +1,7 @@
 'use server';
 
 import { getPathname } from '@nimpl/getters/get-pathname';
-import { headers } from 'next/headers';
+import * as _headers from 'next/headers';
 
 import { env } from '@/lib/env/server';
 import { getValidSubdomain } from '@/lib/utils/get-valid-subdomain';
@@ -13,10 +13,12 @@ export const serverRoute = async ({
 	teamSlug?: string;
 	projectSlug?: string;
 }) => {
+	const headers = await _headers.headers();
+
 	const pathname = getPathname();
-	const host = headers().get('host');
+	const host = headers.get('host');
 	const subdomain = getValidSubdomain(host);
-	const proto = headers().get('x-forwarded-proto') ?? 'https';
+	const proto = headers.get('x-forwarded-proto') ?? 'https';
 
 	const getValidatedTeamSlug = () => {
 		if (!!teamSlug) return teamSlug;

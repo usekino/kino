@@ -1,6 +1,6 @@
 import { Heading } from '@/components/heading';
 
-import { CreateTeamForm } from './_components/create-team-form';
+// import { CreateTeamForm } from './_components/create-team-form';
 
 export default async function CreateTeamPage() {
 	return (
@@ -11,9 +11,7 @@ export default async function CreateTeamPage() {
 					<p className='opacity-50'>Create your team and invite your team members to join.</p>
 				</div>
 			</div>
-			<div className='mt-6'>
-				<CreateTeamForm />
-			</div>
+			<div className='mt-6'>{/* <CreateTeamForm /> */}</div>
 		</div>
 	);
 }

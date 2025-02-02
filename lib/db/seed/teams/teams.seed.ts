@@ -1,10 +1,10 @@
 import type { TeamsSchema } from '@/lib/schema/teams/teams.schema';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { teams } from '@/lib/db/tables/teams/teams.table';
-import { UsersSchema } from '@/lib/schema/users.schema';
 
 const generate = (
 	{
@@ -37,7 +37,7 @@ const generate = (
 			ownerId: users[i].id,
 			name: faker.company.name(),
 			slug: faker.helpers.slugify(faker.company.name()).toLowerCase(),
-			description: faker.lorem.sentence(),
+			// description: faker.lorem.sentence(),
 		});
 	}
 	return teams;

@@ -3,6 +3,7 @@ export const AssignedTo = () => {
 		<div className='flex rounded-lg border bg-muted'>
 			<div className='flex items-center justify-center rounded-l-lg border-r bg-accent/30 px-4'>
 				<div className='mr-[-2.25rem] size-10 overflow-hidden rounded-full border'>
+					{/* eslint-disable-next-line @next/next/no-img-element */}
 					<img src='https://i.pravatar.cc/150?img=natedunn' alt='natedunn' />
 				</div>
 			</div>

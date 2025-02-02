@@ -1,4 +1,4 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -7,7 +7,7 @@ import { boards } from '@/lib/db/tables/boards/boards.table';
 
 import { immutableColumns } from '../_shared';
 
-const refineSchema = {} satisfies Refine<typeof boards, 'select'>;
+const refineSchema = {} satisfies BuildRefine<typeof boards>;
 
 export const boardsSchema = {
 	create: createInsertSchema(boards, refineSchema).pick(immutableColumns),

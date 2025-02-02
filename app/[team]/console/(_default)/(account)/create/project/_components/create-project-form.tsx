@@ -33,6 +33,7 @@
 // import { API } from '@/lib/trpc/routers/_app';
 // import { slugify } from '@/lib/utils';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type CreateProjectProps = {
 	// teams: API['output']['dashboard']['userTeams'];
 };

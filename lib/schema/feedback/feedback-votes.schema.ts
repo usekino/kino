@@ -1,4 +1,4 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -8,8 +8,8 @@ import { feedbackVotes } from '@/lib/db/tables/feedback/feedback-votes.table';
 import { immutableColumns } from '../_shared';
 
 const refineSchema = {
-	vote: ({ vote }) => vote.min(1).max(1),
-} satisfies Refine<typeof feedbackVotes, 'select'>;
+	vote: (vote) => vote.min(1).max(1),
+} satisfies BuildRefine<typeof feedbackVotes>;
 
 export const feedbackVotesSchema = {
 	create: createInsertSchema(feedbackVotes, refineSchema).omit(immutableColumns),

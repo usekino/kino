@@ -1,9 +1,10 @@
+import type { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
+import type { TeamsSchema } from '@/lib/schema/teams/teams.schema';
+
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { projects } from '@/lib/db/tables/projects/projects.table';
-import { ProjectsSchema } from '@/lib/schema/projects/projects.schema';
-import { TeamsSchema } from '@/lib/schema/teams/teams.schema';
 import { generateId } from '@/lib/utils';
 
 const generate = (teams: TeamsSchema['Seed'][], count: number) => {

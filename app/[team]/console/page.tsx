@@ -1,3 +1,5 @@
+import type { PageProps } from './../_types';
+
 import { Check, UsersRound } from 'lucide-react';
 import Link from 'next/link';
 
@@ -9,7 +11,6 @@ import { api } from '@/lib/trpc/clients/server-invoker';
 import { groupProjectsByTeam } from '@/lib/utils/project.utils';
 
 import { deconstructTeamParam } from '../_lib/deconstruct-team-param';
-import { PageProps } from './../_types';
 
 export default async function ConsolePage({ params }: PageProps) {
 	await checkAuth();
@@ -17,7 +18,7 @@ export default async function ConsolePage({ params }: PageProps) {
 	const projects = await api.project.getUserProjects({ groupByTeam: true });
 	const teamProjects = groupProjectsByTeam(projects);
 
-	const { subdomain: teamSlug } = deconstructTeamParam(params.team);
+	const { subdomain: teamSlug } = deconstructTeamParam((await params).team);
 
 	return (
 		<div className='p-2 sm:p-4 md:p-6'>

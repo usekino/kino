@@ -1,11 +1,11 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { feedbackAssignments } from '@/lib/db/tables/feedback/feedback-assignments.table';
 
-const refineSchema = {} satisfies Refine<typeof feedbackAssignments, 'select'>;
+const refineSchema = {} satisfies BuildRefine<typeof feedbackAssignments>;
 
 export const feedbackAssignmentsSchema = {
 	create: createInsertSchema(feedbackAssignments, refineSchema),

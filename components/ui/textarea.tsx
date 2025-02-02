@@ -1,9 +1,10 @@
 'use client';
 
+import type { ExtendedComponentProps } from '@/lib/types';
+
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { mergeRefs } from 'react-merge-refs';
 
-import { ExtendedComponentProps } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 export type TextAreaProps = ExtendedComponentProps<
@@ -36,8 +37,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 			adaptive = true,
 			maxLength = 1000,
 			children,
-			id,
-			error,
+			// id,
+			// error,
 			onChange,
 			...props
 		}: TextAreaProps,

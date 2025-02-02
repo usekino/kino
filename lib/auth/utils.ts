@@ -1,7 +1,7 @@
 import type { Session, User } from 'lucia';
 
 import { cache } from 'react';
-import { cookies } from 'next/headers';
+import * as H from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { lucia } from '@/lib/auth/lucia';
@@ -10,7 +10,9 @@ export const validateAuthRequest = cache(
 	async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
 		'use server';
 
-		const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+		const cookies = await H.cookies();
+
+		const sessionId = cookies.get(lucia.sessionCookieName)?.value ?? null;
 		if (!sessionId) {
 			return {
 				user: null,
@@ -24,12 +26,12 @@ export const validateAuthRequest = cache(
 			if (result.session && result.session.fresh) {
 				const sessionCookie = lucia.createSessionCookie(result.session.id);
 
-				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+				cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 			}
 			if (!result.session) {
 				const sessionCookie = lucia.createBlankSessionCookie();
 
-				cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+				cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 			}
 		} catch {
 			// We know this will throw when Next attempts to set the cookie while

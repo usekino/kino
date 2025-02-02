@@ -1,16 +1,15 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
+import type { SchemaObject } from '../_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { feedbackUpdates } from '@/lib/db/tables/feedback/feedback-updates.table';
 
-import { SchemaObject } from '../_shared';
-
 const refineSchema = {
 	type: () => z.enum(['comment', 'edit', 'status']),
 	visibility: () => z.enum(['public', 'private']),
-} satisfies Refine<typeof feedbackUpdates, 'select'>;
+} satisfies BuildRefine<typeof feedbackUpdates>;
 
 export const feedbackUpdatesSchema = {
 	create: createInsertSchema(feedbackUpdates, refineSchema),

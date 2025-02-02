@@ -1,4 +1,4 @@
-import type { Refine } from 'drizzle-zod';
+import type { BuildRefine } from 'node_modules/drizzle-zod/schema.types.internal.d.ts';
 import type { SchemaObject } from './_shared';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
@@ -10,8 +10,8 @@ import { usersSchema } from '@/lib/schema/users.schema';
 import { immutableColumns } from './_shared';
 
 const refineSchema = {
-	hashedPassword: ({ hashedPassword }) => hashedPassword.min(8).max(100),
-} satisfies Refine<typeof authentications, 'select'>;
+	hashedPassword: (hashedPassword) => hashedPassword.min(8).max(100),
+} satisfies BuildRefine<typeof authentications>;
 
 const crudSchema = {
 	create: createInsertSchema(authentications, refineSchema).pick(immutableColumns),

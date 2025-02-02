@@ -1,11 +1,13 @@
 'use server';
 
-import { cookies } from 'next/headers';
+import * as headers from 'next/headers';
 
 import { env } from '../env/server';
 
 export const setThemeCookie = async (theme: string) => {
-	cookies().set({
+	const cookies = await headers.cookies();
+
+	cookies.set({
 		name: 'theme',
 		value: theme,
 		domain: env.NEXT_PUBLIC_ROOT_DOMAIN,
@@ -14,6 +16,8 @@ export const setThemeCookie = async (theme: string) => {
 };
 
 export const getThemeCookie = async () => {
-	const themeCookie = cookies().get('theme');
+	const cookies = await headers.cookies();
+
+	const themeCookie = cookies.get('theme');
 	return themeCookie?.value;
 };

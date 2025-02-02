@@ -1,12 +1,24 @@
 // import { notFound } from 'next/navigation';
 
+import type { PageProps } from '../_types';
+
 import { getUser } from '@/lib/auth/utils';
 import { getTeamData } from '@/lib/db/prepared';
 
-import { PageProps } from '../_types';
 import { deconstructTeamParam } from './deconstruct-team-param';
 
-export const getTeam = async ({ teamParam }: { teamParam: PageProps['params']['team'] }) => {
+// TODO this is a band-aid to fix type here
+export type TeamPageParams = {
+	params: Promise<{
+		team: string;
+	}>;
+};
+
+export const getTeam = async ({
+	teamParam,
+}: {
+	teamParam: Awaited<PageProps['params']>['team'];
+}) => {
 	const user = await getUser();
 
 	const { subdomain, domain } = deconstructTeamParam(teamParam);

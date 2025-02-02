@@ -1,3 +1,4 @@
+import type { FeedbackVotesSchema } from '@/lib/schema/feedback/feedback-votes.schema';
 import type { FeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
 import type { UsersSchema } from '@/lib/schema/users.schema';
 
@@ -5,7 +6,6 @@ import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { feedbackVotes } from '@/lib/db/tables/feedback/feedback-votes.table';
-import { FeedbackVotesSchema } from '@/lib/schema/feedback/feedback-votes.schema';
 
 const generate = (
 	{

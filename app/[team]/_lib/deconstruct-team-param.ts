@@ -2,7 +2,7 @@ import type { PageProps } from '../_types';
 
 import { env } from '@/lib/env/client';
 
-export const deconstructTeamParam = (teamParam: PageProps['params']['team']) => {
+export const deconstructTeamParam = (teamParam: Awaited<PageProps['params']>['team']) => {
 	let subdomain: string | null = null;
 	let domain: string | null = null;
 

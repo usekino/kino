@@ -8,7 +8,7 @@ import { ProjectHeader } from './_components/project-header';
 
 export default async function DashboardPageLayout({ children, params }: LayoutProps) {
 	const project = await api.project.findBySlug({
-		slug: params.project,
+		slug: (await params).project,
 	});
 	if (!project) return notFound();
 

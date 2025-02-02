@@ -9,6 +9,7 @@ import type {
 	SortingState,
 	VisibilityState,
 } from '@tanstack/react-table';
+import type { PageProps } from '../../_types';
 
 import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
@@ -42,8 +43,6 @@ import {
 } from '@/components/ui/table';
 import { api } from '@/lib/trpc/clients/client';
 import { cn } from '@/lib/utils';
-
-import { PageProps } from '../../_types';
 
 type Test = ArraySingle<NonNullable<API['output']['console']['feedback']['table']['items']>>;
 
@@ -188,7 +187,7 @@ export const columns = (baseUrl: string): ColumnDef<Test>[] => {
 
 export function FeedbackTable() {
 	const router = useRouter();
-	const params = useParams() as PageProps['params'];
+	const params = useParams() as Awaited<PageProps['params']>;
 
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPages, setTotalPages] = useState<number | null>(null);
@@ -208,6 +207,7 @@ export function FeedbackTable() {
 
 	useEffect(() => {
 		setTotalPages(Math.ceil(data.pages[0].count / limit));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data.pages[0].count]);
 
 	console.log('data >>> ', totalPages, currentPage);

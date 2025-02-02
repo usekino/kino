@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react';
 import './globals.css';
 
 import { Inter } from 'next/font/google';
-import { headers } from 'next/headers';
+import * as H from 'next/headers';
 
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/sonner';
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
+	const headers = await H.headers();
 	return (
 		<html lang='en' suppressHydrationWarning className={inter.className}>
 			<body>
@@ -27,7 +28,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 					enableSystem
 					disableTransitionOnChange
 				>
-					<TrpcProvider headers={headers()}>{children}</TrpcProvider>
+					<TrpcProvider headers={headers}>{children}</TrpcProvider>
 					<Toaster richColors />
 				</ThemeProvider>
 			</body>

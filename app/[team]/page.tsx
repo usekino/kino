@@ -19,7 +19,7 @@ export default async function TeamPage({ params }: TeamPageParams) {
 	// 	teamSlug: team.slug,
 	// });
 
-	return <div className='container py-6'>{params.team}</div>;
+	return <div className='container py-6'>{(await params).team}</div>;
 
 	// return (
 	// 	<div className='container py-6'>

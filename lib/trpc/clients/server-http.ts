@@ -1,5 +1,3 @@
-'use server';
-
 import type { AppRouter } from '@/lib/trpc/routers/_app';
 
 import {
@@ -7,8 +5,8 @@ import {
 	httpBatchLink,
 	unstable_httpBatchStreamLink as httpBatchStreamLink,
 	splitLink,
-} from '@trpc/react-query';
-import * as headers from 'next/headers';
+} from '@trpc/client';
+import * as H from 'next/headers';
 import superjson from 'superjson';
 
 import { customLoggerLink, skipStream } from '@/lib/trpc/utils';
@@ -17,12 +15,13 @@ import { getBaseUrl } from '@/lib/utils/get-base-url';
 const options = {
 	transformer: superjson,
 	url: `${getBaseUrl()}/api/trpc`,
-	headers: () => {
-		const h = new Map(headers.headers());
-		h.delete('connection');
-		h.delete('transfer-encoding');
-		h.set('x-trpc-source', 'server');
-		return Object.fromEntries(h.entries());
+	headers: async () => {
+		const headers = new Headers(await H.headers());
+
+		headers.delete('connection');
+		headers.delete('transfer-encoding');
+		headers.set('x-trpc-source', 'server');
+		return Object.fromEntries(headers.entries());
 	},
 };
 

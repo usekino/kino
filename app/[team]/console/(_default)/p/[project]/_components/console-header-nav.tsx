@@ -1,11 +1,13 @@
 'use client';
 
+import type { LinkData } from '@/lib/utils/use-links';
+
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { LinkData, useLinks } from '@/lib/utils/use-links';
+import { useLinks } from '@/lib/utils/use-links';
 
 export type ConsoleHeaderNavProps = {
 	consoleBasePathname: string;

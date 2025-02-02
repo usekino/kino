@@ -1,11 +1,11 @@
 import type { FeedbackCommentsSchema } from '@/lib/schema/feedback/comments/feedback-comments.schema';
+import type { FeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
+import type { UsersSchema } from '@/lib/schema/users.schema';
 
 import { faker } from '@faker-js/faker';
 
 import { httpDb } from '@/lib/db';
 import { feedbackComments } from '@/lib/db/tables/feedback/comments/feedback-comments.table';
-import { FeedbackSchema } from '@/lib/schema/feedback/feedback.schema';
-import { UsersSchema } from '@/lib/schema/users.schema';
 
 export const maxFeedbackCommentsCount = 100;
 
