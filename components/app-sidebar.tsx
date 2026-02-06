@@ -1,20 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import {
-	AudioWaveform,
-	Command,
-	Frame,
-	GalleryVerticalEnd,
-	Map,
-	MessageSquare,
-	PieChart,
-	Rss,
-	Settings2,
-} from 'lucide-react';
+import { AudioWaveform, Command, GalleryVerticalEnd } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
-import { NavProjects } from '@/components/nav-projects';
 import { NavUser } from '@/components/nav-user';
 import { TeamSwitcher } from '@/components/team-switcher';
 import {
@@ -30,7 +19,7 @@ const data = {
 	user: {
 		name: 'shadcn',
 		email: 'm@example.com',
-		avatar: '/avatars/shadcn.jpg',
+		avatar: 'https://i.pravatar.cc/150?img=hello@natedunn.dev',
 	},
 	teams: [
 		{
@@ -49,110 +38,6 @@ const data = {
 			plan: 'Free',
 		},
 	],
-	navMain: [
-		{
-			title: 'Feedback',
-			url: '#',
-			icon: MessageSquare,
-			isActive: true,
-			items: [
-				{
-					title: 'Viewer',
-					url: '#',
-				},
-				{
-					title: 'Boards',
-					url: '#',
-				},
-				{
-					title: 'Settings',
-					url: '#',
-				},
-			],
-		},
-		{
-			title: 'Updates',
-			url: '#',
-			icon: Rss,
-			items: [
-				{
-					title: 'Posted',
-					url: '#',
-				},
-				{
-					title: 'Drafts',
-					url: '#',
-				},
-				{
-					title: 'Settings',
-					url: '#',
-				},
-			],
-		},
-		{
-			title: 'Roadmap',
-			url: '#',
-			icon: Map,
-			items: [
-				{
-					title: 'Organizer',
-					url: '#',
-				},
-				{
-					title: 'Get Started',
-					url: '#',
-				},
-				{
-					title: 'Tutorials',
-					url: '#',
-				},
-				{
-					title: 'Changelog',
-					url: '#',
-				},
-			],
-		},
-		{
-			title: 'Settings',
-			url: '#',
-			icon: Settings2,
-			items: [
-				{
-					title: 'General',
-					url: '#',
-				},
-				{
-					title: 'Team',
-					url: '#',
-				},
-				{
-					title: 'Billing',
-					url: '#',
-				},
-				{
-					title: 'Limits',
-					url: '#',
-				},
-			],
-		},
-	],
-	projects: [
-		{
-			name: 'Design Engineering',
-			url: '#',
-			icon: Frame,
-		},
-		{
-			name: 'Sales & Marketing',
-			url: '#',
-			icon: PieChart,
-		},
-		{
-			name: 'Travel',
-			url: '#',
-			icon: Map,
-		},
-	],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -162,8 +47,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<TeamSwitcher teams={data.teams} />
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
-				<NavProjects projects={data.projects} />
+				<NavMain />
+				{/* <NavProjects projects={data.projects} /> */}
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser user={data.user} />

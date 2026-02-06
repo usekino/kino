@@ -210,7 +210,7 @@ export function FeedbackTable() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data.pages[0].count]);
 
-	console.log('data >>> ', totalPages, currentPage);
+	// console.log('data >>> ', totalPages, currentPage);
 
 	// const flatData = useMemo(() => data.pages.flatMap((page) => page.items), [data]);
 

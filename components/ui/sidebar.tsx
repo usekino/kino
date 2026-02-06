@@ -13,7 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
@@ -38,7 +38,7 @@ const SidebarContext = React.createContext<SidebarContext | null>(null);
 function useSidebar() {
 	const context = React.useContext(SidebarContext);
 	if (!context) {
-		throw new Error('useSidebar must be used within a Sidebar.');
+		throw new Error('useSidebar must be used within a SidebarProvider.');
 	}
 
 	return context;
@@ -64,33 +64,38 @@ const SidebarProvider = React.forwardRef<
 		},
 		ref
 	) => {
-		const isMobile = useBreakpoint();
+		const isMobile = useIsMobile();
 		const [openMobile, setOpenMobile] = React.useState(false);
-
-		// This is the internal state of the sidebar.
-		// We use openProp and setOpenProp for control from outside the component.
 		const [_open, _setOpen] = React.useState(defaultOpen);
+
+		React.useEffect(() => {
+			const cookies = document.cookie.split(';');
+			const sidebarCookie = cookies.find((cookie) =>
+				cookie.trim().startsWith(`${SIDEBAR_COOKIE_NAME}=`)
+			);
+			const cookieState = sidebarCookie ? sidebarCookie.split('=')[1] === 'true' : defaultOpen;
+			_setOpen(cookieState);
+		}, [defaultOpen]);
+
 		const open = openProp ?? _open;
 		const setOpen = React.useCallback(
 			(value: boolean | ((value: boolean) => boolean)) => {
+				const openState = typeof value === 'function' ? value(open) : value;
 				if (setOpenProp) {
-					return setOpenProp?.(typeof value === 'function' ? value(open) : value);
+					setOpenProp(openState);
+				} else {
+					_setOpen(openState);
 				}
 
-				_setOpen(value);
-
-				// This sets the cookie to keep the sidebar state.
-				document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+				document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
 			},
 			[setOpenProp, open]
 		);
 
-		// Helper to toggle the sidebar.
 		const toggleSidebar = React.useCallback(() => {
 			return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
 		}, [isMobile, setOpen, setOpenMobile]);
 
-		// Adds a keyboard shortcut to toggle the sidebar.
 		React.useEffect(() => {
 			const handleKeyDown = (event: KeyboardEvent) => {
 				if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
@@ -103,8 +108,6 @@ const SidebarProvider = React.forwardRef<
 			return () => window.removeEventListener('keydown', handleKeyDown);
 		}, [toggleSidebar]);
 
-		// We add a state so that we can do data-state="expanded" or "collapsed".
-		// This makes it easier to style the sidebar with Tailwind classes.
 		const state = open ? 'expanded' : 'collapsed';
 
 		const contextValue = React.useMemo<SidebarContext>(
@@ -132,7 +135,7 @@ const SidebarProvider = React.forwardRef<
 							} as React.CSSProperties
 						}
 						className={cn(
-							'group/sidebar-wrapper flex min-h-svh w-full text-sidebar-foreground has-[[data-variant=inset]]:bg-sidebar',
+							'group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar',
 							className
 						)}
 						ref={ref}
@@ -206,7 +209,7 @@ const Sidebar = React.forwardRef<
 		return (
 			<div
 				ref={ref}
-				className='group peer hidden md:block'
+				className='group peer hidden text-sidebar-foreground md:block'
 				data-state={state}
 				data-collapsible={state === 'collapsed' ? collapsible : ''}
 				data-variant={variant}
@@ -262,7 +265,7 @@ const SidebarTrigger = React.forwardRef<
 			data-sidebar='trigger'
 			variant='ghost'
 			size='icon'
-			className={cn('h-7 w-7', className)}
+			className={cn('h-8 w-8 [&_svg]:size-5', className)}
 			onClick={(event) => {
 				onClick?.(event);
 				toggleSidebar();

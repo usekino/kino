@@ -4,6 +4,8 @@ export type LinkData = {
 	href: string;
 	title: string;
 	group?: string;
+
+	items?: LinkData[];
 };
 
 export type UseLinksProps<B, T extends LinkData = LinkData> = {

@@ -11,27 +11,26 @@ import { env } from '@/lib/env/client';
 // 	return getBaseUrl() + '/api/trpc';
 // }
 
-export function getTRPCUrl() {
-	// if (typeof window !== 'undefined') {
-	// 	// In the browser, we return a relative URL
-	// 	return '/api/trpc';
-	// }
-	// When rendering on the server, we return an absolute URL
+// export function getTRPCUrl() {
+// 	if (typeof window !== 'undefined') {
+// 		// browser should use relative path
+// 		return '';
+// 	}
+// 	if (process.env.VERCEL_URL) {
+// 		// reference for vercel.com
+// 		return `https://${process.env.VERCEL_URL}`;
+// 	}
+// 	if (process.env.RENDER_INTERNAL_HOSTNAME) {
+// 		// reference for render.com
+// 		return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`;
+// 	}
 
-	return `https://kino.local/api/trpc`;
-
-	// // reference for vercel.com
-	// if (process.env.VERCEL_URL) {
-	// 	return `https://${process.env.VERCEL_URL}/api/trpc`;
-	// }
-
-	// if (env.NEXT_PUBLIC_ROOT_DOMAIN) {
-	// 	return `https://${env.NEXT_PUBLIC_ROOT_DOMAIN}/api/trpc`;
-	// }
-
-	// // assume localhost
-	// return `http://localhost:${process.env.PORT ?? 3000}/api/trpc`;
-}
+// 	if (process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+// 		return `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+// 	}
+// 	// assume localhost
+// 	return `http://localhost:${process.env.PORT ?? 3000}`;
+// }
 
 export const skipStream = (op: Operation) => {
 	const nonStreamPaths = ['user.', 'auth.', 'console.'];

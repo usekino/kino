@@ -1,73 +1,69 @@
-"use client"
+'use client';
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { MapPin, MessageSquare, Rss, Settings } from 'lucide-react';
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import {
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+	SidebarGroup,
+	SidebarGroupLabel,
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
+} from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
+import { usePageSlugs } from '@/lib/utils/console.utils';
+import { useLinks } from '@/lib/utils/use-links';
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
-}) {
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible
-            key={item.title}
-            asChild
-            defaultOpen={item.isActive}
-            className="group/collapsible"
-          >
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </SidebarMenuItem>
-          </Collapsible>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
-  )
+export function NavMain() {
+	const { projectSlug } = usePageSlugs();
+
+	const { links } = useLinks({
+		base: `/console/p/kino`,
+		links: [
+			{
+				title: 'Feedback',
+				href: '/feedback',
+				icon: MessageSquare,
+			},
+			{
+				title: 'Updates',
+				href: '/updates',
+				icon: Rss,
+			},
+			{
+				title: 'Roadmap',
+				href: '/roadmap',
+				icon: MapPin,
+			},
+			{
+				title: 'Settings',
+				href: '/settings',
+				icon: Settings,
+			},
+		],
+	});
+
+	return (
+		<SidebarGroup>
+			<SidebarGroupLabel>Features</SidebarGroupLabel>
+			<SidebarMenu>
+				{links.map((link) => {
+					return (
+						<SidebarMenuItem key={link.title}>
+							<SidebarMenuButton asChild>
+								<a
+									href={link.href}
+									className={cn({
+										'bg-accent text-foreground hover:!bg-accent': link.active,
+									})}
+								>
+									{link.icon && <link.icon />}
+									<span>{link.title}</span>
+								</a>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					);
+				})}
+			</SidebarMenu>
+		</SidebarGroup>
+	);
 }
